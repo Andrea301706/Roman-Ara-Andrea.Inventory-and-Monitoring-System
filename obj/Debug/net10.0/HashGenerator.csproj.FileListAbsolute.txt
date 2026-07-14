@@ -1,0 +1,17 @@
+C:\Users\Ara Andrea\OneDrive\Desktop\Inventory and Monitoring System\Roman Ara Andrea. Inventory and Monitoring System\HashGenerator\bin\Debug\net10.0\HashGenerator.exe
+C:\Users\Ara Andrea\OneDrive\Desktop\Inventory and Monitoring System\Roman Ara Andrea. Inventory and Monitoring System\HashGenerator\bin\Debug\net10.0\HashGenerator.deps.json
+C:\Users\Ara Andrea\OneDrive\Desktop\Inventory and Monitoring System\Roman Ara Andrea. Inventory and Monitoring System\HashGenerator\bin\Debug\net10.0\HashGenerator.runtimeconfig.json
+C:\Users\Ara Andrea\OneDrive\Desktop\Inventory and Monitoring System\Roman Ara Andrea. Inventory and Monitoring System\HashGenerator\bin\Debug\net10.0\HashGenerator.dll
+C:\Users\Ara Andrea\OneDrive\Desktop\Inventory and Monitoring System\Roman Ara Andrea. Inventory and Monitoring System\HashGenerator\bin\Debug\net10.0\HashGenerator.pdb
+C:\Users\Ara Andrea\OneDrive\Desktop\Inventory and Monitoring System\Roman Ara Andrea. Inventory and Monitoring System\HashGenerator\bin\Debug\net10.0\BCrypt-Net-Next.dll
+C:\Users\Ara Andrea\OneDrive\Desktop\Inventory and Monitoring System\Roman Ara Andrea. Inventory and Monitoring System\HashGenerator\obj\Debug\net10.0\HashGenerator.csproj.AssemblyReference.cache
+C:\Users\Ara Andrea\OneDrive\Desktop\Inventory and Monitoring System\Roman Ara Andrea. Inventory and Monitoring System\HashGenerator\obj\Debug\net10.0\HashGenerator.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Ara Andrea\OneDrive\Desktop\Inventory and Monitoring System\Roman Ara Andrea. Inventory and Monitoring System\HashGenerator\obj\Debug\net10.0\HashGenerator.AssemblyInfoInputs.cache
+C:\Users\Ara Andrea\OneDrive\Desktop\Inventory and Monitoring System\Roman Ara Andrea. Inventory and Monitoring System\HashGenerator\obj\Debug\net10.0\HashGenerator.AssemblyInfo.cs
+C:\Users\Ara Andrea\OneDrive\Desktop\Inventory and Monitoring System\Roman Ara Andrea. Inventory and Monitoring System\HashGenerator\obj\Debug\net10.0\HashGenerator.csproj.CoreCompileInputs.cache
+C:\Users\Ara Andrea\OneDrive\Desktop\Inventory and Monitoring System\Roman Ara Andrea. Inventory and Monitoring System\HashGenerator\obj\Debug\net10.0\HashGene.ADC516C2.Up2Date
+C:\Users\Ara Andrea\OneDrive\Desktop\Inventory and Monitoring System\Roman Ara Andrea. Inventory and Monitoring System\HashGenerator\obj\Debug\net10.0\HashGenerator.dll
+C:\Users\Ara Andrea\OneDrive\Desktop\Inventory and Monitoring System\Roman Ara Andrea. Inventory and Monitoring System\HashGenerator\obj\Debug\net10.0\refint\HashGenerator.dll
+C:\Users\Ara Andrea\OneDrive\Desktop\Inventory and Monitoring System\Roman Ara Andrea. Inventory and Monitoring System\HashGenerator\obj\Debug\net10.0\HashGenerator.pdb
+C:\Users\Ara Andrea\OneDrive\Desktop\Inventory and Monitoring System\Roman Ara Andrea. Inventory and Monitoring System\HashGenerator\obj\Debug\net10.0\HashGenerator.genruntimeconfig.cache
+C:\Users\Ara Andrea\OneDrive\Desktop\Inventory and Monitoring System\Roman Ara Andrea. Inventory and Monitoring System\HashGenerator\obj\Debug\net10.0\ref\HashGenerator.dll

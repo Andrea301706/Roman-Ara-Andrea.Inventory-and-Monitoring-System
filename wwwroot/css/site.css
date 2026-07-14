@@ -1,0 +1,119 @@
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin: 0;
+    margin-bottom: 60px;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f7f7f7;
+}
+
+.form-floating > .form-control-plaintext::placeholder,
+.form-floating > .form-control::placeholder {
+    color: var(--bs-secondary-color);
+    text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder,
+.form-floating > .form-control:focus::placeholder {
+    text-align: start;
+}
+
+/* Header */
+
+.header {
+    background: linear-gradient(135deg, #ff6b81, #ff9a9e);
+    padding: 35px;
+    color: white;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 40px;
+}
+
+/* Dashboard */
+
+.container {
+    padding: 40px;
+}
+
+.welcome {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, .1);
+}
+
+.welcome h2 {
+    color: #ff6b81;
+}
+
+/* Cards */
+
+.cards {
+    display: flex;
+    gap: 25px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.card {
+    background: white;
+    width: 250px;
+    padding: 25px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .1);
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card h3 {
+    color: #ff6b81;
+    font-size: 30px;
+}
+
+/* Buttons */
+
+.menu {
+    margin-top: 40px;
+}
+
+.menu a {
+    display: inline-block;
+    text-decoration: none;
+    background: #ff6b81;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 30px;
+    margin-right: 10px;
+    transition: background 0.3s ease;
+}
+
+.menu a:hover {
+    background: #ff4757;
+}

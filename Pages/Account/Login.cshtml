@@ -1,0 +1,161 @@
+@page "/Account/Login"
+@model Roman_Ara_Andrea.Inventory_and_Monitoring_System.Pages.Account.LoginModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inventory System Login</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            height: 100vh;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .title {
+            color: white;
+            font-size: 45px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            margin-bottom: 25px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .login-box {
+            width: 380px;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0px 15px 35px rgba(0,0,0,0.2);
+        }
+
+        .login-box h2 {
+            color: #ff6b81;
+            margin-bottom: 30px;
+            font-size: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 13px;
+            margin-top: 8px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            outline: none;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+        .input-group input:focus {
+            border-color: #ff6b81;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 30px;
+            background: #ff6b81;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .login-btn:hover {
+            background: #ff4757;
+        }
+
+        .error {
+            color: red;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: 20px;
+            color: #777;
+            font-size: 13px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="title">
+        INVENTORY SYSTEM
+    </div>
+
+    <div class="login-box">
+
+        <h2>Login</h2>
+
+        <form method="post">
+
+            <div class="input-group">
+                <label>Username</label>
+                <input asp-for="UserName" placeholder="Enter username" />
+            </div>
+
+
+            <div class="input-group">
+                <label>Password</label>
+                <input asp-for="Password" 
+                       type="password" 
+                       placeholder="Enter password" />
+            </div>
+
+
+            <button class="login-btn" type="submit">
+                Login
+            </button>
+
+
+            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <div class="error">
+                    @Model.ErrorMessage
+                </div>
+            }
+
+        </form>
+
+
+        <div class="footer">
+            Inventory Monitoring System © 2026
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

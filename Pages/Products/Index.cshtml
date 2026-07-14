@@ -1,0 +1,228 @@
+@page
+@model IndexModel
+@using System.Security.Claims
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Inventory System Dashboard</title>
+
+<style>
+
+body {
+    margin:0;
+    font-family:'Segoe UI', sans-serif;
+    background:#f7f7f7;
+}
+
+
+/* Header */
+
+.header {
+
+    background:linear-gradient(135deg,#ff6b81,#ff9a9e);
+    padding:35px;
+    color:white;
+
+}
+
+
+.header h1 {
+
+    margin:0;
+    font-size:40px;
+
+}
+
+
+/* Dashboard */
+
+.container {
+
+    padding:40px;
+
+}
+
+
+.welcome {
+
+    background:white;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,.1);
+
+}
+
+
+.welcome h2 {
+
+    color:#ff6b81;
+
+}
+
+
+
+/* Cards */
+
+.cards {
+
+    display:flex;
+    gap:25px;
+    margin-top:30px;
+    flex-wrap:wrap;
+
+}
+
+
+.card {
+
+    background:white;
+    width:250px;
+    padding:25px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 8px 20px rgba(0,0,0,.1);
+
+}
+
+
+.card h3 {
+
+    color:#ff6b81;
+    font-size:30px;
+
+}
+
+
+
+/* Buttons */
+
+.menu {
+
+    margin-top:40px;
+
+}
+
+
+.menu a {
+
+    text-decoration:none;
+    background:#ff6b81;
+    color:white;
+    padding:12px 25px;
+    border-radius:30px;
+    margin-right:10px;
+
+}
+
+
+.menu a:hover {
+
+    background:#ff4757;
+
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="header">
+
+<h1>
+INVENTORY SYSTEM
+</h1>
+
+<p>
+Monitoring and Management Dashboard
+</p>
+
+
+</div>
+
+
+
+<div class="container">
+
+
+<div class="welcome">
+
+<h2>
+Welcome, @User.Identity?.Name! 👋
+</h2>
+
+
+<p>
+Login successful. Welcome to your Inventory Monitoring System.
+</p>
+
+
+</div>
+
+
+
+<div class="cards">
+
+
+<div class="card">
+
+<h3>
+📦
+</h3>
+
+<p>
+Products
+</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+👤
+</h3>
+
+<p>
+Admin Account
+</p>
+
+</div>
+
+
+
+</div>
+
+
+
+<div class="menu">
+
+
+<a asp-page="/Products/Index">
+Manage Products
+</a>
+
+
+
+<a asp-page="/Account/Logout">
+Logout
+</a>
+
+
+</div>
+
+
+</div>
+
+
+</body>
+</html>
