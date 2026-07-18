@@ -1,0 +1,44 @@
+@page
+@model Roman_Ara_Andrea.Inventory_and_Monitoring_System.Pages.Account.AcceptInviteModel
+@{
+    ViewData["Title"] = "Accept Invite";
+}
+l
+<h2>Accept Invite</h2>
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-danger">
+        @Model.ErrorMessage
+    </div>
+}
+
+<form method="post">
+
+    <!-- Keep the invite token -->
+    <input type="hidden" asp-for="Token" />
+
+    <div class="mb-3">
+        <label>Password</label>
+        <input asp-for="Password" type="password" class="form-control" />
+
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label>Confirm Password</label>
+        <input asp-for="ConfirmPassword" type="password" class="form-control" />
+
+        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        Create Password
+    </button>
+
+</form>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

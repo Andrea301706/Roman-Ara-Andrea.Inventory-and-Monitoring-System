@@ -1,0 +1,68 @@
+@page "/Account/Invite-User"
+@model Roman_Ara_Andrea.Inventory_and_Monitoring_System.Pages.Account.InviteModel
+
+@{
+    ViewData["Title"] = "Invite User";
+}
+
+<h2>Invite User</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div style="color:green; font-weight:bold;">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["InviteUrl"] != null)
+{
+    <div style="margin-top:15px; padding:10px; border:1px solid #28a745; background-color:#f8fff8;">
+        <strong>Invite URL:</strong><br />
+        <a href="@TempData["InviteUrl"]" target="_blank">
+            @TempData["InviteUrl"]
+        </a>
+    </div>
+}
+
+<form method="post">
+
+    <div>
+        <label asp-for="UserInviteDto.Username"></label><br />
+        <input asp-for="UserInviteDto.Username" />
+        <span asp-validation-for="UserInviteDto.Username" style="color:red"></span>
+    </div>
+
+    <br />
+
+    <div>
+        <label asp-for="UserInviteDto.FirstName"></label><br />
+        <input asp-for="UserInviteDto.FirstName" />
+        <span asp-validation-for="UserInviteDto.FirstName" style="color:red"></span>
+    </div>
+
+    <br />
+
+    <div>
+        <label asp-for="UserInviteDto.LastName"></label><br />
+        <input asp-for="UserInviteDto.LastName" />
+        <span asp-validation-for="UserInviteDto.LastName" style="color:red"></span>
+    </div>
+
+    <br />
+
+    <div>
+        <label asp-for="UserInviteDto.DateOfBirth"></label><br />
+        <input asp-for="UserInviteDto.DateOfBirth" type="date" />
+        <span asp-validation-for="UserInviteDto.DateOfBirth" style="color:red"></span>
+    </div>
+
+    <br />
+
+    <button type="submit">Invite User</button>
+
+</form>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}
