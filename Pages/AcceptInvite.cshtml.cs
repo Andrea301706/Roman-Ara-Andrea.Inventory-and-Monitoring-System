@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Roman_Ara_Andrea.Inventory_and_Monitoring_System.Helpers;
 using Roman_Ara_Andrea.Inventory_and_Monitoring_System.Infrastructure;
 using Roman_Ara_Andrea.Inventory_and_Monitoring_System.Domain;
+
 namespace Roman_Ara_Andrea.Inventory_and_Monitoring_System.Pages.Account;
 
 public class AcceptInviteModel : PageModel
@@ -59,6 +60,7 @@ public class AcceptInviteModel : PageModel
             return Page();
         }
 
+        // STEP 11 - Validate JWT Token
         var principal = _inviteTokenService.ValidateInviteToken(Token);
 
         if (principal == null)
@@ -67,25 +69,27 @@ public class AcceptInviteModel : PageModel
             return Page();
         }
 
+        // Read UserId from JWT
         var userId = int.Parse(principal.FindFirst("UserId")!.Value);
 
+        // STEP 13 - Confirm Password Validation
         if (Password != ConfirmPassword)
         {
             ErrorMessage = "Passwords do not match.";
             return Page();
         }
 
-        // Strong password validation
-        if (Password.Length < 8)
+        // STEP 14 - Strong Password Validation
+        if (!PasswordPolicyHelper.IsStrongPassword(Password))
         {
-            ErrorMessage = "Password must be at least 8 characters.";
+            ErrorMessage = "Password does not meet the required policy.";
             return Page();
         }
 
-        // Hash password
+        // STEP 15 - Hash Password
         string hashedPassword = BCrypt.Net.BCrypt.HashPassword(Password);
 
-        // Save password
+        // STEP 16 - Save Password in UserLoginInfo
         var passwordRecord = await _dbContext.UserLoginInfos
             .FirstOrDefaultAsync(x =>
                 x.UserId == userId &&
@@ -111,6 +115,7 @@ public class AcceptInviteModel : PageModel
 
         TempData["SuccessMessage"] = "Account setup complete. You may now log in.";
 
+        // STEP 17 - Redirect to Login
         return RedirectToPage("/Account/Login");
     }
 }

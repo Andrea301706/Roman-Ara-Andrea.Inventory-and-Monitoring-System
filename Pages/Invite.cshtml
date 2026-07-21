@@ -9,18 +9,16 @@
 
 @if (TempData["SuccessMessage"] != null)
 {
-    <div style="color:green; font-weight:bold;">
+    <div style="color:green; font-weight:bold; padding:10px; border:1px solid green; margin-bottom:20px;">
         @TempData["SuccessMessage"]
     </div>
 }
 
 @if (TempData["InviteUrl"] != null)
 {
-    <div style="margin-top:15px; padding:10px; border:1px solid #28a745; background-color:#f8fff8;">
-        <strong>Invite URL:</strong><br />
-        <a href="@TempData["InviteUrl"]" target="_blank">
-            @TempData["InviteUrl"]
-        </a>
+    <div style="color:blue; margin-bottom:20px;">
+        <strong>Invite Link:</strong><br />
+        <a href="@TempData["InviteUrl"]">@TempData["InviteUrl"]</a>
     </div>
 }
 
@@ -30,6 +28,14 @@
         <label asp-for="UserInviteDto.Username"></label><br />
         <input asp-for="UserInviteDto.Username" />
         <span asp-validation-for="UserInviteDto.Username" style="color:red"></span>
+    </div>
+
+    <br />
+
+    <div>
+        <label asp-for="UserInviteDto.Email"></label><br />
+        <input asp-for="UserInviteDto.Email" type="email" />
+        <span asp-validation-for="UserInviteDto.Email" style="color:red"></span>
     </div>
 
     <br />

@@ -12,13 +12,16 @@ public class InviteModel : PageModel
 {
     private readonly InventorySystemDbContext _dbContext;
     private readonly InviteTokenService _inviteTokenService;
+    private readonly EmailService _emailService;
 
     public InviteModel(
         InventorySystemDbContext dbContext,
-        InviteTokenService inviteTokenService)
+        InviteTokenService inviteTokenService,
+        EmailService emailService)
     {
         _dbContext = dbContext;
         _inviteTokenService = inviteTokenService;
+        _emailService = emailService;
     }
 
     [BindProperty]
@@ -30,13 +33,11 @@ public class InviteModel : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
-        // STEP 2 - Required field validation
         if (!ModelState.IsValid)
         {
             return Page();
         }
 
-        // STEP 3 - Username already exists
         var existingUser = await _dbContext.Users
             .FirstOrDefaultAsync(u =>
                 u.UserName!.ToLower() == UserInviteDto.Username!.ToLower());
@@ -50,7 +51,6 @@ public class InviteModel : PageModel
             return Page();
         }
 
-        // STEP 4 - Age validation
         DateTime birthDate = UserInviteDto.DateOfBirth!.Value;
         DateTime today = DateTime.Today;
 
@@ -70,7 +70,6 @@ public class InviteModel : PageModel
             return Page();
         }
 
-        // STEP 5 - Save new user
         var newUser = new User
         {
             UserName = UserInviteDto.Username!,
@@ -80,10 +79,7 @@ public class InviteModel : PageModel
         };
 
         _dbContext.Users.Add(newUser);
-
         await _dbContext.SaveChangesAsync();
-
-        // STEP 6 - Create UserLoginInfo records
 
         _dbContext.UserLoginInfos.Add(new UserLoginInfo
         {
@@ -108,18 +104,20 @@ public class InviteModel : PageModel
 
         await _dbContext.SaveChangesAsync();
 
-        // STEP 7 - Generate JWT Invite Token
         var token = _inviteTokenService.CreateInviteToken(newUser.Id);
 
-        // STEP 8 - Create Invite URL
-        var inviteUrl = Url.Page(
-            "/Account/Accept-Invite",
-            null,
-            new { token = token },
-            Request.Scheme);
+        // Replace 7180 with your project's HTTPS port if different
+        var inviteUrl = $"https://localhost:7180/Account/AcceptInvite?token={token}";
 
-        // Display success and invite URL
-        TempData["SuccessMessage"] = "User invited successfully!";
+       await _emailService.SendInviteEmailAsync(
+    UserInviteDto.Email!,
+    inviteUrl);
+
+        await _emailService.SendInviteEmailAsync(
+            UserInviteDto.Email!,
+            inviteUrl!);
+
+        TempData["SuccessMessage"] = "Invitation email sent successfully!";
         TempData["InviteUrl"] = inviteUrl;
 
         return Page();
@@ -129,8 +127,11 @@ public class InviteModel : PageModel
 public class UserInviteDto
 {
     [Required(ErrorMessage = "Username is required.")]
-    [EmailAddress(ErrorMessage = "Invalid email address.")]
     public string? Username { get; set; }
+
+    [Required(ErrorMessage = "Email is required.")]
+    [EmailAddress(ErrorMessage = "Invalid email address.")]
+    public string? Email { get; set; }
 
     [Required(ErrorMessage = "First Name is required.")]
     public string? FirstName { get; set; }

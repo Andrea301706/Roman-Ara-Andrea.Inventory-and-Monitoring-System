@@ -1,0 +1,53 @@
+@page
+@model Roman_Ara_Andrea.Inventory_and_Monitoring_System.Pages.Account.RegisterModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h2>Account Registration</h2>
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-danger">
+        @Model.ErrorMessage
+    </div>
+}
+
+<form method="post">
+
+    <div class="mb-3">
+        <label asp-for="Input.UserName" class="form-label">Username</label>
+        <input asp-for="Input.UserName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Input.FirstName" class="form-label">First Name</label>
+        <input asp-for="Input.FirstName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Input.LastName" class="form-label">Last Name</label>
+        <input asp-for="Input.LastName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Input.DateOfBirth" class="form-label">Date of Birth</label>
+        <input asp-for="Input.DateOfBirth" type="date" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Input.Password" class="form-label">Password</label>
+        <input asp-for="Input.Password" type="password" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Input.ConfirmPassword" class="form-label">Confirm Password</label>
+        <input asp-for="Input.ConfirmPassword" type="password" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        Register
+    </button>
+
+</form>

@@ -16,6 +16,10 @@ namespace Roman_Ara_Andrea.Inventory_and_Monitoring_System.Domain
         [Required]
         public string LastName { get; set; } = string.Empty;
 
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; } = string.Empty;
+
         public DateTime DateOfBirth { get; set; }
     }
 }
