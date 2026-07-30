@@ -80,7 +80,7 @@ public class AcceptInviteModel : PageModel
         }
 
         // STEP 14 - Strong Password Validation
-        if (!PasswordPolicyHelper.IsStrongPassword(Password))
+        if (!PasswordPolicyHelper.IsValid(Password))
         {
             ErrorMessage = "Password does not meet the required policy.";
             return Page();
