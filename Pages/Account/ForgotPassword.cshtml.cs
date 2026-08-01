@@ -43,24 +43,19 @@ public class ForgotPasswordModel : PageModel
         var user = await _context.Users
             .FirstOrDefaultAsync(x => x.Email == EmailAddress);
 
-        // Always return the same message for security
-        if (user == null)
+        if (user != null)
         {
-            Message = "We have sent you an email with link to reset your password.";
-            return Page();
-        }
+            try
+            {
+                var token = _tokenService.GenerateResetToken(user.Id);
 
-        try
-        {
-            var token = _tokenService.GenerateResetToken(user.Id);
+                var link = $"{Request.Scheme}://{Request.Host}/account/verify-forgot-password?token={token}";
 
-            var link = $"{Request.Scheme}://{Request.Host}/account/verify-forgot-password?token={token}";
-
-            await _emailService.SendEmailAsync(
-                user.Email,
-                "Reset Password",
-                $@"
-Hello {user.FirstName},<br><br>
+                await _emailService.SendEmailAsync(
+                    user.Email,
+                    "Reset Password",
+                    $@"
+Hello {user.FirstName},<br><br>c
 
 You requested to reset your password.<br><br>
 
@@ -71,14 +66,16 @@ Click the link below to reset your password:<br><br>
 This link will expire in <b>5 minutes</b>.<br><br>
 
 If you did not request this password reset, you may ignore this email.");
+            }
+            catch
+            {
+                // Optional: log the exception here.
+                // Do not expose email sending errors to the user.
+            }
+        }
 
-            Message = "We have sent you an email with link to reset your password.";
-        }
-        catch (Exception ex)
-        {
-            // TEMPORARY: Show the real error while testing
-            Message = ex.ToString();
-        }
+        // Always return the same message for security
+        Message = "We have sent you an email with link to reset your password.";
 
         return Page();
     }
