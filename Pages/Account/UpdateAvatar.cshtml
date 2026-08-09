@@ -1,26 +1,343 @@
 @page "/account/update-avatar"
-@model UpdateAvatar
+@model UpdateAvatarModel
 
+@{
+ViewData["Title"] = "New Avatar";
+}
 
-<form method="post" class="mt-5" enctype="multipart/form-data">
-  <div class="mb-3">
-    <div asp-validation-summary="All" class="text-danger"></div>
-  </div>    
-  <div class="mb-3">
-    <img class="card-img-top mb-3" style="max-width: 200px; height: auto;" src="@Model.UserAvatarDto.ProfileImage" alt="@Model.UserAvatarDto.FirstName @Model.UserAvatarDto.LastName">
-  </div>
-  <div class="mb-3">
-    <label for="exampleInputEmail1" class="form-label">New Avatar</label>
-    <input type="file" class="form-control" id="exampleInputEmail1" asp-for="@Model.UserAvatarDto.AvatarImage">
-    <span asp-validation-for="@Model.UserAvatarDto.AvatarImage" class="text-danger"></span>
-  </div>  
-  <div class="mb-3">
-    <label for="exampleInputEmail1" class="form-label">Email address</label>
-    <p class="card-text">@Model.UserAvatarDto.Username </p>
-  </div>
-  <div class="mb-3">
-    <label for="exampleInputEmail1" class="form-label">Name</label>
-    <p class="card-text">@Model.UserAvatarDto.FirstName @Model.UserAvatarDto.LastName</p>
-  </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+<style>
+    .avatar-page {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+    }
+
+    .avatar-card {
+        width: 100%;
+        max-width: 620px;
+        background: #ffffff;
+        border-radius: 22px;
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+    }
+
+    .avatar-header {
+        padding: 32px 30px 20px;
+        text-align: center;
+    }
+
+    .avatar-header h2 {
+        font-size: 26px;
+        font-weight: 700;
+        margin-bottom: 6px;
+    }
+
+    .avatar-header p {
+        margin: 0;
+        color: #777;
+        font-size: 14px;
+    }
+
+    .avatar-section {
+        padding: 10px 40px 35px;
+    }
+
+    .avatar-preview {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .avatar-image {
+        width: 170px;
+        height: 170px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 6px solid #f4f4f4;
+        box-shadow: 0 5px 18px rgba(0, 0, 0, 0.10);
+    }
+
+    .user-name {
+        margin-top: 15px;
+        margin-bottom: 3px;
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    .username {
+        color: #888;
+        font-size: 14px;
+    }
+
+    .user-information {
+        background: #f8f9fa;
+        border-radius: 14px;
+        padding: 20px;
+        margin-bottom: 25px;
+    }
+
+    .information-title {
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+
+    .information-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 9px 0;
+        border-bottom: 1px solid #e9e9e9;
+        font-size: 14px;
+    }
+
+    .information-row:last-child {
+        border-bottom: none;
+    }
+
+    .information-label {
+        color: #777;
+        font-weight: 500;
+    }
+
+    .information-value {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .divider {
+        border: 0;
+        border-top: 1px solid #eeeeee;
+        margin: 25px 0;
+    }
+
+    .section-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 6px;
+    }
+
+    .section-description {
+        color: #777;
+        font-size: 13px;
+        margin-bottom: 18px;
+    }
+
+    .file-label {
+        display: block;
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+
+    .file-input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #dddddd;
+        border-radius: 10px;
+        background: #fafafa;
+        cursor: pointer;
+    }
+
+    .file-input:hover {
+        border-color: #999999;
+        background: #ffffff;
+    }
+
+    .file-help {
+        display: block;
+        margin-top: 8px;
+        color: #888;
+        font-size: 12px;
+    }
+
+    .validation-summary {
+        margin-bottom: 15px;
+        font-size: 14px;
+    }
+
+    .validation-message {
+        display: block;
+        margin-top: 6px;
+        font-size: 13px;
+    }
+
+    .button-container {
+        display: flex;
+        gap: 12px;
+        margin-top: 30px;
+    }
+
+    .avatar-button {
+        flex: 1;
+        padding: 12px 20px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        text-align: center;
+        transition: 0.2s ease;
+        border: none;
+        cursor: pointer;
+    }
+
+    .save-button {
+        background: #198754;
+        color: white;
+    }
+
+    .save-button:hover {
+        background: #157347;
+        color: white;
+    }
+
+    .cancel-button {
+        background: #f1f1f1;
+        color: #555;
+    }
+
+    .cancel-button:hover {
+        background: #e2e2e2;
+        color: #333;
+    }
+</style>
+
+<div class="avatar-page">
+
+```
+<div class="avatar-card">
+
+    <!-- Header -->
+    <div class="avatar-header">
+
+        <h2>New Avatar</h2>
+
+        <p>
+            Update your Avatar
+        </p>
+
+    </div>
+
+    <div class="avatar-section">
+
+        <!-- Current Avatar -->
+        <div class="avatar-preview">
+
+            <img src="@Model.UserAvatarDto.ProfileImage"
+                 alt="Profile Image"
+                 class="avatar-image" />
+
+            <div class="user-name">
+                @Model.UserAvatarDto.FirstName
+                @Model.UserAvatarDto.LastName
+            </div>
+
+            <div class="username">
+                @@@Model.UserAvatarDto.Username
+            </div>
+
+        </div>
+
+        <!-- User Information -->
+        <div class="user-information">
+
+            <div class="information-title">
+                Profile Information
+            </div>
+
+            <div class="information-row">
+                <span class="information-label">
+                    Username
+                </span>
+
+                <span class="information-value">
+                    @Model.UserAvatarDto.Username
+                </span>
+            </div>
+
+            <div class="information-row">
+                <span class="information-label">
+                    First Name
+                </span>
+
+                <span class="information-value">
+                    @Model.UserAvatarDto.FirstName
+                </span>
+            </div>
+
+            <div class="information-row">
+                <span class="information-label">
+                    Last Name
+                </span>
+
+                <span class="information-value">
+                    @Model.UserAvatarDto.LastName
+                </span>
+            </div>
+
+        </div>
+
+        <hr class="divider" />
+
+        <!-- Upload -->
+        <div class="section-title">
+            New Profile Photo
+        </div>
+
+        <div class="section-description">
+            Choose an image from your computer to replace
+            your current profile photo.
+        </div>
+
+        <form method="post"
+              enctype="multipart/form-data">
+
+            <div asp-validation-summary="All"
+                 class="text-danger validation-summary">
+            </div>
+
+            <div>
+
+                <label asp-for="UserAvatarDto.AvatarImage"
+                       class="file-label">
+                    Select Image
+                </label>
+
+                <input asp-for="UserAvatarDto.AvatarImage"
+                       type="file"
+                       class="file-input"
+                       accept="image/*" />
+
+                <small class="file-help">
+                    Supported image files: JPG, JPEG, PNG
+                </small>
+
+                <span asp-validation-for="UserAvatarDto.AvatarImage"
+                      class="text-danger validation-message">
+                </span>
+
+            </div>
+
+            <!-- Buttons -->
+            <div class="button-container">
+
+                <a asp-page="/Account/Profile"
+                   class="avatar-button cancel-button">
+                    Cancel
+                </a>
+
+                <button type="submit"
+                        class="avatar-button save-button">
+                    Save Photo
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+```
+
+</div>
