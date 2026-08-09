@@ -42,7 +42,8 @@ public class LoginModel : PageModel
 
         // STEP 2: Retrieve User
         var user = _dbContext.Users
-            .FirstOrDefault(u => u.UserName.ToLower() == UserName.ToLower());
+            .FirstOrDefault(u =>
+                u.UserName.ToLower() == UserName.ToLower());
 
         if (user == null)
         {
@@ -64,7 +65,9 @@ public class LoginModel : PageModel
 
         if (loginStatus.Value == "LockedOut")
         {
-            ErrorMessage = "Your account is LockedOut, have an Admin unlock your account first";
+            ErrorMessage =
+                "Your account is LockedOut, have an Admin unlock your account first.";
+
             return Page();
         }
 
@@ -85,80 +88,68 @@ public class LoginModel : PageModel
             Password,
             storedPassword.Value);
 
-        if (passwordMatch)
+        if (!passwordMatch)
         {
-            // Reset LoginRetries
-            var retries = _dbContext.UserLoginInfos
-                .FirstOrDefault(x =>
-                    x.UserId == user.Id &&
-                    x.Key == "LoginRetries");
-
-            if (retries != null)
-            {
-                retries.Value = "0";
-            }
-
-            _dbContext.SaveChanges();
-
-            // Cookie Authentication
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, user.UserName),
-                new Claim("UserId", user.Id.ToString()),
-                new Claim(ClaimTypes.GivenName, user.FirstName),
-                new Claim(ClaimTypes.Surname, user.LastName)
-            };
-
-            var identity = new ClaimsIdentity(
-                claims,
-                CookieAuthenticationDefaults.AuthenticationScheme);
-
-            var principal = new ClaimsPrincipal(identity);
-
-            await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                principal);
-
-            // STEP 6: Successful Login
-            return RedirectToPage("/Products/Index");
+            ErrorMessage = "Invalid login.";
+            return Page();
         }
 
-        // STEP 7: Failed Login
-        var loginRetries = _dbContext.UserLoginInfos
+        // STEP 6: Reset Login Retries
+        var retries = _dbContext.UserLoginInfos
             .FirstOrDefault(x =>
                 x.UserId == user.Id &&
                 x.Key == "LoginRetries");
 
-        if (loginRetries == null)
+        if (retries != null)
         {
-            loginRetries = new UserLoginInfo
-            {
-                UserId = user.Id,
-                Key = "LoginRetries",
-                Value = "1"
-            };
-
-            _dbContext.UserLoginInfos.Add(loginRetries);
-        }
-        else
-        {
-            int retries = int.Parse(loginRetries.Value);
-            retries++;
-            loginRetries.Value = retries.ToString();
-        }
-
-        _dbContext.SaveChanges();
-
-        // STEP 8: Lock Account
-        int retryCount = int.Parse(loginRetries.Value);
-
-        if (retryCount > 2)
-        {
-            loginStatus.Value = "LockedOut";
+            retries.Value = "0";
             _dbContext.SaveChanges();
         }
 
-        ErrorMessage = "Invalid login.";
-        return Page();
+        // STEP 7: Create Authentication Claims
+        var claims = new List<Claim>
+        {
+            new Claim(
+                ClaimTypes.NameIdentifier,
+                user.Id.ToString()),
+
+            new Claim(
+                ClaimTypes.Name,
+                user.UserName ?? string.Empty),
+
+            new Claim(
+                ClaimTypes.GivenName,
+                user.FirstName ?? string.Empty),
+
+            new Claim(
+                ClaimTypes.Surname,
+                user.LastName ?? string.Empty)
+        };
+
+        // STEP 8: Create Identity
+        var identity = new ClaimsIdentity(
+            claims,
+            CookieAuthenticationDefaults.AuthenticationScheme);
+
+        // STEP 9: Create Principal
+        var principal = new ClaimsPrincipal(identity);
+
+        // STEP 10: Sign In
+        await HttpContext.SignInAsync(
+            CookieAuthenticationDefaults.AuthenticationScheme,
+            principal);
+
+var authResult = await HttpContext.AuthenticateAsync(
+    CookieAuthenticationDefaults.AuthenticationScheme);
+
+Console.WriteLine("===== AUTH TEST AFTER SIGN-IN =====");
+Console.WriteLine($"Authenticated: {authResult.Succeeded}");
+Console.WriteLine($"User: {authResult.Principal?.Identity?.Name}");
+Console.WriteLine(
+    $"NameIdentifier: {authResult.Principal?.FindFirst(ClaimTypes.NameIdentifier)?.Value}");
+Console.WriteLine("===================================");
+
+        // STEP 11: Redirect after successful login
+        return RedirectToPage("/Products/Index");
     }
 }

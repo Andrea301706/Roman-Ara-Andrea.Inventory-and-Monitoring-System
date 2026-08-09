@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "awj3sz5Svcc=",
+  "dgSpecHash": "T1L/1rVhTs4=",
   "success": true,
   "projectFilePath": "C:\\Users\\Ara Andrea\\OneDrive\\Desktop\\Inventory and Monitoring System\\Roman Ara Andrea. Inventory and Monitoring System\\Roman Ara Andrea. Inventory and Monitoring System\\Roman Ara Andrea. Inventory and Monitoring System.csproj",
   "expectedPackageFiles": [
@@ -32,6 +32,7 @@
     "C:\\Users\\Ara Andrea\\.nuget\\packages\\mono.texttemplating\\3.0.0\\mono.texttemplating.3.0.0.nupkg.sha512",
     "C:\\Users\\Ara Andrea\\.nuget\\packages\\mysqlconnector\\2.6.0\\mysqlconnector.2.6.0.nupkg.sha512",
     "C:\\Users\\Ara Andrea\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\Ara Andrea\\.nuget\\packages\\sixlabors.imagesharp\\3.1.12\\sixlabors.imagesharp.3.1.12.nupkg.sha512",
     "C:\\Users\\Ara Andrea\\.nuget\\packages\\system.codedom\\6.0.0\\system.codedom.6.0.0.nupkg.sha512",
     "C:\\Users\\Ara Andrea\\.nuget\\packages\\system.composition\\9.0.0\\system.composition.9.0.0.nupkg.sha512",
     "C:\\Users\\Ara Andrea\\.nuget\\packages\\system.composition.attributedmodel\\9.0.0\\system.composition.attributedmodel.9.0.0.nupkg.sha512",

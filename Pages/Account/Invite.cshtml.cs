@@ -38,6 +38,7 @@ public class InviteModel : PageModel
             return Page();
         }
 
+        // Check existing username
         var existingUser = await _dbContext.Users
             .FirstOrDefaultAsync(u =>
                 u.UserName!.ToLower() == UserInviteDto.Username!.ToLower());
@@ -51,12 +52,13 @@ public class InviteModel : PageModel
             return Page();
         }
 
+
+        // Age validation
         DateTime birthDate = UserInviteDto.DateOfBirth!.Value;
-        DateTime today = DateTime.Today;
 
-        int age = today.Year - birthDate.Year;
+        int age = DateTime.Today.Year - birthDate.Year;
 
-        if (birthDate > today.AddYears(-age))
+        if (birthDate.Date > DateTime.Today.AddYears(-age))
         {
             age--;
         }
@@ -70,76 +72,80 @@ public class InviteModel : PageModel
             return Page();
         }
 
+
+        // Create User
         var newUser = new User
         {
-            UserName = UserInviteDto.Username!,
-            FirstName = UserInviteDto.FirstName!,
-            LastName = UserInviteDto.LastName!,
+            UserName = UserInviteDto.Username,
+            FirstName = UserInviteDto.FirstName,
+            LastName = UserInviteDto.LastName,
             DateOfBirth = UserInviteDto.DateOfBirth.Value
         };
 
+
         _dbContext.Users.Add(newUser);
+
         await _dbContext.SaveChangesAsync();
 
+
+        // Create login information
         _dbContext.UserLoginInfos.Add(new UserLoginInfo
         {
             UserId = newUser.Id,
             Key = "LoginStatus",
-            Value = "Active"
+            Value = "Pending"
         });
 
-        _dbContext.UserLoginInfos.Add(new UserLoginInfo
-        {
-            UserId = newUser.Id,
-            Key = "LoginRetries",
-            Value = "0"
-        });
-
-        _dbContext.UserLoginInfos.Add(new UserLoginInfo
-        {
-            UserId = newUser.Id,
-            Key = "Role",
-            Value = "User"
-        });
 
         await _dbContext.SaveChangesAsync();
 
+
+        // Create invite token
         var token = _inviteTokenService.CreateInviteToken(newUser.Id);
 
-        // Replace 7180 with your project's HTTPS port if different
-        var inviteUrl = $"https://localhost:7180/Account/AcceptInvite?token={token}";
 
-       await _emailService.SendInviteEmailAsync(
-    UserInviteDto.Email!,
-    inviteUrl);
+        // Create invite URL
+        var inviteUrl =
+            $"https://localhost:7180/Account/AcceptInvite?token={token}";
 
+
+        // Send email
         await _emailService.SendInviteEmailAsync(
             UserInviteDto.Email!,
-            inviteUrl!);
+            inviteUrl);
 
-        TempData["SuccessMessage"] = "Invitation email sent successfully!";
+
+        TempData["SuccessMessage"] =
+            "Invitation email sent successfully!";
+
         TempData["InviteUrl"] = inviteUrl;
+
 
         return Page();
     }
 }
 
+
+// DTO used by the invite form
 public class UserInviteDto
 {
     [Required(ErrorMessage = "Username is required.")]
     public string? Username { get; set; }
 
+
     [Required(ErrorMessage = "Email is required.")]
     [EmailAddress(ErrorMessage = "Invalid email address.")]
     public string? Email { get; set; }
 
+
     [Required(ErrorMessage = "First Name is required.")]
     public string? FirstName { get; set; }
+
 
     [Required(ErrorMessage = "Last Name is required.")]
     public string? LastName { get; set; }
 
+
     [Required(ErrorMessage = "Date of Birth is required.")]
-    [DataType(DataType.Date)]
     public DateTime? DateOfBirth { get; set; }
 }

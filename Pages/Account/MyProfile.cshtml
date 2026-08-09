@@ -1,0 +1,55 @@
+@page "/account/my-profile"
+@model ProfileModel
+
+@{
+    ViewData["Title"] = "";
+}
+
+<div class="container mt-5">
+
+    <h2>My Profile</h2>
+
+    <div class="card mt-4 p-4">
+
+        <div class="text-center mb-4">
+
+            <img src="@Model.UserDto.ProfileImage"
+                 alt="Profile Image"
+                 width="150"
+                 height="150"
+                 style="object-fit: cover; border-radius: 50%;" />
+
+        </div>
+
+        <div class="mb-3">
+            <strong>Username:</strong>
+            <span>@Model.UserDto.Username</span>
+        </div>
+
+        <div class="mb-3">
+            <strong>First Name:</strong>
+            <span>@Model.UserDto.FirstName</span>
+        </div>
+
+        <div class="mb-3">
+            <strong>Last Name:</strong>
+            <span>@Model.UserDto.LastName</span>
+        </div>
+
+        <div class="mb-3">
+            <strong>Date of Birth:</strong>
+            <span>
+                @Model.UserDto.DateOfBirth?.ToString("yyyy-MM-dd")
+            </span>
+        </div>
+
+        <div class="mt-3">
+            <a asp-page="/Account/UpdateProfile"
+               class="btn btn-primary">
+                Update Profile
+            </a>
+        </div>
+
+    </div>
+
+</div>
