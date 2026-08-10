@@ -24,9 +24,14 @@ html {
 body {
     margin: 0;
     margin-bottom: 60px;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: "Segoe UI", Arial, sans-serif;
     background: #f7f7f7;
+    color: #333;
 }
+
+/* ==============================
+   FORM DEFAULTS
+   ============================== */
 
 .form-floating > .form-control-plaintext::placeholder,
 .form-floating > .form-control::placeholder {
@@ -39,7 +44,9 @@ body {
     text-align: start;
 }
 
-/* Header */
+/* ==============================
+   HEADER
+   ============================== */
 
 .header {
     background: linear-gradient(135deg, #ff6b81, #ff9a9e);
@@ -52,7 +59,9 @@ body {
     font-size: 40px;
 }
 
-/* Dashboard */
+/* ==============================
+   DASHBOARD
+   ============================== */
 
 .container {
     padding: 40px;
@@ -62,14 +71,16 @@ body {
     background: white;
     padding: 30px;
     border-radius: 20px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, .1);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
 .welcome h2 {
     color: #ff6b81;
 }
 
-/* Cards */
+/* ==============================
+   CARDS
+   ============================== */
 
 .cards {
     display: flex;
@@ -84,7 +95,7 @@ body {
     padding: 25px;
     border-radius: 20px;
     text-align: center;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, .1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
 }
 
@@ -97,7 +108,9 @@ body {
     font-size: 30px;
 }
 
-/* Buttons */
+/* ==============================
+   BUTTONS
+   ============================== */
 
 .menu {
     margin-top: 40px;
@@ -117,3 +130,327 @@ body {
 .menu a:hover {
     background: #ff4757;
 }
+
+/* ==================================================
+   PROFILE / UPDATE AVATAR / CHANGE PASSWORD
+   ================================================== */
+
+.avatar-card {
+    max-width: 900px;
+    margin: 40px auto;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+/* ==============================
+   PROFILE HEADER
+   ============================== */
+
+.avatar-header {
+    padding: 30px 35px;
+    background: linear-gradient(135deg, #ff6b81, #ff9a9e);
+    color: white;
+}
+
+.avatar-header h2 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+}
+
+.avatar-header p {
+    margin: 8px 0 0;
+    font-size: 15px;
+    font-weight: 400;
+}
+
+/* ==============================
+   MAIN PROFILE SECTION
+   ============================== */
+
+.avatar-section {
+    padding: 35px;
+}
+
+/* ==============================
+   PROFILE PREVIEW
+   ============================== */
+
+.avatar-preview {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.avatar-image {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid #ff9a9e;
+    display: block;
+    margin: 0 auto 15px;
+}
+
+.user-name {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+    margin-top: 10px;
+}
+
+.username {
+    font-size: 14px;
+    font-weight: 400;
+    color: #888;
+    margin-top: 5px;
+}
+
+/* ==============================
+   USER INFORMATION
+   ============================== */
+
+.user-information {
+    background: #fafafa;
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.information-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.information-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.information-row:last-child {
+    border-bottom: none;
+}
+
+.information-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #666;
+}
+
+.information-value {
+    font-size: 14px;
+    font-weight: 400;
+    color: #333;
+}
+
+/* ==============================
+   DIVIDER
+   ============================== */
+
+.divider {
+    border: 0;
+    border-top: 1px solid #eeeeee;
+    margin: 30px 0;
+}
+
+/* ==============================
+   SECTION TITLES
+   ============================== */
+
+.section-title {
+    font-size: 19px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.section-description {
+    font-size: 14px;
+    color: #777;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+/* ==============================
+   PASSWORD FIELDS
+   ============================== */
+
+.password-field {
+    margin-bottom: 20px;
+}
+
+.password-field .file-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #444;
+    margin-bottom: 8px;
+}
+
+.password-field .form-control {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 14px;
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 14px;
+    color: #333;
+    background: #ffffff;
+    transition: border-color 0.2s ease,
+                box-shadow 0.2s ease;
+}
+
+.password-field .form-control:focus {
+    border-color: #ff6b81;
+    box-shadow: 0 0 0 3px rgba(255, 107, 129, 0.15);
+    outline: none;
+}
+
+.password-field .file-help {
+    display: block;
+    margin-top: 7px;
+    font-size: 12px;
+    color: #888;
+    line-height: 1.5;
+}
+
+/* ==============================
+   VALIDATION
+   ============================== */
+
+.validation-summary {
+    font-size: 13px;
+    margin-bottom: 15px;
+}
+
+.validation-message {
+    display: block;
+    margin-top: 5px;
+    font-size: 13px;
+}
+
+/* ==============================
+   AVATAR / PASSWORD BUTTONS
+   ============================== */
+
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 30px;
+}
+
+.avatar-button {
+    display: inline-block;
+    padding: 12px 25px;
+    border-radius: 30px;
+    border: none;
+    text-decoration: none;
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s ease,
+                transform 0.2s ease;
+}
+
+.avatar-button:hover {
+    transform: translateY(-2px);
+}
+
+.cancel-button {
+    background: #eeeeee;
+    color: #555;
+}
+
+.cancel-button:hover {
+    background: #dddddd;
+    color: #333;
+}
+
+.save-button {
+    background: #ff6b81;
+    color: white;
+}
+
+.save-button:hover {
+    background: #ff4757;
+    color: white;
+}
+
+/* ==============================
+   FILE UPLOAD
+   ============================== */
+
+.file-label {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #444;
+    margin-bottom: 8px;
+}
+
+.file-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 14px;
+}
+
+.file-help {
+    display: block;
+    margin-top: 7px;
+    font-size: 12px;
+    color: #888;
+}
+
+/* ==============================
+   MOBILE RESPONSIVE
+   ============================== */
+
+@media (max-width: 767px) {
+
+    .container {
+        padding: 20px;
+    }
+
+    .avatar-card {
+        margin: 20px;
+    }
+
+    .avatar-header {
+        padding: 25px;
+    }
+
+    .avatar-section {
+        padding: 25px;
+    }
+
+    .avatar-header h2 {
+        font-size: 24px;
+    }
+
+    .information-row {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .button-container {
+        flex-direction: column;
+    }
+
+    .avatar-button {
+        width: 100%;
+        text-align: center;
+        box-sizing: border-box;
+    }
+}
+
