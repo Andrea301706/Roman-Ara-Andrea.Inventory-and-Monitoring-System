@@ -4,10 +4,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Roman_Ara_Andrea.Inventory_and_Monitoring_System.Infrastructure;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
+using Roman_Ara_Andrea.Inventory_and_Monitoring_System.Domain;
 
 namespace Roman_Ara_Andrea.Inventory_and_Monitoring_System.Pages.Account;
 
-[Authorize]
+[Authorize(Roles = "Admin,User")]
 public class ProfileModel : PageModel
 {
     private readonly InventorySystemDbContext _dbContext;

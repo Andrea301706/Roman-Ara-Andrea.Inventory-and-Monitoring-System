@@ -1,0 +1,141 @@
+@page "/manage/users"
+@model Roman_Ara_Andrea.Inventory_and_Monitoring_System.Pages.Manage.Users.IndexModel
+
+@{
+    ViewData["Title"] = "Manage Users";
+}
+
+<div class="container mt-5">
+
+    <h1 class="mb-5">Manage Users</h1>
+
+    <table class="user-table">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Current Role</th>
+                <th>Change Role</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @foreach (var user in Model.Users)
+            {
+                <tr>
+
+                    <td>
+                        @user.UserName
+                    </td>
+
+                    <td>
+                        <span class="role-badge">
+                            @user.Role
+                        </span>
+                    </td>
+
+                    <td>
+
+                        <form method="post">
+
+                            <input type="hidden"
+                                   name="userId"
+                                   value="@user.UserId" />
+
+                            <select name="role"
+                                    class="role-select">
+
+                                @if (user.Role == "Admin")
+                                {
+                                    <option value="Admin" selected>
+                                        Admin
+                                    </option>
+
+                                    <option value="User">
+                                        User
+                                    </option>
+                                }
+                                else
+                                {
+                                    <option value="Admin">
+                                        Admin
+                                    </option>
+
+                                    <option value="User" selected>
+                                        User
+                                    </option>
+                                }
+
+                            </select>
+
+                            <button type="submit"
+                                    class="save-btn">
+                                Save
+                            </button>
+
+                        </form>
+
+                    </td>
+
+                </tr>
+            }
+
+        </tbody>
+    </table>
+
+</div>
+
+<style>
+
+    .user-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .user-table th {
+        text-align: left;
+        padding: 18px 20px;
+        font-size: 18px;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .user-table td {
+        padding: 22px 20px;
+        font-size: 17px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .role-badge {
+        display: inline-block;
+        background: #c94f56;
+        color: white;
+        font-weight: bold;
+        padding: 9px 25px;
+        border-radius: 7px;
+        min-width: 100px;
+        text-align: center;
+    }
+
+    .role-select {
+        padding: 9px 15px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 16px;
+        margin-right: 8px;
+    }
+
+    .save-btn {
+        padding: 9px 18px;
+        border: none;
+        border-radius: 6px;
+        background: #c94f56;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .save-btn:hover {
+        opacity: 0.9;
+    }
+
+</style>

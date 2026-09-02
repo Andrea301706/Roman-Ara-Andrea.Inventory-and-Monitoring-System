@@ -1,9 +1,11 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Roman Ara Andrea.Inventory and Monitoring System</title>
+
+    <title>@ViewData["Title"] - Inventory and Monitoring System</title>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -14,47 +16,121 @@
     <!-- Project CSS -->
     <link rel="stylesheet" href="~/Roman Ara Andrea.Inventory and Monitoring System.styles.css" asp-append-version="true" />
 </head>
+
 <body>
 
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-page="/Index">
-                    Inventory and Monitoring System
-                </a>
+    @{
+        var isAccessDenied = ViewData["Title"]?.ToString() == "Access Denied";
+    }
 
-                <button class="navbar-toggler" type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+    @if (!isAccessDenied)
+    {
+        <!-- HEADER / NAVIGATION -->
+        <header>
+            <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
+                <div class="container">
 
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-page="/Privacy">Privacy</a>
-                        </li>
-                    </ul>
+                    <!-- Mobile Menu Button -->
+                    <button class="navbar-toggler"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#navbarNav"
+                            aria-controls="navbarNav"
+                            aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarNav">
+
+                        <ul class="navbar-nav me-auto">
+
+                            <!-- Home -->
+                            <li class="nav-item">
+                                <a class="nav-link" asp-page="/Index">
+                                    Home
+                                </a>
+                            </li>
+
+                            <!-- Privacy -->
+                            <li class="nav-item">
+                                <a class="nav-link" asp-page="/Privacy">
+                                    Privacy
+                                </a>
+                            </li>
+
+                            @if (User.Identity != null && User.Identity.IsAuthenticated)
+                            {
+                                <!-- My Profile -->
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-page="/Account/Profile">
+                                        My Profile
+                                    </a>
+                                </li>
+
+                                <!-- Admin Only -->
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-page="/Admin/Dashboard">
+                                            Admin Dashboard
+                                        </a>
+                                    </li>
+                                }
+
+                                <!-- User Only -->
+                                @if (User.IsInRole("User"))
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-page="/Events/MyEvents">
+                                            My Events
+                                        </a>
+                                    </li>
+                                }
+
+                                <!-- Logout -->
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-page="/Account/Logout">
+                                        Logout
+                                    </a>
+                                </li>
+                            }
+                            else
+                            {
+                                <!-- Guest / Login -->
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-page="/Account/Login">
+                                        Login
+                                    </a>
+                                </li>
+                            }
+
+                        </ul>
+
+                    </div>
                 </div>
-            </div>
-        </nav>
-    </header>
+            </nav>
+        </header>
+    }
 
+    <!-- PAGE CONTENT -->
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - Roman Ara Andrea.Inventory and Monitoring System
-        </div>
-    </footer>
+    @if (!isAccessDenied)
+    {
+        <!-- FOOTER -->
+        <footer class="border-top footer text-muted">
+            <div class="container">
+                &copy; 2026 - Roman Ara Andrea.Inventory and Monitoring System
+            </div>
+        </footer>
+    }
 
+    <!-- JavaScript -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

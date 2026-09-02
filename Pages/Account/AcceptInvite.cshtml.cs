@@ -3,9 +3,9 @@ using BCrypt.Net;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Roman_Ara_Andrea.Inventory_and_Monitoring_System.Domain;
 using Roman_Ara_Andrea.Inventory_and_Monitoring_System.Helpers;
 using Roman_Ara_Andrea.Inventory_and_Monitoring_System.Infrastructure;
-using Roman_Ara_Andrea.Inventory_and_Monitoring_System.Domain;
 
 namespace Roman_Ara_Andrea.Inventory_and_Monitoring_System.Pages.Account;
 
@@ -37,7 +37,7 @@ public class AcceptInviteModel : PageModel
 
     public IActionResult OnGet()
     {
-        if (string.IsNullOrEmpty(Token))
+        if (string.IsNullOrWhiteSpace(Token))
         {
             ErrorMessage = "Invalid invite link.";
             return Page();
@@ -60,7 +60,7 @@ public class AcceptInviteModel : PageModel
             return Page();
         }
 
-        // STEP 11 - Validate JWT Token
+        // Validate invite token
         var principal = _inviteTokenService.ValidateInviteToken(Token);
 
         if (principal == null)
@@ -69,27 +69,38 @@ public class AcceptInviteModel : PageModel
             return Page();
         }
 
-        // Read UserId from JWT
-        var userId = int.Parse(principal.FindFirst("UserId")!.Value);
+        // Get UserId from token
+        var userIdClaim = principal.FindFirst("UserId");
 
-        // STEP 13 - Confirm Password Validation
+        if (userIdClaim == null ||
+            !int.TryParse(userIdClaim.Value, out int userId))
+        {
+            ErrorMessage = "Invalid user.";
+            return Page();
+        }
+
+        // Confirm password
         if (Password != ConfirmPassword)
         {
             ErrorMessage = "Passwords do not match.";
             return Page();
         }
 
-        // STEP 14 - Strong Password Validation
+        // Validate password
         if (!PasswordPolicyHelper.IsValid(Password))
         {
-            ErrorMessage = "Password does not meet the required policy.";
+            ErrorMessage =
+                "Password must contain uppercase, lowercase, number, " +
+                "special character and at least 8 characters.";
+
             return Page();
         }
 
-        // STEP 15 - Hash Password
-        string hashedPassword = BCrypt.Net.BCrypt.HashPassword(Password);
+        // Hash password
+        string hashedPassword =
+            BCrypt.Net.BCrypt.HashPassword(Password);
 
-        // STEP 16 - Save Password in UserLoginInfo
+        // Find existing password record
         var passwordRecord = await _dbContext.UserLoginInfos
             .FirstOrDefaultAsync(x =>
                 x.UserId == userId &&
@@ -97,7 +108,8 @@ public class AcceptInviteModel : PageModel
 
         if (passwordRecord == null)
         {
-            passwordRecord = new UserLoginInfo
+            // Create password record
+            passwordRecord = new UserLogininfo
             {
                 UserId = userId,
                 Key = "Password",
@@ -108,14 +120,15 @@ public class AcceptInviteModel : PageModel
         }
         else
         {
+            // Update existing password
             passwordRecord.Value = hashedPassword;
         }
 
         await _dbContext.SaveChangesAsync();
 
-        TempData["SuccessMessage"] = "Account setup complete. You may now log in.";
+        TempData["SuccessMessage"] =
+            "Account setup complete. You may now log in.";
 
-        // STEP 17 - Redirect to Login
         return RedirectToPage("/Account/Login");
     }
 }

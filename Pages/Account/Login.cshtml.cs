@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Roman_Ara_Andrea.Inventory_and_Monitoring_System.Infrastructure;
-using Roman_Ara_Andrea.Inventory_and_Monitoring_System.Domain;
 using System.Security.Claims;
+using Roman_Ara_Andrea.Inventory_and_Monitoring_System.Domain;
 
 namespace Roman_Ara_Andrea.Inventory_and_Monitoring_System.Pages.Account;
 
@@ -53,9 +53,11 @@ public class LoginModel : PageModel
 
         // STEP 3: Check Login Status
         var loginStatus = _dbContext.UserLoginInfos
-            .FirstOrDefault(x =>
+            .Where(x =>
                 x.UserId == user.Id &&
-                x.Key == "LoginStatus");
+                x.Key == "LoginStatus")
+            .OrderByDescending(x => x.Id)
+            .FirstOrDefault();
 
         if (loginStatus == null)
         {
@@ -73,9 +75,11 @@ public class LoginModel : PageModel
 
         // STEP 4: Retrieve Stored Password
         var storedPassword = _dbContext.UserLoginInfos
-            .FirstOrDefault(x =>
+            .Where(x =>
                 x.UserId == user.Id &&
-                x.Key == "Password");
+                x.Key == "Password")
+            .OrderByDescending(x => x.Id)
+            .FirstOrDefault();
 
         if (storedPassword == null)
         {
@@ -96,17 +100,42 @@ public class LoginModel : PageModel
 
         // STEP 6: Reset Login Retries
         var retries = _dbContext.UserLoginInfos
-            .FirstOrDefault(x =>
+            .Where(x =>
                 x.UserId == user.Id &&
-                x.Key == "LoginRetries");
+                x.Key == "LoginRetries")
+            .OrderByDescending(x => x.Id)
+            .FirstOrDefault();
 
         if (retries != null)
         {
             retries.Value = "0";
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
         }
 
-        // STEP 7: Create Authentication Claims
+        // STEP 7: Retrieve User Role
+        var roleInfo = _dbContext.UserLoginInfos
+            .Where(x =>
+                x.UserId == user.Id &&
+                x.Key.ToLower() == "role")
+            .OrderByDescending(x => x.Id)
+            .FirstOrDefault();
+
+        // STEP 8: Normalize Role
+        string roleValue;
+
+        if (string.Equals(
+                roleInfo?.Value?.Trim(),
+                "admin",
+                StringComparison.OrdinalIgnoreCase))
+        {
+            roleValue = "Admin";
+        }
+        else
+        {
+            roleValue = "User";
+        }
+
+        // STEP 9: Create Authentication Claims
         var claims = new List<Claim>
         {
             new Claim(
@@ -115,41 +144,41 @@ public class LoginModel : PageModel
 
             new Claim(
                 ClaimTypes.Name,
-                user.UserName ?? string.Empty),
+                user.UserName),
 
             new Claim(
                 ClaimTypes.GivenName,
-                user.FirstName ?? string.Empty),
+                user.FirstName),
 
             new Claim(
                 ClaimTypes.Surname,
-                user.LastName ?? string.Empty)
+                user.LastName),
+
+            new Claim(
+                ClaimTypes.Role,
+                roleValue)
         };
 
-        // STEP 8: Create Identity
+        // STEP 10: Create Identity
         var identity = new ClaimsIdentity(
             claims,
             CookieAuthenticationDefaults.AuthenticationScheme);
 
-        // STEP 9: Create Principal
+        // STEP 11: Create Principal
         var principal = new ClaimsPrincipal(identity);
 
-        // STEP 10: Sign In
+        // STEP 12: Sign In
         await HttpContext.SignInAsync(
             CookieAuthenticationDefaults.AuthenticationScheme,
             principal);
 
-var authResult = await HttpContext.AuthenticateAsync(
-    CookieAuthenticationDefaults.AuthenticationScheme);
+        // STEP 13: Redirect based on user role
+        if (roleValue == "Admin")
+        {
+            return RedirectToPage("/Admin/Dashboard");
+        }
 
-Console.WriteLine("===== AUTH TEST AFTER SIGN-IN =====");
-Console.WriteLine($"Authenticated: {authResult.Succeeded}");
-Console.WriteLine($"User: {authResult.Principal?.Identity?.Name}");
-Console.WriteLine(
-    $"NameIdentifier: {authResult.Principal?.FindFirst(ClaimTypes.NameIdentifier)?.Value}");
-Console.WriteLine("===================================");
-
-        // STEP 11: Redirect after successful login
         return RedirectToPage("/Products/Index");
     }
 }
+

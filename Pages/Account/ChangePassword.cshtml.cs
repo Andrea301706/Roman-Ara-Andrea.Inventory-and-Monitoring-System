@@ -6,6 +6,8 @@ using Roman_Ara_Andrea.Inventory_and_Monitoring_System.DTOs;
 using Roman_Ara_Andrea.Inventory_and_Monitoring_System.Helpers;
 using Roman_Ara_Andrea.Inventory_and_Monitoring_System.Infrastructure;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Roman_Ara_Andrea.Inventory_and_Monitoring_System.Domain;
 
 namespace Roman_Ara_Andrea.Inventory_and_Monitoring_System.Pages.Account;
 

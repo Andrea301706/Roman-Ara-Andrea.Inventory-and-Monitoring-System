@@ -38,10 +38,12 @@ public class InviteModel : PageModel
             return Page();
         }
 
-        // Check existing username
+        // Check if username already exists
         var existingUser = await _dbContext.Users
             .FirstOrDefaultAsync(u =>
-                u.UserName!.ToLower() == UserInviteDto.Username!.ToLower());
+                u.UserName != null &&
+                u.UserName.ToLower() ==
+                UserInviteDto.Username!.ToLower());
 
         if (existingUser != null)
         {
@@ -51,7 +53,6 @@ public class InviteModel : PageModel
 
             return Page();
         }
-
 
         // Age validation
         DateTime birthDate = UserInviteDto.DateOfBirth!.Value;
@@ -72,8 +73,7 @@ public class InviteModel : PageModel
             return Page();
         }
 
-
-        // Create User
+        // Create new user
         var newUser = new User
         {
             UserName = UserInviteDto.Username,
@@ -82,44 +82,49 @@ public class InviteModel : PageModel
             DateOfBirth = UserInviteDto.DateOfBirth.Value
         };
 
-
         _dbContext.Users.Add(newUser);
 
         await _dbContext.SaveChangesAsync();
 
-
-        // Create login information
-        _dbContext.UserLoginInfos.Add(new UserLoginInfo
+        // Create LoginStatus record
+        var loginStatus = new UserLogininfo
         {
             UserId = newUser.Id,
             Key = "LoginStatus",
             Value = "Pending"
-        });
+        };
 
+        _dbContext.UserLoginInfos.Add(loginStatus);
+
+        // Create default Role record
+        // New invited users start as User.
+        var roleRecord = new UserLogininfo
+        {
+            UserId = newUser.Id,
+            Key = "Role",
+            Value = "User"
+        };
+
+        _dbContext.UserLoginInfos.Add(roleRecord);
 
         await _dbContext.SaveChangesAsync();
 
-
         // Create invite token
         var token = _inviteTokenService.CreateInviteToken(newUser.Id);
-
 
         // Create invite URL
         var inviteUrl =
             $"https://localhost:7180/Account/AcceptInvite?token={token}";
 
-
-        // Send email
+        // Send invitation email
         await _emailService.SendInviteEmailAsync(
             UserInviteDto.Email!,
             inviteUrl);
-
 
         TempData["SuccessMessage"] =
             "Invitation email sent successfully!";
 
         TempData["InviteUrl"] = inviteUrl;
-
 
         return Page();
     }
@@ -132,19 +137,15 @@ public class UserInviteDto
     [Required(ErrorMessage = "Username is required.")]
     public string? Username { get; set; }
 
-
     [Required(ErrorMessage = "Email is required.")]
     [EmailAddress(ErrorMessage = "Invalid email address.")]
     public string? Email { get; set; }
 
-
     [Required(ErrorMessage = "First Name is required.")]
     public string? FirstName { get; set; }
 
-
     [Required(ErrorMessage = "Last Name is required.")]
     public string? LastName { get; set; }
-
 
     [Required(ErrorMessage = "Date of Birth is required.")]
     public DateTime? DateOfBirth { get; set; }

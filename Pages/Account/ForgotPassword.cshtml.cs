@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Roman_Ara_Andrea.Inventory_and_Monitoring_System.Infrastructure;
 using Roman_Ara_Andrea.Inventory_and_Monitoring_System.Services;
 using EmailService = Roman_Ara_Andrea.Inventory_and_Monitoring_System.Infrastructure.EmailService;
+using Roman_Ara_Andrea.Inventory_and_Monitoring_System.Domain;
 
 namespace Roman_Ara_Andrea.Inventory_and_Monitoring_System.Pages.Account;
 

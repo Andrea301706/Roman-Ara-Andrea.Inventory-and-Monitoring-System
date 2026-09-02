@@ -1,4 +1,3 @@
-
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Roman_Ara_Andrea.Inventory_and_Monitoring_System.Helpers;
@@ -11,17 +10,20 @@ var builder = WebApplication.CreateBuilder(args);
 // TEST PASSWORD HASH
 // =====================================================
 // TEMPORARY ONLY:
-// This generates a BCrypt hash for the test password:
+// Generates a BCrypt hash for:
 // admin123
 //
-// Run the application once and copy the hash from the
-// terminal. Then use that hash in UserLoginInfos.
+// Run the application once and copy the hash
+// from the terminal.
 //
-// REMOVE OR COMMENT THIS LINE AFTER COPYING THE HASH.
+// AFTER COPYING THE HASH, REMOVE THIS SECTION.
 // =====================================================
-Console.WriteLine("TEST PASSWORD HASH:");
-Console.WriteLine(BCrypt.Net.BCrypt.HashPassword("admin123"));
-Console.WriteLine("END TEST PASSWORD HASH");
+Console.WriteLine("========================================");
+Console.WriteLine("TEST PASSWORD HASH");
+Console.WriteLine("Password: admin123");
+Console.WriteLine(
+    BCrypt.Net.BCrypt.HashPassword("admin123"));
+Console.WriteLine("========================================");
 
 // =====================================================
 // RAZOR PAGES
@@ -67,13 +69,20 @@ builder.Services
         options.Cookie.Name = "InventorySystemAuth";
 
         options.LoginPath = "/Account/Login";
-        options.AccessDeniedPath = "/Account/Login";
 
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+        options.AccessDeniedPath =
+            "/Account/AccessDenied";
+
+        options.ExpireTimeSpan =
+            TimeSpan.FromMinutes(30);
+
         options.SlidingExpiration = true;
 
         options.Cookie.HttpOnly = true;
-        options.Cookie.SameSite = SameSiteMode.Lax;
+
+        options.Cookie.SameSite =
+            SameSiteMode.Lax;
+
         options.Cookie.SecurePolicy =
             CookieSecurePolicy.SameAsRequest;
     });
@@ -83,6 +92,9 @@ builder.Services
 // =====================================================
 builder.Services.AddAuthorization();
 
+// =====================================================
+// BUILD APPLICATION
+// =====================================================
 var app = builder.Build();
 
 // =====================================================

@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Roman_Ara_Andrea.Inventory_and_Monitoring_System.Domain
 {
-    public class UserLoginInfo
+    public class UserLogininfo
     {
         [Key]
         public int Id { get; set; }

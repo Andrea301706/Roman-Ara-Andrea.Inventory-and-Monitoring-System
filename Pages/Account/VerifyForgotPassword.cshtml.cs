@@ -35,7 +35,6 @@ public class VerifyForgotPasswordModel : PageModel
 
     public string ErrorMessage { get; set; } = string.Empty;
 
-
     public IActionResult OnGet(string token)
     {
         if (string.IsNullOrWhiteSpace(token))
@@ -68,13 +67,11 @@ public class VerifyForgotPasswordModel : PageModel
         return Page();
     }
 
-
     public async Task<IActionResult> OnPostAsync()
     {
         Console.WriteLine("RESET PASSWORD SUBMITTED");
         Console.WriteLine($"UserId: {UserId}");
         Console.WriteLine($"New Password Length: {NewPassword.Length}");
-
 
         if (UserId <= 0)
         {
@@ -82,13 +79,11 @@ public class VerifyForgotPasswordModel : PageModel
             return Page();
         }
 
-
         if (string.IsNullOrWhiteSpace(NewPassword))
         {
             ModelState.AddModelError("", "Password is required.");
             return Page();
         }
-
 
         if (NewPassword != ConfirmPassword)
         {
@@ -96,30 +91,28 @@ public class VerifyForgotPasswordModel : PageModel
             return Page();
         }
 
-
         if (!PasswordPolicyHelper.IsValid(NewPassword))
         {
-            ModelState.AddModelError("", 
-                "Password must contain uppercase, lowercase, number, special character and at least 8 characters.");
+            ModelState.AddModelError(
+                "",
+                "Password must contain uppercase, lowercase, number, special character and at least 8 characters."
+            );
 
             return Page();
         }
-
 
         var loginInfo = await _context.UserLoginInfos
             .FirstOrDefaultAsync(x =>
                 x.UserId == UserId &&
                 x.Key == "Password");
 
-
         var passwordHash = BCrypt.Net.BCrypt.HashPassword(NewPassword);
-
 
         if (loginInfo == null)
         {
             Console.WriteLine("Creating new password record.");
 
-            loginInfo = new UserLoginInfo
+            loginInfo = new UserLogininfo
             {
                 UserId = UserId,
                 Key = "Password",
@@ -135,21 +128,17 @@ public class VerifyForgotPasswordModel : PageModel
             loginInfo.Value = passwordHash;
         }
 
-
         Console.WriteLine("Saving password...");
 
         await _context.SaveChangesAsync();
 
         Console.WriteLine("PASSWORD SAVED SUCCESSFULLY");
 
-
         TempData["Success"] = "Password changed successfully.";
 
         return RedirectToPage("/Account/Login");
     }
 }
-
-
 
 internal class PasswordPolicyHelper
 {
@@ -161,28 +150,22 @@ internal class PasswordPolicyHelper
         if (password.Length < 8)
             return false;
 
-
         bool hasUpper = false;
         bool hasLower = false;
         bool hasDigit = false;
         bool hasSpecial = false;
 
-
         foreach (char c in password)
         {
             if (char.IsUpper(c))
                 hasUpper = true;
-
             else if (char.IsLower(c))
                 hasLower = true;
-
             else if (char.IsDigit(c))
                 hasDigit = true;
-
             else
                 hasSpecial = true;
         }
-
 
         return hasUpper &&
                hasLower &&

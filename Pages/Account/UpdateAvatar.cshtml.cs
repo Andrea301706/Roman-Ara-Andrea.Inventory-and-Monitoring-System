@@ -5,6 +5,7 @@ using Roman_Ara_Andrea.Inventory_and_Monitoring_System.Infrastructure;
 using System.Security.Claims;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Png;
+using Roman_Ara_Andrea.Inventory_and_Monitoring_System.Domain;
 
 namespace Roman_Ara_Andrea.Inventory_and_Monitoring_System.Pages.Account;
 

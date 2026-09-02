@@ -1,0 +1,58 @@
+@page "/Account/AccessDenied"
+
+@{
+    ViewData["Title"] = "Access Denied";
+}
+
+<div class="access-denied">
+    <div class="access-denied-card">
+        <h1>Access Denied</h1>
+
+        <p>
+            You do not have permission to access this page.
+        </p>
+
+        <a href="/" class="back-button">
+            Back to Home
+        </a>
+    </div>
+</div>
+
+<style>
+    .access-denied {
+        min-height: 70vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .access-denied-card {
+        text-align: center;
+        padding: 40px;
+    }
+
+    .access-denied-card h1 {
+        font-size: 36px;
+        margin-bottom: 15px;
+    }
+
+    .access-denied-card p {
+        font-size: 18px;
+        color: #666;
+        margin-bottom: 25px;
+    }
+
+    .back-button {
+        display: inline-block;
+        padding: 10px 25px;
+        background: #c94f56;
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+    }
+
+    .back-button:hover {
+        color: white;
+        opacity: 0.9;
+    }
+</style>

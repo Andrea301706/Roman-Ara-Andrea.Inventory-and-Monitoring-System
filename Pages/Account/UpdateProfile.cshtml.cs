@@ -5,9 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Hosting;
-
-using Roman_Ara_Andrea.Inventory_and_Monitoring_System.Infrastructure;
 using Roman_Ara_Andrea.Inventory_and_Monitoring_System.Domain;
+using Roman_Ara_Andrea.Inventory_and_Monitoring_System.Infrastructure;
 public class UpdateProfile : PageModel
 {
     private readonly InventorySystemDbContext _dbContext;
