@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Roman_Ara_Andrea.Inventory_and_Monitoring_System.Infrastructure;
 using Roman_Ara_Andrea.Inventory_and_Monitoring_System.Services;
 using EmailService = Roman_Ara_Andrea.Inventory_and_Monitoring_System.Infrastructure.EmailService;
-using Roman_Ara_Andrea.Inventory_and_Monitoring_System.Domain;
 
 namespace Roman_Ara_Andrea.Inventory_and_Monitoring_System.Pages.Account;
 
@@ -37,7 +36,10 @@ public class ForgotPasswordModel : PageModel
     {
         if (string.IsNullOrWhiteSpace(EmailAddress))
         {
-            ModelState.AddModelError("", "Email address is required.");
+            ModelState.AddModelError(
+                "",
+                "Email address is required.");
+
             return Page();
         }
 
@@ -48,35 +50,48 @@ public class ForgotPasswordModel : PageModel
         {
             try
             {
+                // Generate reset token
                 var token = _tokenService.GenerateResetToken(user.Id);
 
-                var link = $"{Request.Scheme}://{Request.Host}/account/verify-forgot-password?token={token}";
+                // Encode token for URL
+                var encodedToken =
+                    Uri.EscapeDataString(token);
 
+                // Create reset link
+                var link =
+                    $"{Request.Scheme}://{Request.Host}" +
+                    $"/account/verify-forgot-password?token={encodedToken}";
+
+                // Send email
                 await _emailService.SendEmailAsync(
                     user.Email,
                     "Reset Password",
                     $@"
-Hello {user.FirstName},<br><br>c
+Hello {user.FirstName},<br><br>
 
 You requested to reset your password.<br><br>
 
 Click the link below to reset your password:<br><br>
 
-<a href='{link}'>{link}</a><br><br>
+<a href='{link}'>Reset My Password</a><br><br>
 
 This link will expire in <b>5 minutes</b>.<br><br>
 
-If you did not request this password reset, you may ignore this email.");
+If you did not request this password reset, you may ignore this email.
+");
+
             }
-            catch
+            catch (Exception ex)
             {
-                // Optional: log the exception here.
-                // Do not expose email sending errors to the user.
+                // Show the real problem in Visual Studio console
+                Console.WriteLine("PASSWORD RESET ERROR:");
+                Console.WriteLine(ex.Message);
             }
         }
 
-        // Always return the same message for security
-        Message = "We have sent you an email with link to reset your password.";
+        // Do not reveal whether the email exists
+        Message =
+            "We have sent you an email with a link to reset your password.";
 
         return Page();
     }

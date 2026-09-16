@@ -1,53 +1,1160 @@
-@page
+@page "/account/register"
 @model Roman_Ara_Andrea.Inventory_and_Monitoring_System.Pages.Account.RegisterModel
 
 @{
     ViewData["Title"] = "Register";
 }
 
-<h2>Account Registration</h2>
+<style>
+    .register-page {
+        min-height: calc(100vh - 80px);
+        padding: 35px 20px;
+        background: #fdf5f8;
+    }
 
-@if (!string.IsNullOrEmpty(Model.ErrorMessage))
-{
-    <div class="alert alert-danger">
-        @Model.ErrorMessage
+    .register-wrapper {
+        max-width: 850px;
+        margin: 0 auto;
+    }
+
+    /* Header */
+    .register-header {
+        margin-bottom: 25px;
+    }
+
+    .register-header h2 {
+        margin: 0;
+        font-size: 28px;
+        font-weight: 700;
+        color: #4a1830;
+    }
+
+    .register-header p {
+        margin: 6px 0 0;
+        color: #8b7180;
+        font-size: 14px;
+    }
+
+    /* Card */
+    .register-card {
+        background: #ffffff;
+        border-radius: 22px;
+        overflow: hidden;
+        border: 1px solid #f3dce6;
+        box-shadow: 0 10px 35px rgba(107, 25, 70, 0.10);
+    }
+
+    /* Pink Banner */
+    .register-banner {
+        height: 125px;
+        background: linear-gradient(135deg, #8f174f, #d84b88);
+        position: relative;
+        overflow: hidden;
+        padding: 28px 45px;
+        color: white;
+    }
+
+    .register-banner::before {
+        content: "";
+        position: absolute;
+        width: 230px;
+        height: 230px;
+        border-radius: 50%;
+        background: rgba(255,255,255,.08);
+        right: -70px;
+        top: -130px;
+    }
+
+    .register-banner-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .register-banner-icon {
+        font-size: 25px;
+        margin-bottom: 5px;
+    }
+
+    .register-banner h3 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .register-banner span {
+        font-size: 13px;
+        opacity: .9;
+    }
+
+    /* Form Content */
+    .register-content {
+        padding: 35px 45px 40px;
+    }
+
+    /* Error */
+    .register-error {
+        padding: 13px 15px;
+        margin-bottom: 25px;
+        border-radius: 11px;
+        background: #fff0f3;
+        border: 1px solid #f5cbd7;
+        color: #a51d5b;
+        font-size: 14px;
+    }
+
+    .register-error i {
+        margin-right: 7px;
+    }
+
+    /* Form Grid */
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 2px;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        color: #4a1830;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .input-wrapper {
+        position: relative;
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #b06a89;
+        font-size: 15px;
+        pointer-events: none;
+    }
+
+    .form-control {
+        width: 100%;
+        min-height: 46px;
+        padding: 11px 14px 11px 42px;
+        border: 1px solid #e8ccd9;
+        border-radius: 11px;
+        background: #fffafb;
+        color: #42172e;
+        font-size: 14px;
+        transition: .2s ease;
+        box-sizing: border-box;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #a51d5b;
+        background: #ffffff;
+        box-shadow: 0 0 0 3px rgba(165, 29, 91, .10);
+    }
+
+    .form-control::placeholder {
+        color: #b59ca8;
+    }
+
+    /* Password */
+    .password-toggle {
+        position: absolute;
+        right: 13px;
+        top: 50%;
+        transform: translateY(-50%);
+        border: none;
+        background: transparent;
+        color: #9a7d8c;
+        cursor: pointer;
+        padding: 4px;
+    }
+
+    .password-toggle:hover {
+        color: #a51d5b;
+    }
+
+    .password-input {
+        padding-right: 45px;
+    }
+
+    /* Full width fields */
+    .full-width {
+        grid-column: 1 / -1;
+    }
+
+    /* Password Note */
+    .password-note {
+        margin-top: 8px;
+        color: #9a7d8c;
+        font-size: 12px;
+    }
+
+    /* Buttons */
+    .register-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 30px;
+        padding-top: 25px;
+        border-top: 1px solid #f2e3e9;
+    }
+
+    .register-button {
+        flex: 1;
+        min-height: 46px;
+        border-radius: 11px;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: .2s ease;
+        cursor: pointer;
+    }
+
+    .register-submit {
+        border: none;
+        background: #a51d5b;
+        color: white;
+    }
+
+    .register-submit:hover {
+        background: #861548;
+        color: white;
+        transform: translateY(-1px);
+        box-shadow: 0 5px 15px rgba(165,29,91,.20);
+    }
+
+    .register-cancel {
+        background: #fce8f1;
+        color: #a51d5b;
+        border: 1px solid #f1cbdc;
+    }
+
+    .register-cancel:hover {
+        background: #f7dce8;
+        color: #8c164c;
+        transform: translateY(-1px);
+    }
+
+    /* Login link */
+    .login-link {
+        text-align: center;
+        margin-top: 22px;
+        color: #8b7180;
+        font-size: 13px;
+    }
+
+    .login-link a {
+        color: #a51d5b;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .login-link a:hover {
+        text-decoration: underline;
+    }
+
+    /* Mobile */
+    @@media (max-width: 700px) {
+
+        .register-page {
+            padding: 20px 12px;
+        }
+
+        .register-header h2 {
+            font-size: 24px;
+        }
+
+        .register-banner {
+            height: 110px;
+            padding: 25px 25px;
+        }
+
+        .register-content {
+            padding: 25px 22px 30px;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .full-width {
+            grid-column: auto;
+        }
+
+        .register-actions {
+            flex-direction: column;
+        }
+
+        .register-button {
+            width: 100%;
+        }
+    }
+</style>
+
+
+<div class="register-page">
+
+    <div class="register-wrapper">
+
+        <!-- Page Header -->
+        <div class="register-header">
+            <h2>Account Registration</h2>
+            <p>Create your Inventory System account.</p>
+        </div>
+
+
+        <!-- Main Card -->
+        <div class="register-card">
+
+            <!-- Pink Banner -->
+            <div class="register-banner">
+
+                <div class="register-banner-content">
+
+                    <div class="register-banner-icon">
+                        <i class="bi bi-person-plus-fill"></i>
+                    </div>
+
+                    <h3>Create Account</h3>
+
+                    <span>
+                        Enter your information below to get started.
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- Form -->
+            <div class="register-content">
+
+                @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                {
+                    <div class="register-error">
+                        <i class="bi bi-exclamation-circle-fill"></i>
+                        @Model.ErrorMessage
+                    </div>
+                }
+
+
+                <form method="post">
+
+                    <div class="form-grid">
+
+                        <!-- Username -->
+                        <div class="form-group">
+
+                            <label asp-for="Input.UserName"
+                                   class="form-label">
+                                Username
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <i class="bi bi-person input-icon"></i>
+
+                                <input asp-for="Input.UserName"
+                                       class="form-control"
+                                       placeholder="Enter username"
+                                       autocomplete="username" />
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Date of Birth -->
+                        <div class="form-group">
+
+                            <label asp-for="Input.DateOfBirth"
+                                   class="form-label">
+                                Date of Birth
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <i class="bi bi-calendar3 input-icon"></i>
+
+                                <input asp-for="Input.DateOfBirth"
+                                       type="date"
+                                       class="form-control" />
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- First Name -->
+                        <div class="form-group">
+
+                            <label asp-for="Input.FirstName"
+                                   class="form-label">
+                                First Name
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <i class="bi bi-person-badge input-icon"></i>
+
+                                <input asp-for="Input.FirstName"
+                                       class="form-control"
+                                       placeholder="Enter first name" />
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Last Name -->
+                        <div class="form-group">
+
+                            <label asp-for="Input.LastName"
+                                   class="form-label">
+                                Last Name
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <i class="bi bi-person-badge input-icon"></i>
+
+                                <input asp-for="Input.LastName"
+                                       class="form-control"
+                                       placeholder="Enter last name" />
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Password -->
+                        <div class="form-group">
+
+                            <label asp-for="Input.Password"
+                                   class="form-label">
+                                Password
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <i class="bi bi-lock input-icon"></i>
+
+                                <input asp-for="Input.Password"
+                                       id="registerPassword"
+                                       type="password"
+                                       class="form-control password-input"
+                                       placeholder="Create a password"
+                                       autocomplete="new-password" />
+
+                                <button type="button"
+                                        class="password-toggle"
+                                        onclick="toggleRegisterPassword('registerPassword', 'registerPasswordIcon')"
+                                        aria-label="Show password">
+
+                                    <i id="registerPasswordIcon"
+                                       class="bi bi-eye"></i>
+
+                                </button>
+
+                            </div>
+
+                            <div class="password-note">
+                                Use a strong password for better account security.
+                            </div>
+
+                        </div>
+
+
+                        <!-- Confirm Password -->
+                        <div class="form-group">
+
+                            <label asp-for="Input.ConfirmPassword"
+                                   class="form-label">
+                                Confirm Password
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <i class="bi bi-shield-lock input-icon"></i>
+
+                                <input asp-for="Input.ConfirmPassword"
+                                       id="confirmPassword"
+                                       type="password"
+                                       class="form-control password-input"
+                                       placeholder="Confirm your password"
+                                       autocomplete="new-password" />
+
+                                <button type="button"
+                                        class="password-toggle"
+                                        onclick="toggleRegisterPassword('confirmPassword', 'confirmPasswordIcon')"
+                                        aria-label="Show password">
+
+                                    <i id="confirmPasswordIcon"
+                                       class="bi bi-eye"></i>
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Buttons -->
+                    <div class="register-actions">
+
+                        <a asp-page="/Account/Login"
+                           class="register-button register-cancel">
+
+                            <i class="bi bi-arrow-left"></i>
+                            Back to Login
+
+                        </a>
+
+
+                        <button type="submit"
+                                class="register-button register-submit">
+
+                            <i class="bi bi-person-plus"></i>
+                            Create Account
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+
+                <div class="login-link">
+
+                    Already have an account?
+
+                    <a asp-page="/Account/Login">
+                        Sign in here
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
-}
 
-<form method="post">
+</div>
 
-    <div class="mb-3">
-        <label asp-for="Input.UserName" class="form-label">Username</label>
-        <input asp-for="Input.UserName" class="form-control" />
+
+<script>
+
+    function toggleRegisterPassword(inputId, iconId) {
+
+        const input = document.getElementById(inputId);
+        const icon = document.getElementById(iconId);
+
+        if (input.type === "password") {
+
+            input.type = "text";
+
+            icon.classList.remove("bi-eye");
+            icon.classList.add("bi-eye-slash");
+
+        } else {
+
+            input.type = "password";
+
+            icon.classList.remove("bi-eye-slash");
+            icon.classList.add("bi-eye");
+
+        }
+    }
+
+</script>
+
+<style>
+    .register-page {
+        min-height: calc(100vh - 80px);
+        padding: 35px 20px;
+        background: #fdf5f8;
+    }
+
+    .register-wrapper {
+        max-width: 850px;
+        margin: 0 auto;
+    }
+
+    /* Header */
+    .register-header {
+        margin-bottom: 25px;
+    }
+
+    .register-header h2 {
+        margin: 0;
+        font-size: 28px;
+        font-weight: 700;
+        color: #4a1830;
+    }
+
+    .register-header p {
+        margin: 6px 0 0;
+        color: #8b7180;
+        font-size: 14px;
+    }
+
+    /* Card */
+    .register-card {
+        background: #ffffff;
+        border-radius: 22px;
+        overflow: hidden;
+        border: 1px solid #f3dce6;
+        box-shadow: 0 10px 35px rgba(107, 25, 70, 0.10);
+    }
+
+    /* Pink Banner */
+    .register-banner {
+        height: 125px;
+        background: linear-gradient(135deg, #8f174f, #d84b88);
+        position: relative;
+        overflow: hidden;
+        padding: 28px 45px;
+        color: white;
+    }
+
+    .register-banner::before {
+        content: "";
+        position: absolute;
+        width: 230px;
+        height: 230px;
+        border-radius: 50%;
+        background: rgba(255,255,255,.08);
+        right: -70px;
+        top: -130px;
+    }
+
+    .register-banner-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .register-banner-icon {
+        font-size: 25px;
+        margin-bottom: 5px;
+    }
+
+    .register-banner h3 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .register-banner span {
+        font-size: 13px;
+        opacity: .9;
+    }
+
+    /* Form Content */
+    .register-content {
+        padding: 35px 45px 40px;
+    }
+
+    /* Error */
+    .register-error {
+        padding: 13px 15px;
+        margin-bottom: 25px;
+        border-radius: 11px;
+        background: #fff0f3;
+        border: 1px solid #f5cbd7;
+        color: #a51d5b;
+        font-size: 14px;
+    }
+
+    .register-error i {
+        margin-right: 7px;
+    }
+
+    /* Form Grid */
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 2px;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        color: #4a1830;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .input-wrapper {
+        position: relative;
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #b06a89;
+        font-size: 15px;
+        pointer-events: none;
+    }
+
+    .form-control {
+        width: 100%;
+        min-height: 46px;
+        padding: 11px 14px 11px 42px;
+        border: 1px solid #e8ccd9;
+        border-radius: 11px;
+        background: #fffafb;
+        color: #42172e;
+        font-size: 14px;
+        transition: .2s ease;
+        box-sizing: border-box;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #a51d5b;
+        background: #ffffff;
+        box-shadow: 0 0 0 3px rgba(165, 29, 91, .10);
+    }
+
+    .form-control::placeholder {
+        color: #b59ca8;
+    }
+
+    /* Password */
+    .password-toggle {
+        position: absolute;
+        right: 13px;
+        top: 50%;
+        transform: translateY(-50%);
+        border: none;
+        background: transparent;
+        color: #9a7d8c;
+        cursor: pointer;
+        padding: 4px;
+    }
+
+    .password-toggle:hover {
+        color: #a51d5b;
+    }
+
+    .password-input {
+        padding-right: 45px;
+    }
+
+    /* Full width fields */
+    .full-width {
+        grid-column: 1 / -1;
+    }
+
+    /* Password Note */
+    .password-note {
+        margin-top: 8px;
+        color: #9a7d8c;
+        font-size: 12px;
+    }
+
+    /* Buttons */
+    .register-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 30px;
+        padding-top: 25px;
+        border-top: 1px solid #f2e3e9;
+    }
+
+    .register-button {
+        flex: 1;
+        min-height: 46px;
+        border-radius: 11px;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: .2s ease;
+        cursor: pointer;
+    }
+
+    .register-submit {
+        border: none;
+        background: #a51d5b;
+        color: white;
+    }
+
+    .register-submit:hover {
+        background: #861548;
+        color: white;
+        transform: translateY(-1px);
+        box-shadow: 0 5px 15px rgba(165,29,91,.20);
+    }
+
+    .register-cancel {
+        background: #fce8f1;
+        color: #a51d5b;
+        border: 1px solid #f1cbdc;
+    }
+
+    .register-cancel:hover {
+        background: #f7dce8;
+        color: #8c164c;
+        transform: translateY(-1px);
+    }
+
+    /* Login link */
+    .login-link {
+        text-align: center;
+        margin-top: 22px;
+        color: #8b7180;
+        font-size: 13px;
+    }
+
+    .login-link a {
+        color: #a51d5b;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .login-link a:hover {
+        text-decoration: underline;
+    }
+
+    /* Mobile */
+    @@media (max-width: 700px) {
+
+        .register-page {
+            padding: 20px 12px;
+        }
+
+        .register-header h2 {
+            font-size: 24px;
+        }
+
+        .register-banner {
+            height: 110px;
+            padding: 25px 25px;
+        }
+
+        .register-content {
+            padding: 25px 22px 30px;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .full-width {
+            grid-column: auto;
+        }
+
+        .register-actions {
+            flex-direction: column;
+        }
+
+        .register-button {
+            width: 100%;
+        }
+    }
+</style>
+
+
+<div class="register-page">
+
+    <div class="register-wrapper">
+
+        <!-- Page Header -->
+        <div class="register-header">
+            <h2>Account Registration</h2>
+            <p>Create your Inventory System account.</p>
+        </div>
+
+
+        <!-- Main Card -->
+        <div class="register-card">
+
+            <!-- Pink Banner -->
+            <div class="register-banner">
+
+                <div class="register-banner-content">
+
+                    <div class="register-banner-icon">
+                        <i class="bi bi-person-plus-fill"></i>
+                    </div>
+
+                    <h3>Create Account</h3>
+
+                    <span>
+                        Enter your information below to get started.
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- Form -->
+            <div class="register-content">
+
+                @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                {
+                    <div class="register-error">
+                        <i class="bi bi-exclamation-circle-fill"></i>
+                        @Model.ErrorMessage
+                    </div>
+                }
+
+
+                <form method="post">
+
+                    <div class="form-grid">
+
+                        <!-- Username -->
+                        <div class="form-group">
+
+                            <label asp-for="Input.UserName"
+                                   class="form-label">
+                                Username
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <i class="bi bi-person input-icon"></i>
+
+                                <input asp-for="Input.UserName"
+                                       class="form-control"
+                                       placeholder="Enter username"
+                                       autocomplete="username" />
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Date of Birth -->
+                        <div class="form-group">
+
+                            <label asp-for="Input.DateOfBirth"
+                                   class="form-label">
+                                Date of Birth
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <i class="bi bi-calendar3 input-icon"></i>
+
+                                <input asp-for="Input.DateOfBirth"
+                                       type="date"
+                                       class="form-control" />
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- First Name -->
+                        <div class="form-group">
+
+                            <label asp-for="Input.FirstName"
+                                   class="form-label">
+                                First Name
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <i class="bi bi-person-badge input-icon"></i>
+
+                                <input asp-for="Input.FirstName"
+                                       class="form-control"
+                                       placeholder="Enter first name" />
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Last Name -->
+                        <div class="form-group">
+
+                            <label asp-for="Input.LastName"
+                                   class="form-label">
+                                Last Name
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <i class="bi bi-person-badge input-icon"></i>
+
+                                <input asp-for="Input.LastName"
+                                       class="form-control"
+                                       placeholder="Enter last name" />
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Password -->
+                        <div class="form-group">
+
+                            <label asp-for="Input.Password"
+                                   class="form-label">
+                                Password
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <i class="bi bi-lock input-icon"></i>
+
+                                <input asp-for="Input.Password"
+                                       id="registerPassword"
+                                       type="password"
+                                       class="form-control password-input"
+                                       placeholder="Create a password"
+                                       autocomplete="new-password" />
+
+                                <button type="button"
+                                        class="password-toggle"
+                                        onclick="toggleRegisterPassword('registerPassword', 'registerPasswordIcon')"
+                                        aria-label="Show password">
+
+                                    <i id="registerPasswordIcon"
+                                       class="bi bi-eye"></i>
+
+                                </button>
+
+                            </div>
+
+                            <div class="password-note">
+                                Use a strong password for better account security.
+                            </div>
+
+                        </div>
+
+
+                        <!-- Confirm Password -->
+                        <div class="form-group">
+
+                            <label asp-for="Input.ConfirmPassword"
+                                   class="form-label">
+                                Confirm Password
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <i class="bi bi-shield-lock input-icon"></i>
+
+                                <input asp-for="Input.ConfirmPassword"
+                                       id="confirmPassword"
+                                       type="password"
+                                       class="form-control password-input"
+                                       placeholder="Confirm your password"
+                                       autocomplete="new-password" />
+
+                                <button type="button"
+                                        class="password-toggle"
+                                        onclick="toggleRegisterPassword('confirmPassword', 'confirmPasswordIcon')"
+                                        aria-label="Show password">
+
+                                    <i id="confirmPasswordIcon"
+                                       class="bi bi-eye"></i>
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Buttons -->
+                    <div class="register-actions">
+
+                        <a asp-page="/Account/Login"
+                           class="register-button register-cancel">
+
+                            <i class="bi bi-arrow-left"></i>
+                            Back to Login
+
+                        </a>
+
+
+                        <button type="submit"
+                                class="register-button register-submit">
+
+                            <i class="bi bi-person-plus"></i>
+                            Create Account
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+
+                <div class="login-link">
+
+                    Already have an account?
+
+                    <a asp-page="/Account/Login">
+                        Sign in here
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
 
-    <div class="mb-3">
-        <label asp-for="Input.FirstName" class="form-label">First Name</label>
-        <input asp-for="Input.FirstName" class="form-control" />
-    </div>
+</div>
 
-    <div class="mb-3">
-        <label asp-for="Input.LastName" class="form-label">Last Name</label>
-        <input asp-for="Input.LastName" class="form-control" />
-    </div>
 
-    <div class="mb-3">
-        <label asp-for="Input.DateOfBirth" class="form-label">Date of Birth</label>
-        <input asp-for="Input.DateOfBirth" type="date" class="form-control" />
-    </div>
+<script>
 
-    <div class="mb-3">
-        <label asp-for="Input.Password" class="form-label">Password</label>
-        <input asp-for="Input.Password" type="password" class="form-control" />
-    </div>
+    function toggleRegisterPassword(inputId, iconId) {
 
-    <div class="mb-3">
-        <label asp-for="Input.ConfirmPassword" class="form-label">Confirm Password</label>
-        <input asp-for="Input.ConfirmPassword" type="password" class="form-control" />
-    </div>
+        const input = document.getElementById(inputId);
+        const icon = document.getElementById(iconId);
 
-    <button type="submit" class="btn btn-primary">
-        Register
-    </button>
+        if (input.type === "password") {
 
-</form>
+            input.type = "text";
+
+            icon.classList.remove("bi-eye");
+            icon.classList.add("bi-eye-slash");
+
+        } else {
+
+            input.type = "password";
+
+            icon.classList.remove("bi-eye-slash");
+            icon.classList.add("bi-eye");
+
+        }
+    }
+
+</script>

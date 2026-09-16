@@ -3,9 +3,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Roman_Ara_Andrea.Inventory_and_Monitoring_System.Infrastructure;
-using System.Security.Claims;
-using Roman_Ara_Andrea.Inventory_and_Monitoring_System.Domain;
 
 namespace Roman_Ara_Andrea.Inventory_and_Monitoring_System.Pages.Account;
 
@@ -32,7 +31,7 @@ public class LoginModel : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
-        // STEP 1: Validate Username and Password
+        // STEP 1: Validate username and password
         if (string.IsNullOrWhiteSpace(UserName) ||
             string.IsNullOrWhiteSpace(Password))
         {
@@ -40,9 +39,10 @@ public class LoginModel : PageModel
             return Page();
         }
 
-        // STEP 2: Retrieve User
-        var user = _dbContext.Users
-            .FirstOrDefault(u =>
+        // STEP 2: Retrieve user
+        var user = await _dbContext.Users
+            .FirstOrDefaultAsync(u =>
+                u.UserName != null &&
                 u.UserName.ToLower() == UserName.ToLower());
 
         if (user == null)
@@ -51,13 +51,13 @@ public class LoginModel : PageModel
             return Page();
         }
 
-        // STEP 3: Check Login Status
-        var loginStatus = _dbContext.UserLoginInfos
+        // STEP 3: Check login status
+        var loginStatus = await _dbContext.UserLoginInfos
             .Where(x =>
                 x.UserId == user.Id &&
                 x.Key == "LoginStatus")
             .OrderByDescending(x => x.Id)
-            .FirstOrDefault();
+            .FirstOrDefaultAsync();
 
         if (loginStatus == null)
         {
@@ -73,13 +73,13 @@ public class LoginModel : PageModel
             return Page();
         }
 
-        // STEP 4: Retrieve Stored Password
-        var storedPassword = _dbContext.UserLoginInfos
+        // STEP 4: Retrieve stored password
+        var storedPassword = await _dbContext.UserLoginInfos
             .Where(x =>
                 x.UserId == user.Id &&
                 x.Key == "Password")
             .OrderByDescending(x => x.Id)
-            .FirstOrDefault();
+            .FirstOrDefaultAsync();
 
         if (storedPassword == null)
         {
@@ -87,7 +87,7 @@ public class LoginModel : PageModel
             return Page();
         }
 
-        // STEP 5: Verify Password
+        // STEP 5: Verify password
         bool passwordMatch = BCrypt.Net.BCrypt.Verify(
             Password,
             storedPassword.Value);
@@ -98,13 +98,13 @@ public class LoginModel : PageModel
             return Page();
         }
 
-        // STEP 6: Reset Login Retries
-        var retries = _dbContext.UserLoginInfos
+        // STEP 6: Reset login retries
+        var retries = await _dbContext.UserLoginInfos
             .Where(x =>
                 x.UserId == user.Id &&
                 x.Key == "LoginRetries")
             .OrderByDescending(x => x.Id)
-            .FirstOrDefault();
+            .FirstOrDefaultAsync();
 
         if (retries != null)
         {
@@ -112,15 +112,16 @@ public class LoginModel : PageModel
             await _dbContext.SaveChangesAsync();
         }
 
-        // STEP 7: Retrieve User Role
-        var roleInfo = _dbContext.UserLoginInfos
+        // STEP 7: Retrieve role
+        // Your database uses Key = "role"
+        var roleInfo = await _dbContext.UserLoginInfos
             .Where(x =>
                 x.UserId == user.Id &&
                 x.Key.ToLower() == "role")
             .OrderByDescending(x => x.Id)
-            .FirstOrDefault();
+            .FirstOrDefaultAsync();
 
-        // STEP 8: Normalize Role
+        // STEP 8: Normalize role
         string roleValue;
 
         if (string.Equals(
@@ -135,44 +136,46 @@ public class LoginModel : PageModel
             roleValue = "User";
         }
 
-        // STEP 9: Create Authentication Claims
-        var claims = new List<Claim>
+        // STEP 9: Create authentication claims
+        // Fully qualify Claim to avoid conflict with another Claim class.
+        var claims = new List<System.Security.Claims.Claim>
         {
-            new Claim(
-                ClaimTypes.NameIdentifier,
+            new System.Security.Claims.Claim(
+                System.Security.Claims.ClaimTypes.NameIdentifier,
                 user.Id.ToString()),
 
-            new Claim(
-                ClaimTypes.Name,
-                user.UserName),
+            new System.Security.Claims.Claim(
+                System.Security.Claims.ClaimTypes.Name,
+                user.UserName ?? string.Empty),
 
-            new Claim(
-                ClaimTypes.GivenName,
-                user.FirstName),
+            new System.Security.Claims.Claim(
+                System.Security.Claims.ClaimTypes.GivenName,
+                user.FirstName ?? string.Empty),
 
-            new Claim(
-                ClaimTypes.Surname,
-                user.LastName),
+            new System.Security.Claims.Claim(
+                System.Security.Claims.ClaimTypes.Surname,
+                user.LastName ?? string.Empty),
 
-            new Claim(
-                ClaimTypes.Role,
+            new System.Security.Claims.Claim(
+                System.Security.Claims.ClaimTypes.Role,
                 roleValue)
         };
 
-        // STEP 10: Create Identity
-        var identity = new ClaimsIdentity(
+        // STEP 10: Create identity
+        var identity = new System.Security.Claims.ClaimsIdentity(
             claims,
             CookieAuthenticationDefaults.AuthenticationScheme);
 
-        // STEP 11: Create Principal
-        var principal = new ClaimsPrincipal(identity);
+        // STEP 11: Create principal
+        var principal = new System.Security.Claims.ClaimsPrincipal(
+            identity);
 
-        // STEP 12: Sign In
+        // STEP 12: Sign in
         await HttpContext.SignInAsync(
             CookieAuthenticationDefaults.AuthenticationScheme,
             principal);
 
-        // STEP 13: Redirect based on user role
+        // STEP 13: Redirect based on role
         if (roleValue == "Admin")
         {
             return RedirectToPage("/Admin/Dashboard");
@@ -181,4 +184,3 @@ public class LoginModel : PageModel
         return RedirectToPage("/Products/Index");
     }
 }
-

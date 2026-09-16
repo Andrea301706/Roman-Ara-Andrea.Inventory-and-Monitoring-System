@@ -1,0 +1,182 @@
+@page "{id:int}"
+@model Roman_Ara_Andrea.Inventory_and_Monitoring_System.Pages.Admin.Products.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete Product";
+}
+
+<div class="products-page">
+
+    <!-- HEADER -->
+    <div class="products-header">
+
+        <div>
+            <h1>Delete Product</h1>
+            <p>Review the product information before permanently deleting it.</p>
+        </div>
+
+        <a asp-page="./Index"
+           class="btn btn-light">
+            <i class="bi bi-arrow-left"></i>
+            Back to Products
+        </a>
+
+    </div>
+
+
+    <!-- DELETE CARD -->
+    <div class="delete-product-card">
+
+        <!-- WARNING HEADER -->
+        <div class="delete-warning-header">
+
+            <div class="delete-warning-icon">
+                <i class="bi bi-trash3"></i>
+            </div>
+
+            <div>
+                <h2>Delete Product?</h2>
+                <p>
+                    Are you sure you want to permanently delete this product?
+                    This action cannot be undone.
+                </p>
+            </div>
+
+        </div>
+
+
+        <!-- PRODUCT INFORMATION -->
+        <div class="delete-product-body">
+
+            <div class="delete-product-summary">
+
+                <div class="delete-product-icon">
+                    <i class="bi bi-box-seam"></i>
+                </div>
+
+                <div class="delete-product-info">
+
+                    <span class="delete-label">
+                        Product
+                    </span>
+
+                    <h3>
+                        @Model.Product.Name
+                    </h3>
+
+                    <span class="delete-code">
+                        Product Code:
+                        <strong>@Model.Product.ProductCode</strong>
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- DETAILS -->
+            <div class="row g-3 delete-details">
+
+                <div class="col-md-4">
+
+                    <div class="delete-detail-item">
+
+                        <span>
+                            Product ID
+                        </span>
+
+                        <strong>
+                            #@Model.Product.Id
+                        </strong>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <div class="delete-detail-item">
+
+                        <span>
+                            Unit Price
+                        </span>
+
+                        <strong class="delete-price">
+                            ₱@Model.Product.UnitPrice.ToString("N2")
+                        </strong>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <div class="delete-detail-item">
+
+                        <span>
+                            Current Stock
+                        </span>
+
+                        <strong>
+                            @Model.Product.CurrentStock
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- WARNING MESSAGE -->
+            <div class="delete-confirmation">
+
+                <div class="delete-confirmation-icon">
+                    <i class="bi bi-exclamation-triangle"></i>
+                </div>
+
+                <div>
+                    <strong>Important</strong>
+
+                    <p>
+                        Deleting this product will permanently remove it
+                        from your inventory system.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <!-- ACTIONS -->
+            <div class="delete-footer">
+
+                <a asp-page="./Index"
+                   class="btn btn-light">
+
+                    <i class="bi bi-x-circle"></i>
+                    Cancel
+
+                </a>
+
+                <form method="post">
+
+                    <input type="hidden"
+                           asp-for="Product.Id" />
+
+                    <button type="submit"
+                            class="btn btn-delete">
+
+                        <i class="bi bi-trash3"></i>
+                        Delete Product
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

@@ -6,156 +6,786 @@
 }
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Inventory System Login</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Inventory System | Login</title>
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', sans-serif;
-            height: 100vh;
-            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .container {
-            text-align: center;
-        }
-
-        .title {
-            color: white;
-            font-size: 45px;
-            font-weight: 800;
-            letter-spacing: 3px;
-            margin-bottom: 25px;
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.2);
-        }
-
-        .login-box {
-            width: 380px;
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0px 15px 35px rgba(0,0,0,0.2);
-        }
-
-        .login-box h2 {
-            color: #ff6b81;
-            margin-bottom: 30px;
-            font-size: 30px;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .input-group label {
-            font-weight: 600;
-            color: #555;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 13px;
-            margin-top: 8px;
-            border-radius: 10px;
-            border: 1px solid #ddd;
-            outline: none;
-            font-size: 15px;
+        * {
             box-sizing: border-box;
         }
 
-        .input-group input:focus {
-            border-color: #ff6b81;
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: #fcecf4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
         }
+
+        /* =========================
+           MAIN CONTAINER
+        ========================= */
+
+        .login-container {
+            width: 100%;
+            max-width: 1120px;
+            min-height: 650px;
+            display: grid;
+            grid-template-columns: 1.08fr 0.92fr;
+            background: white;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 25px 70px rgba(145, 35, 85, 0.18);
+        }
+
+        /* =========================
+           LEFT PHOTO SECTION
+        ========================= */
+
+        .inventory-section {
+            position: relative;
+            min-height: 650px;
+
+            background-image:
+                linear-gradient(
+                    135deg,
+                    rgba(157, 25, 86, 0.76),
+                    rgba(221, 73, 133, 0.45)
+                ),
+                url("https://images.pexels.com/photos/5156696/pexels-photo-5156696.jpeg");
+
+            background-size: cover;
+            background-position: center;
+
+            display: flex;
+            align-items: flex-end;
+            padding: 55px;
+            color: white;
+        }
+
+        .inventory-overlay {
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(
+                    to top,
+                    rgba(67, 9, 37, 0.78),
+                    transparent 65%
+                );
+        }
+
+        .inventory-content {
+            position: relative;
+            z-index: 2;
+            max-width: 460px;
+        }
+
+        .logo-box {
+            width: 58px;
+            height: 58px;
+            border-radius: 17px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: rgba(255,255,255,0.18);
+            border: 1px solid rgba(255,255,255,0.4);
+
+            backdrop-filter: blur(8px);
+
+            margin-bottom: 22px;
+
+            font-size: 27px;
+        }
+
+        .inventory-content h1 {
+            margin: 0;
+            font-size: 42px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            line-height: 1.05;
+        }
+
+        .inventory-content .subtitle {
+            margin-top: 15px;
+            font-size: 17px;
+            line-height: 1.6;
+            color: rgba(255,255,255,0.92);
+        }
+
+        .inventory-line {
+            width: 65px;
+            height: 4px;
+            border-radius: 10px;
+            background: white;
+            margin-top: 22px;
+        }
+
+        .inventory-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            margin-top: 25px;
+            padding: 9px 14px;
+
+            border-radius: 50px;
+
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
+
+            backdrop-filter: blur(8px);
+
+            font-size: 12px;
+            letter-spacing: 0.4px;
+        }
+
+        /* =========================
+           RIGHT LOGIN SECTION
+        ========================= */
+
+        .login-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 55px 60px;
+
+            background:
+                radial-gradient(
+                    circle at top right,
+                    rgba(244, 114, 161, 0.10),
+                    transparent 35%
+                ),
+                #ffffff;
+        }
+
+        .login-content {
+            width: 100%;
+            max-width: 380px;
+        }
+
+        .welcome {
+            margin-bottom: 34px;
+        }
+
+        .welcome h2 {
+            margin: 0;
+            color: #9c174f;
+            font-size: 32px;
+            font-weight: 750;
+            letter-spacing: -0.5px;
+        }
+
+        .welcome p {
+            margin: 9px 0 0;
+            color: #8b8b8b;
+            font-size: 14px;
+        }
+
+        /* =========================
+           INPUTS
+        ========================= */
+
+        .input-group-custom {
+            margin-bottom: 21px;
+        }
+
+        .input-group-custom label {
+            display: block;
+            margin-bottom: 8px;
+
+            color: #3d3d3d;
+            font-size: 13px;
+            font-weight: 650;
+        }
+
+        .input-group-custom label i {
+            color: #d63384;
+            margin-right: 5px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper > i {
+            position: absolute;
+            left: 17px;
+            top: 50%;
+            transform: translateY(-50%);
+
+            color: #d63384;
+            font-size: 17px;
+
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            height: 53px;
+
+            padding: 10px 48px 10px 46px;
+
+            border: 1px solid #e5dce1;
+            border-radius: 13px;
+
+            outline: none;
+
+            background: #fffafd;
+
+            color: #333;
+            font-size: 14px;
+
+            transition: all 0.25s ease;
+        }
+
+        .input-wrapper input::placeholder {
+            color: #b5adb1;
+        }
+
+        .input-wrapper input:hover {
+            border-color: #e7a6c1;
+        }
+
+        .input-wrapper input:focus {
+            background: white;
+            border-color: #d63384;
+
+            box-shadow:
+                0 0 0 4px rgba(214, 51, 132, 0.09);
+        }
+
+        /* Hide browser password reveal */
+        input[type="password"]::-ms-reveal,
+        input[type="password"]::-ms-clear {
+            display: none;
+        }
+
+        input[type="password"]::-webkit-credentials-auto-fill-button {
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* =========================
+           PASSWORD BUTTON
+        ========================= */
+
+        .password-toggle {
+            position: absolute;
+
+            right: 10px;
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            width: 36px;
+            height: 36px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border: none;
+            background: transparent;
+
+            color: #999;
+            cursor: pointer;
+
+            border-radius: 8px;
+
+            font-size: 17px;
+            padding: 0;
+
+            transition: 0.2s ease;
+        }
+
+        .password-toggle:hover {
+            background: #fff0f6;
+            color: #d63384;
+        }
+
+        /* =========================
+           ERROR
+        ========================= */
+
+        .error-message {
+            display: flex;
+            align-items: flex-start;
+            gap: 9px;
+
+            background: #fff2f4;
+            border: 1px solid #f4c7cf;
+
+            color: #a52d3b;
+
+            border-radius: 11px;
+
+            padding: 12px 14px;
+            margin-bottom: 18px;
+
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .error-message i {
+            font-size: 17px;
+            margin-top: 1px;
+        }
+
+        /* =========================
+           SIGN IN BUTTON
+        ========================= */
 
         .login-btn {
             width: 100%;
-            padding: 14px;
+            height: 53px;
+
             border: none;
-            border-radius: 30px;
-            background: #ff6b81;
+            border-radius: 13px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #e83e8c,
+                    #b9165d
+                );
+
             color: white;
-            font-size: 18px;
-            font-weight: bold;
+
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+
             cursor: pointer;
-            transition: 0.3s;
+
+            transition: all 0.25s ease;
+
+            box-shadow:
+                0 9px 22px rgba(185, 22, 93, 0.22);
         }
 
         .login-btn:hover {
-            background: #ff4757;
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 13px 28px rgba(185, 22, 93, 0.30);
         }
 
-        .error {
-            color: red;
-            margin-top: 15px;
-            font-weight: bold;
+        .login-btn:active {
+            transform: translateY(0);
         }
 
-        .footer {
-            margin-top: 20px;
-            color: #777;
+        /* =========================
+           FORGOT PASSWORD
+        ========================= */
+
+        .forgot-password {
+            text-align: center;
+            margin-top: 17px;
+        }
+
+        .forgot-password a {
+            color: #c5286b;
+            text-decoration: none;
+
             font-size: 13px;
+            font-weight: 600;
+
+            transition: 0.2s ease;
         }
 
+        .forgot-password a:hover {
+            color: #941348;
+            text-decoration: underline;
+        }
+
+        /* =========================
+           SECURITY NOTE
+        ========================= */
+
+        .security-info {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+
+            background: #fff8fb;
+
+            border: 1px solid #f4e1e9;
+            border-radius: 13px;
+
+            padding: 13px 14px;
+
+            margin-top: 29px;
+        }
+
+        .security-info i {
+            width: 35px;
+            height: 35px;
+
+            flex-shrink: 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 10px;
+
+            background: #fde5ef;
+            color: #c5286b;
+
+            font-size: 17px;
+        }
+
+        .security-info strong {
+            display: block;
+
+            color: #444;
+            font-size: 12px;
+        }
+
+        .security-info span {
+            display: block;
+
+            color: #999;
+            font-size: 10px;
+
+            margin-top: 2px;
+            line-height: 1.4;
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .login-footer {
+            text-align: center;
+
+            margin-top: 28px;
+
+            color: #aaa;
+            font-size: 10px;
+        }
+
+        .login-footer i {
+            color: #d63384;
+            margin-right: 3px;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @@media (max-width: 850px) {
+
+            body {
+                padding: 15px;
+            }
+
+            .login-container {
+                grid-template-columns: 1fr;
+                max-width: 520px;
+            }
+
+            .inventory-section {
+                min-height: 300px;
+                padding: 35px;
+            }
+
+            .inventory-content h1 {
+                font-size: 32px;
+            }
+
+            .inventory-content .subtitle {
+                font-size: 14px;
+            }
+
+            .login-section {
+                padding: 40px 30px;
+            }
+        }
+
+        @@media (max-width: 500px) {
+
+            body {
+                padding: 0;
+            }
+
+            .login-container {
+                min-height: 100vh;
+                border-radius: 0;
+            }
+
+            .inventory-section {
+                min-height: 270px;
+                padding: 30px 25px;
+            }
+
+            .inventory-content h1 {
+                font-size: 28px;
+            }
+
+            .logo-box {
+                width: 50px;
+                height: 50px;
+                margin-bottom: 16px;
+            }
+
+            .login-section {
+                padding: 35px 24px;
+            }
+
+            .welcome h2 {
+                font-size: 28px;
+            }
+        }
     </style>
 </head>
 
 <body>
 
-<div class="container">
+    <div class="login-container">
 
-    <div class="title">
-        INVENTORY SYSTEM
+        <!-- =====================================
+             LEFT: REAL INVENTORY PHOTO
+        ====================================== -->
+
+        <section class="inventory-section">
+
+            <div class="inventory-overlay"></div>
+
+            <div class="inventory-content">
+
+                <div class="logo-box">
+                    <i class="bi bi-box-seam-fill"></i>
+                </div>
+
+                <h1>INVENTORY<br />SYSTEM</h1>
+
+                <div class="inventory-line"></div>
+
+                <p class="subtitle">
+                    Inventory & Stock Monitoring System
+                </p>
+
+                <div class="inventory-tag">
+                    <i class="bi bi-boxes"></i>
+                    Smart inventory. Simple management.
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================
+             RIGHT: LOGIN
+        ====================================== -->
+
+        <section class="login-section">
+
+            <div class="login-content">
+
+                <div class="welcome">
+
+                    <h2>Welcome Back</h2>
+
+                    <p>
+                        Sign in to continue to your inventory account.
+                    </p>
+
+                </div>
+
+
+                <form method="post">
+
+                    <!-- Username -->
+
+                    <div class="input-group-custom">
+
+                        <label>
+                            <i class="bi bi-person-fill"></i>
+                            Username
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="bi bi-person"></i>
+
+                            <input asp-for="UserName"
+                                   placeholder="Enter your username"
+                                   autocomplete="username" />
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Password -->
+
+                    <div class="input-group-custom">
+
+                        <label>
+                            <i class="bi bi-lock-fill"></i>
+                            Password
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="bi bi-lock"></i>
+
+                            <input asp-for="Password"
+                                   id="passwordInput"
+                                   type="password"
+                                   placeholder="Enter your password"
+                                   autocomplete="current-password" />
+
+                            <button type="button"
+                                    class="password-toggle"
+                                    onclick="togglePassword()"
+                                    aria-label="Show password">
+
+                                <i id="passwordIcon"
+                                   class="bi bi-eye"></i>
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Error -->
+
+                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                    {
+                        <div class="error-message">
+
+                            <i class="bi bi-exclamation-circle-fill"></i>
+
+                            <span>
+                                @Model.ErrorMessage
+                            </span>
+
+                        </div>
+                    }
+
+
+                    <!-- Sign In -->
+
+                    <button type="submit"
+                            class="login-btn">
+
+                        <i class="bi bi-box-arrow-in-right me-2"></i>
+
+                        Sign In
+
+                    </button>
+
+
+                    <!-- Forgot Password -->
+
+                    <div class="forgot-password">
+
+                        <a href="/account/forgot-password">
+
+                            <i class="bi bi-key-fill me-1"></i>
+
+                            Forgot Password?
+
+                        </a>
+
+                    </div>
+
+                </form>
+
+
+                <!-- Security -->
+
+                <div class="security-info">
+
+                    <i class="bi bi-shield-check"></i>
+
+                    <div>
+
+                        <strong>Secure Login</strong>
+
+                        <span>
+                            Your account information is protected
+                            using secure authentication.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Footer -->
+
+                <div class="login-footer">
+
+                    <i class="bi bi-shield-lock-fill"></i>
+
+                    Inventory Monitoring System © 2026
+
+                </div>
+
+            </div>
+
+        </section>
+
     </div>
 
-    <div class="login-box">
 
-        <h2>Login</h2>
+    <!-- =====================================
+         PASSWORD TOGGLE
+    ====================================== -->
 
-        <form method="post">
+    <script>
 
-            <div class="input-group">
-                <label>Username</label>
-                <input asp-for="UserName" placeholder="Enter username" />
-            </div>
+        function togglePassword() {
 
+            const passwordInput =
+                document.getElementById("passwordInput");
 
-            <div class="input-group">
-                <label>Password</label>
-                <input asp-for="Password" 
-                       type="password" 
-                       placeholder="Enter password" />
-            </div>
+            const passwordIcon =
+                document.getElementById("passwordIcon");
 
+            if (passwordInput.type === "password") {
 
-            <button class="login-btn" type="submit">
-                Login
-            </button>
+                passwordInput.type = "text";
 
+                passwordIcon.classList.remove("bi-eye");
 
-            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
-            {
-                <div class="error">
-                    @Model.ErrorMessage
-                </div>
+                passwordIcon.classList.add("bi-eye-slash");
+
+            }
+            else {
+
+                passwordInput.type = "password";
+
+                passwordIcon.classList.remove("bi-eye-slash");
+
+                passwordIcon.classList.add("bi-eye");
+
             }
 
-        </form>
+        }
 
-
-        <div class="footer">
-            Inventory Monitoring System © 2026
-        </div>
-
-    </div>
-
-</div>
+    </script>
 
 </body>
 </html>

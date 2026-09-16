@@ -54,6 +54,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWNjb3VudFxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Ara Andrea/OneDrive/Desktop/Inventory and Monitoring System/Roman Ara Andrea. Inventory and Monitoring System/Roman Ara Andrea. Inventory and Monitoring System/Pages/Account/Logout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWNjb3VudFxMb2dvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Ara Andrea/OneDrive/Desktop/Inventory and Monitoring System/Roman Ara Andrea. Inventory and Monitoring System/Roman Ara Andrea. Inventory and Monitoring System/Pages/Account/Profile.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWNjb3VudFxQcm9maWxlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -92,6 +96,22 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Ara Andrea/OneDrive/Desktop/Inventory and Monitoring System/Roman Ara Andrea. Inventory and Monitoring System/Roman Ara Andrea. Inventory and Monitoring System/Pages/Manage/Users/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFuYWdlXFVzZXJzXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Ara Andrea/OneDrive/Desktop/Inventory and Monitoring System/Roman Ara Andrea. Inventory and Monitoring System/Roman Ara Andrea. Inventory and Monitoring System/Pages/Products/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJvZHVjdHNcQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Ara Andrea/OneDrive/Desktop/Inventory and Monitoring System/Roman Ara Andrea. Inventory and Monitoring System/Roman Ara Andrea. Inventory and Monitoring System/Pages/Products/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJvZHVjdHNcRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Ara Andrea/OneDrive/Desktop/Inventory and Monitoring System/Roman Ara Andrea. Inventory and Monitoring System/Roman Ara Andrea. Inventory and Monitoring System/Pages/Products/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJvZHVjdHNcRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Ara Andrea/OneDrive/Desktop/Inventory and Monitoring System/Roman Ara Andrea. Inventory and Monitoring System/Roman Ara Andrea. Inventory and Monitoring System/Pages/Products/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJvZHVjdHNcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Ara Andrea/OneDrive/Desktop/Inventory and Monitoring System/Roman Ara Andrea. Inventory and Monitoring System/Roman Ara Andrea. Inventory and Monitoring System/Pages/Products/Index.cshtml]

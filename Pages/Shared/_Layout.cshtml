@@ -1,141 +1,1691 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>@ViewData["Title"] - Inventory and Monitoring System</title>
+    <title>
+        @ViewData["Title"] - Inventory and Monitoring System
+    </title>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet" />
 
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 
     <!-- Site CSS -->
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
 
     <!-- Project CSS -->
-    <link rel="stylesheet" href="~/Roman Ara Andrea.Inventory and Monitoring System.styles.css" asp-append-version="true" />
+    <link rel="stylesheet"
+          href="~/Roman Ara Andrea.Inventory and Monitoring System.styles.css"
+          asp-append-version="true" />
+
+    <style>
+
+        /* =========================================================
+           COLOR VARIABLES
+           ========================================================= */
+
+        :root {
+            --primary: #a51d5b;
+            --primary-dark: #811344;
+            --primary-light: #d84b88;
+
+            --pink-50: #fff7fa;
+            --pink-100: #fceaf2;
+            --pink-200: #f8d6e3;
+
+            --purple: #7c3aed;
+            --purple-light: #f1eaff;
+
+            --blue: #2563eb;
+            --blue-light: #eaf1ff;
+
+            --green: #16a34a;
+            --green-light: #eaf8ef;
+
+            --orange: #ea580c;
+            --orange-light: #fff0e8;
+
+            --yellow: #ca8a04;
+            --yellow-light: #fff8df;
+
+            --red: #dc2626;
+            --red-light: #ffeded;
+
+            --text-dark: #321322;
+            --text: #5e4351;
+            --muted: #927987;
+
+            --white: #ffffff;
+
+            --border: #f0dce5;
+
+            --page-bg: #fff5f9;
+
+            --shadow:
+                0 8px 30px rgba(94, 28, 59, .08);
+
+            --shadow-hover:
+                0 14px 35px rgba(94, 28, 59, .14);
+        }
+
+
+        /* =========================================================
+           GLOBAL
+           ========================================================= */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            background:
+                radial-gradient(
+                    circle at 5% 10%,
+                    rgba(216, 75, 136, .16),
+                    transparent 25%
+                ),
+                radial-gradient(
+                    circle at 95% 15%,
+                    rgba(165, 29, 91, .12),
+                    transparent 27%
+                ),
+                radial-gradient(
+                    circle at 85% 90%,
+                    rgba(124, 58, 237, .08),
+                    transparent 28%
+                ),
+                linear-gradient(
+                    135deg,
+                    #fff8fb 0%,
+                    #fcecf4 48%,
+                    #fff5f9 100%
+                );
+
+            background-attachment: fixed;
+
+            color: var(--text-dark);
+
+            font-family:
+                "Poppins",
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            font-size: 14px;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font-family: inherit;
+        }
+
+
+        /* =========================================================
+           SIDEBAR
+           ========================================================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+
+            width: 270px;
+            height: 100vh;
+
+            background: rgba(255,255,255,.96);
+
+            border-right: 1px solid var(--border);
+
+            display: flex;
+            flex-direction: column;
+
+            z-index: 1000;
+
+            box-shadow:
+                6px 0 28px rgba(87, 24, 53, .05);
+        }
+
+
+        /* =========================================================
+           LOGO AREA
+           ========================================================= */
+
+        .sidebar-logo {
+            height: 96px;
+
+            padding: 18px 22px;
+
+            display: flex;
+            align-items: center;
+
+            gap: 13px;
+
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo-box {
+            width: 51px;
+            height: 51px;
+
+            flex-shrink: 0;
+
+            border-radius: 16px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #7f1045 0%,
+                    #a51d5b 45%,
+                    #db5590 100%
+                );
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: white;
+
+            font-size: 23px;
+
+            box-shadow:
+                0 8px 20px rgba(165, 29, 91, .25);
+        }
+
+        .logo-content {
+            min-width: 0;
+        }
+
+        .logo-title {
+            font-size: 17px;
+            line-height: 1.1;
+
+            font-weight: 800;
+
+            letter-spacing: .4px;
+
+            color: var(--text-dark);
+        }
+
+        .logo-subtitle {
+            margin-top: 5px;
+
+            font-size: 9.5px;
+            line-height: 1.3;
+
+            color: var(--muted);
+
+            font-weight: 500;
+
+            letter-spacing: .2px;
+        }
+
+
+        /* =========================================================
+           SIDEBAR NAV
+           ========================================================= */
+
+        .sidebar-nav {
+            flex: 1;
+
+            overflow-y: auto;
+
+            padding: 17px 14px;
+        }
+
+        .sidebar-nav::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .sidebar-nav::-webkit-scrollbar-thumb {
+            background: #edd4df;
+            border-radius: 20px;
+        }
+
+
+        /* =========================================================
+           SECTION TITLES
+           ========================================================= */
+
+        .nav-section {
+            display: flex;
+            align-items: center;
+
+            gap: 7px;
+
+            padding: 13px 11px 8px;
+
+            color: #a58a98;
+
+            font-size: 9.5px;
+
+            font-weight: 700;
+
+            letter-spacing: 1.4px;
+        }
+
+        .nav-section::before {
+            content: "";
+
+            width: 5px;
+            height: 5px;
+
+            border-radius: 50%;
+
+            background: var(--primary-light);
+        }
+
+
+        /* =========================================================
+           SIDEBAR LINKS
+           ========================================================= */
+
+        .sidebar-link {
+            position: relative;
+
+            display: flex;
+            align-items: center;
+
+            gap: 11px;
+
+            width: 100%;
+
+            min-height: 49px;
+
+            padding: 7px 10px;
+
+            margin-bottom: 4px;
+
+            border-radius: 13px;
+
+            color: #715765;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            transition: all .22s ease;
+        }
+
+
+        /* ICON CONTAINER */
+
+        .nav-icon {
+            width: 34px;
+            height: 34px;
+
+            flex-shrink: 0;
+
+            border-radius: 10px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 16px;
+
+            transition: all .22s ease;
+        }
+
+
+        /* INDIVIDUAL ICON COLORS */
+
+        .icon-dashboard {
+            background: #f0e9ff;
+            color: #7c3aed;
+        }
+
+        .icon-products {
+            background: #eaf1ff;
+            color: #2563eb;
+        }
+
+        .icon-add {
+            background: #eaf8ef;
+            color: #16a34a;
+        }
+
+        .icon-users {
+            background: #fff0e8;
+            color: #ea580c;
+        }
+
+        .icon-events {
+            background: #fff5df;
+            color: #ca8a04;
+        }
+
+        .icon-profile {
+            background: #fceaf2;
+            color: #c02668;
+        }
+
+        .icon-password {
+            background: #ffeded;
+            color: #dc2626;
+        }
+
+        .sidebar-link span {
+            flex: 1;
+        }
+
+
+        /* HOVER */
+
+        .sidebar-link:hover {
+            color: var(--primary);
+
+            background: #fff5f8;
+
+            transform: translateX(3px);
+        }
+
+        .sidebar-link:hover .nav-icon {
+            transform: scale(1.06);
+        }
+
+
+        /* ACTIVE */
+
+        .sidebar-link.active {
+            color: var(--primary);
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #fff0f6,
+                    #fff8fb
+                );
+
+            font-weight: 700;
+        }
+
+        .sidebar-link.active::before {
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+
+            top: 8px;
+            bottom: 8px;
+
+            width: 4px;
+
+            border-radius: 0 5px 5px 0;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    var(--primary),
+                    var(--primary-light)
+                );
+        }
+
+        .sidebar-link.active .nav-icon {
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary-dark),
+                    var(--primary-light)
+                );
+
+            color: white;
+
+            box-shadow:
+                0 5px 13px rgba(165, 29, 91, .18);
+        }
+
+
+        /* =========================================================
+           DIVIDER
+           ========================================================= */
+
+        .nav-divider {
+            height: 1px;
+
+            background: var(--border);
+
+            margin: 15px 9px;
+        }
+
+
+        /* =========================================================
+           SIDEBAR BOTTOM
+           ========================================================= */
+
+        .sidebar-bottom {
+            padding: 14px;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #fffafd,
+                    #fff7fa
+                );
+
+            border-top: 1px solid var(--border);
+        }
+
+
+        /* =========================================================
+           PROFILE CARD
+           ========================================================= */
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+
+            padding: 9px;
+
+            border-radius: 14px;
+
+            color: var(--text-dark);
+
+            transition: .2s ease;
+        }
+
+        .user-profile:hover {
+            background: var(--pink-100);
+
+            color: var(--primary);
+        }
+
+        .user-avatar {
+            width: 41px;
+            height: 41px;
+
+            flex-shrink: 0;
+
+            border-radius: 50%;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary-dark),
+                    var(--primary-light)
+                );
+
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 17px;
+
+            box-shadow:
+                0 6px 15px rgba(165, 29, 91, .20);
+        }
+
+        .user-info {
+            min-width: 0;
+
+            flex: 1;
+        }
+
+        .user-name {
+            display: block;
+
+            color: var(--text-dark);
+
+            font-size: 11.5px;
+
+            font-weight: 700;
+
+            white-space: nowrap;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+        }
+
+        .user-role {
+            display: inline-flex;
+
+            margin-top: 3px;
+
+            padding: 2px 7px;
+
+            border-radius: 20px;
+
+            background: var(--pink-100);
+
+            color: var(--primary);
+
+            font-size: 8px;
+
+            font-weight: 700;
+
+            text-transform: uppercase;
+
+            letter-spacing: .5px;
+        }
+
+        .profile-arrow {
+            color: #b297a4;
+
+            font-size: 11px;
+        }
+
+
+        /* =========================================================
+           LOGOUT
+           ========================================================= */
+
+        .logout-button {
+            width: 100%;
+
+            height: 39px;
+
+            margin-top: 8px;
+
+            border: 1px solid var(--border);
+
+            border-radius: 11px;
+
+            background: white;
+
+            color: #765967;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            gap: 8px;
+
+            font-size: 11.5px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+
+            transition: .2s ease;
+        }
+
+        .logout-button i {
+            color: var(--red);
+
+            font-size: 15px;
+        }
+
+        .logout-button:hover {
+            background: #fff0f3;
+
+            border-color: #efc4d1;
+
+            color: var(--red);
+
+            transform: translateY(-1px);
+        }
+
+
+        /* =========================================================
+           MAIN WRAPPER
+           ========================================================= */
+
+        .main-wrapper {
+            min-height: 100vh;
+
+            display: flex;
+            flex-direction: column;
+
+            position: relative;
+        }
+
+        .main-wrapper.with-sidebar {
+            margin-left: 270px;
+        }
+
+
+        /* =========================================================
+           DECORATIVE BACKGROUND
+           ========================================================= */
+
+        .main-wrapper.with-sidebar::before {
+            content: "";
+
+            position: fixed;
+
+            width: 300px;
+            height: 300px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(216, 75, 136, .06);
+
+            top: 120px;
+            right: -130px;
+
+            pointer-events: none;
+
+            z-index: -1;
+        }
+
+        .main-wrapper.with-sidebar::after {
+            content: "";
+
+            position: fixed;
+
+            width: 240px;
+            height: 240px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(124, 58, 237, .045);
+
+            bottom: 30px;
+            left: 285px;
+
+            pointer-events: none;
+
+            z-index: -1;
+        }
+
+
+        /* =========================================================
+           TOPBAR
+           ========================================================= */
+
+        .topbar {
+            height: 78px;
+
+            padding: 0 31px;
+
+            background:
+                rgba(255,255,255,.94);
+
+            border-bottom: 1px solid var(--border);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 900;
+
+            backdrop-filter: blur(12px);
+        }
+
+
+        /* =========================================================
+           PAGE TITLE
+           ========================================================= */
+
+        .topbar-title {
+            display: flex;
+
+            flex-direction: column;
+        }
+
+        .topbar-title h6 {
+            margin: 0;
+
+            color: var(--text-dark);
+
+            font-size: 15px;
+
+            font-weight: 700;
+        }
+
+        .topbar-title small {
+            margin-top: 2px;
+
+            color: var(--muted);
+
+            font-size: 9.5px;
+
+            font-weight: 500;
+        }
+
+
+        /* =========================================================
+           MOBILE TITLE
+           ========================================================= */
+
+        .mobile-title {
+            display: none;
+
+            color: var(--text-dark);
+
+            font-size: 16px;
+
+            font-weight: 750;
+        }
+
+
+        /* =========================================================
+           TOPBAR RIGHT
+           ========================================================= */
+
+        .topbar-right {
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+        }
+
+
+        /* =========================================================
+           SEARCH
+           ========================================================= */
+
+        .top-search {
+            width: 285px;
+
+            height: 42px;
+
+            padding: 0 13px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            border: 1px solid var(--border);
+
+            border-radius: 12px;
+
+            background: #fff9fb;
+
+            transition: .2s ease;
+        }
+
+        .top-search:focus-within {
+            background: white;
+
+            border-color: #df9bb6;
+
+            box-shadow:
+                0 0 0 4px rgba(165,29,91,.06);
+        }
+
+        .top-search i {
+            color: var(--primary);
+
+            font-size: 15px;
+        }
+
+        .top-search input {
+            width: 100%;
+
+            border: none;
+
+            outline: none;
+
+            background: transparent;
+
+            color: var(--text-dark);
+
+            font-size: 11.5px;
+        }
+
+        .top-search input::placeholder {
+            color: #aa94a0;
+        }
+
+
+        /* =========================================================
+           TOPBAR BUTTONS
+           ========================================================= */
+
+        .topbar-button {
+            position: relative;
+
+            width: 42px;
+            height: 42px;
+
+            border: 1px solid var(--border);
+
+            border-radius: 12px;
+
+            background: white;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            cursor: pointer;
+
+            transition: .2s ease;
+        }
+
+        .topbar-button i {
+            font-size: 17px;
+        }
+
+        .notification-button i {
+            color: #d97706;
+        }
+
+        .message-button i {
+            color: #7c3aed;
+        }
+
+        .topbar-button:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 7px 18px rgba(87,24,53,.08);
+        }
+
+        .notification-button:hover {
+            background: var(--yellow-light);
+
+            border-color: #f0d899;
+        }
+
+        .message-button:hover {
+            background: var(--purple-light);
+
+            border-color: #d9c9fa;
+        }
+
+
+        /* =========================================================
+           NOTIFICATION DOT
+           ========================================================= */
+
+        .notification-dot {
+            position: absolute;
+
+            top: 7px;
+            right: 7px;
+
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #e11d48;
+
+            border: 2px solid white;
+        }
+
+
+        /* =========================================================
+           MAIN CONTENT
+           ========================================================= */
+
+        main {
+            flex: 1;
+
+            width: 100%;
+
+            position: relative;
+        }
+
+
+        /* =========================================================
+           FOOTER
+           ========================================================= */
+
+        .system-footer {
+            padding: 17px 30px;
+
+            background: rgba(255,255,255,.90);
+
+            border-top: 1px solid var(--border);
+
+            color: var(--muted);
+
+            text-align: center;
+
+            font-size: 9.5px;
+
+            font-weight: 500;
+        }
+
+
+        /* =========================================================
+           MESSAGE POPUP
+           ========================================================= */
+
+        .layout-message {
+            position: fixed;
+
+            top: 91px;
+            right: 28px;
+
+            z-index: 9999;
+
+            min-width: 250px;
+
+            padding: 13px 16px;
+
+            border: 1px solid var(--border);
+
+            border-radius: 13px;
+
+            background: white;
+
+            box-shadow:
+                0 15px 40px rgba(87,24,53,.13);
+
+            color: var(--text-dark);
+
+            font-size: 11px;
+
+            font-weight: 600;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            animation:
+                layoutMessageIn .25s ease;
+        }
+
+        .layout-message i {
+            color: var(--primary);
+
+            font-size: 16px;
+        }
+
+
+        /* =========================================================
+           ANIMATION
+           ========================================================= */
+
+        @@keyframes layoutMessageIn {
+
+            from {
+                opacity: 0;
+
+                transform: translateY(-8px);
+            }
+
+            to {
+                opacity: 1;
+
+                transform: translateY(0);
+            }
+        }
+
+
+        /* =========================================================
+           LARGE TABLET
+           ========================================================= */
+
+        @@media (max-width: 1100px) {
+
+            .sidebar {
+                width: 245px;
+            }
+
+            .main-wrapper.with-sidebar {
+                margin-left: 245px;
+            }
+
+            .topbar {
+                padding: 0 22px;
+            }
+
+            .top-search {
+                width: 220px;
+            }
+        }
+
+
+        /* =========================================================
+           TABLET / MOBILE
+           ========================================================= */
+
+        @@media (max-width: 800px) {
+
+            .sidebar {
+                position: relative;
+
+                width: 100%;
+
+                height: auto;
+
+                min-height: auto;
+
+                border-right: none;
+
+                border-bottom: 1px solid var(--border);
+            }
+
+            .sidebar-logo {
+                height: 78px;
+            }
+
+            .sidebar-nav {
+                max-height: none;
+
+                overflow: visible;
+
+                padding: 12px;
+            }
+
+            .main-wrapper.with-sidebar {
+                margin-left: 0;
+            }
+
+            .topbar {
+                position: relative;
+
+                height: auto;
+
+                min-height: 66px;
+
+                padding: 12px 17px;
+            }
+
+            .topbar-title {
+                display: none;
+            }
+
+            .mobile-title {
+                display: block;
+            }
+
+            .top-search {
+                display: none;
+            }
+
+            .system-footer {
+                padding: 15px;
+            }
+
+            .main-wrapper.with-sidebar::before,
+            .main-wrapper.with-sidebar::after {
+                display: none;
+            }
+        }
+
+
+        /* =========================================================
+           SMALL MOBILE
+           ========================================================= */
+
+        @@media (max-width: 480px) {
+
+            .sidebar-logo {
+                padding: 15px 17px;
+            }
+
+            .logo-box {
+                width: 45px;
+
+                height: 45px;
+
+                border-radius: 13px;
+
+                font-size: 20px;
+            }
+
+            .logo-title {
+                font-size: 15px;
+            }
+
+            .logo-subtitle {
+                font-size: 8.5px;
+            }
+
+            .topbar-right {
+                gap: 6px;
+            }
+
+            .topbar-button {
+                width: 38px;
+
+                height: 38px;
+            }
+
+            .layout-message {
+                left: 15px;
+
+                right: 15px;
+
+                top: 80px;
+
+                min-width: 0;
+            }
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
-    @{
-        var isAccessDenied = ViewData["Title"]?.ToString() == "Access Denied";
-    }
+@{
+    var isAccessDenied =
+        ViewData["Title"]?.ToString() == "Access Denied";
 
-    @if (!isAccessDenied)
-    {
-        <!-- HEADER / NAVIGATION -->
-        <header>
-            <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
-                <div class="container">
+    var isAuthenticated =
+        User.Identity != null &&
+        User.Identity.IsAuthenticated;
 
-                    <!-- Mobile Menu Button -->
-                    <button class="navbar-toggler"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#navbarNav"
-                            aria-controls="navbarNav"
-                            aria-expanded="false"
-                            aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
+    var isAdmin =
+        User.IsInRole("Admin");
 
-                    <div class="collapse navbar-collapse" id="navbarNav">
+    var isUser =
+        User.IsInRole("User");
 
-                        <ul class="navbar-nav me-auto">
+    var currentPage =
+        ViewContext.RouteData.Values["page"]?.ToString() ?? "";
+}
 
-                            <!-- Home -->
-                            <li class="nav-item">
-                                <a class="nav-link" asp-page="/Index">
-                                    Home
-                                </a>
-                            </li>
 
-                            <!-- Privacy -->
-                            <li class="nav-item">
-                                <a class="nav-link" asp-page="/Privacy">
-                                    Privacy
-                                </a>
-                            </li>
+@if (isAuthenticated && !isAccessDenied)
+{
+    <!-- =========================================================
+         SIDEBAR
+         ========================================================= -->
 
-                            @if (User.Identity != null && User.Identity.IsAuthenticated)
-                            {
-                                <!-- My Profile -->
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-page="/Account/Profile">
-                                        My Profile
-                                    </a>
-                                </li>
+    <aside class="sidebar">
 
-                                <!-- Admin Only -->
-                                @if (User.IsInRole("Admin"))
-                                {
-                                    <li class="nav-item">
-                                        <a class="nav-link" asp-page="/Admin/Dashboard">
-                                            Admin Dashboard
-                                        </a>
-                                    </li>
-                                }
+        <!-- LOGO -->
 
-                                <!-- User Only -->
-                                @if (User.IsInRole("User"))
-                                {
-                                    <li class="nav-item">
-                                        <a class="nav-link" asp-page="/Events/MyEvents">
-                                            My Events
-                                        </a>
-                                    </li>
-                                }
+        <div class="sidebar-logo">
 
-                                <!-- Logout -->
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-page="/Account/Logout">
-                                        Logout
-                                    </a>
-                                </li>
-                            }
-                            else
-                            {
-                                <!-- Guest / Login -->
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-page="/Account/Login">
-                                        Login
-                                    </a>
-                                </li>
-                            }
+            <div class="logo-box">
+                <i class="bi bi-box-seam-fill"></i>
+            </div>
 
-                        </ul>
+            <div class="logo-content">
 
-                    </div>
+                <div class="logo-title">
+                    INVENTORY
                 </div>
-            </nav>
+
+                <div class="logo-subtitle">
+                    Inventory & Monitoring System
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- NAVIGATION -->
+
+        <nav class="sidebar-nav">
+
+            <!-- MAIN -->
+
+            <div class="nav-section">
+                MAIN
+            </div>
+
+
+            @if (isAdmin)
+            {
+                <!-- DASHBOARD -->
+
+                <a asp-page="/Admin/Dashboard"
+                   class="sidebar-link @(currentPage == "/Admin/Dashboard" ? "active" : "")">
+
+                    <span class="nav-icon icon-dashboard">
+                        <i class="bi bi-grid-1x2-fill"></i>
+                    </span>
+
+                    <span>
+                        Dashboard
+                    </span>
+
+                </a>
+
+
+                <!-- PRODUCTS -->
+
+                <a asp-page="/Admin/Products/Index"
+                   class="sidebar-link @(currentPage.StartsWith("/Admin/Products") && currentPage != "/Admin/Products/Create" ? "active" : "")">
+
+                    <span class="nav-icon icon-products">
+                        <i class="bi bi-box-seam-fill"></i>
+                    </span>
+
+                    <span>
+                        Products
+                    </span>
+
+                </a>
+
+
+                <!-- ADD PRODUCT -->
+
+                <a asp-page="/Admin/Products/Create"
+                   class="sidebar-link @(currentPage == "/Admin/Products/Create" ? "active" : "")">
+
+                    <span class="nav-icon icon-add">
+                        <i class="bi bi-plus-lg"></i>
+                    </span>
+
+                    <span>
+                        Add Product
+                    </span>
+
+                </a>
+
+
+                <!-- DIVIDER -->
+
+                <div class="nav-divider"></div>
+
+
+                <!-- MANAGEMENT -->
+
+                <div class="nav-section">
+                    MANAGEMENT
+                </div>
+
+
+                <!-- USERS -->
+
+                <a asp-page="/Admin/Manage/Users/Index"
+                   class="sidebar-link @(currentPage.StartsWith("/Admin/Manage/Users") ? "active" : "")">
+
+                    <span class="nav-icon icon-users">
+                        <i class="bi bi-people-fill"></i>
+                    </span>
+
+                    <span>
+                        Users
+                    </span>
+
+                </a>
+            }
+
+
+            @if (isUser)
+            {
+                <!-- USER EVENTS -->
+
+                <a asp-page="/Events/MyEvents"
+                   class="sidebar-link @(currentPage.StartsWith("/Events/MyEvents") ? "active" : "")">
+
+                    <span class="nav-icon icon-events">
+                        <i class="bi bi-calendar-event-fill"></i>
+                    </span>
+
+                    <span>
+                        My Events
+                    </span>
+
+                </a>
+            }
+
+
+            <!-- ACCOUNT -->
+
+            <div class="nav-divider"></div>
+
+            <div class="nav-section">
+                ACCOUNT
+            </div>
+
+
+            <!-- PROFILE -->
+
+            <a asp-page="/Account/Profile"
+               class="sidebar-link @(currentPage.StartsWith("/Account/Profile") ? "active" : "")">
+
+                <span class="nav-icon icon-profile">
+                    <i class="bi bi-person-fill"></i>
+                </span>
+
+                <span>
+                    My Profile
+                </span>
+
+            </a>
+
+
+            <!-- CHANGE PASSWORD -->
+
+            <a asp-page="/Account/ChangePassword"
+               class="sidebar-link @(currentPage.StartsWith("/Account/ChangePassword") ? "active" : "")">
+
+                <span class="nav-icon icon-password">
+                    <i class="bi bi-shield-lock-fill"></i>
+                </span>
+
+                <span>
+                    Change Password
+                </span>
+
+            </a>
+
+        </nav>
+
+
+        <!-- SIDEBAR BOTTOM -->
+
+        <div class="sidebar-bottom">
+
+            <!-- USER PROFILE -->
+
+            <a asp-page="/Account/Profile"
+               class="user-profile">
+
+                <div class="user-avatar">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+
+                <div class="user-info">
+
+                    <span class="user-name">
+                        @(User.Identity?.Name ?? "User")
+                    </span>
+
+                    <span class="user-role">
+                        @(isAdmin ? "Administrator" : "User")
+                    </span>
+
+                </div>
+
+                <i class="bi bi-chevron-right profile-arrow"></i>
+
+            </a>
+
+
+            <!-- LOGOUT -->
+
+            <form method="post"
+                  asp-page="/Account/Logout">
+
+                <button type="submit"
+                        class="logout-button">
+
+                    <i class="bi bi-box-arrow-right"></i>
+
+                    <span>
+                        Logout
+                    </span>
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </aside>
+}
+
+
+<!-- =============================================================
+     MAIN WRAPPER
+     ============================================================= -->
+
+<div class="main-wrapper @(isAuthenticated && !isAccessDenied ? "with-sidebar" : "")">
+
+
+    @if (isAuthenticated && !isAccessDenied)
+    {
+        <!-- =====================================================
+             TOPBAR
+             ===================================================== -->
+
+        <header class="topbar">
+
+            <!-- DESKTOP TITLE -->
+
+            <div class="topbar-title">
+
+                <h6>
+                    Inventory & Monitoring System
+                </h6>
+
+                <small>
+                    Manage your inventory with ease
+                </small>
+
+            </div>
+
+
+            <!-- MOBILE TITLE -->
+
+            <div class="mobile-title">
+                Inventory System
+            </div>
+
+
+            <!-- RIGHT SIDE -->
+
+            <div class="topbar-right">
+
+                <!-- SEARCH -->
+
+                <div class="top-search">
+
+                    <i class="bi bi-search"></i>
+
+                    <input type="text"
+                           id="globalSearch"
+                           placeholder="Search products..."
+                           autocomplete="off" />
+
+                </div>
+
+
+                <!-- NOTIFICATIONS -->
+
+                <button type="button"
+                        class="topbar-button notification-button"
+                        title="Notifications"
+                        onclick="showLayoutMessage('You are all caught up!')">
+
+                    <i class="bi bi-bell-fill"></i>
+
+                    <span class="notification-dot"></span>
+
+                </button>
+
+
+                <!-- MESSAGES -->
+
+                <button type="button"
+                        class="topbar-button message-button"
+                        title="Messages"
+                        onclick="showLayoutMessage('No new messages.')">
+
+                    <i class="bi bi-chat-left-text-fill"></i>
+
+                </button>
+
+            </div>
+
         </header>
     }
 
-    <!-- PAGE CONTENT -->
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+
+    <!-- =========================================================
+         PAGE CONTENT
+         ========================================================= -->
+
+    <main role="main">
+
+        @RenderBody()
+
+    </main>
+
+
+    <!-- =========================================================
+         FOOTER
+         ========================================================= -->
 
     @if (!isAccessDenied)
     {
-        <!-- FOOTER -->
-        <footer class="border-top footer text-muted">
-            <div class="container">
-                &copy; 2026 - Roman Ara Andrea.Inventory and Monitoring System
-            </div>
+        <footer class="system-footer">
+
+            © 2026 Roman Ara Andrea Inventory and Monitoring System
+
         </footer>
     }
 
-    <!-- JavaScript -->
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+</div>
 
-    @await RenderSectionAsync("Scripts", required: false)
+
+<!-- =============================================================
+     SCRIPTS
+     ============================================================= -->
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="~/js/site.js"
+        asp-append-version="true">
+</script>
+
+
+<script>
+
+    /* =========================================================
+       GLOBAL PRODUCT SEARCH
+       ========================================================= */
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const searchBox =
+            document.getElementById("globalSearch");
+
+
+        if (searchBox) {
+
+            searchBox.addEventListener(
+                "keydown",
+                function (event) {
+
+                    if (event.key === "Enter") {
+
+                        const value =
+                            searchBox.value.trim();
+
+
+                        if (value.length > 0) {
+
+                            window.location.href =
+                                "/Admin/Products/Index?search=" +
+                                encodeURIComponent(value);
+
+                        }
+
+                    }
+
+                }
+            );
+
+        }
+
+    });
+
+
+    /* =========================================================
+       TOPBAR MESSAGE
+       ========================================================= */
+
+    function showLayoutMessage(message) {
+
+        const oldMessage =
+            document.getElementById("layoutMessage");
+
+
+        if (oldMessage) {
+            oldMessage.remove();
+        }
+
+
+        const box =
+            document.createElement("div");
+
+
+        box.id =
+            "layoutMessage";
+
+
+        box.className =
+            "layout-message";
+
+
+        box.innerHTML =
+            '<i class="bi bi-info-circle-fill"></i>' +
+            '<span>' +
+            message +
+            '</span>';
+
+
+        document.body.appendChild(box);
+
+
+        setTimeout(function () {
+
+            box.style.opacity =
+                "0";
+
+            box.style.transform =
+                "translateY(-8px)";
+
+            box.style.transition =
+                "all .25s ease";
+
+
+            setTimeout(function () {
+
+                box.remove();
+
+            }, 250);
+
+        }, 2300);
+
+    }
+
+</script>
+
+
+@await RenderSectionAsync("Scripts", required: false)
+
 
 </body>
+
 </html>

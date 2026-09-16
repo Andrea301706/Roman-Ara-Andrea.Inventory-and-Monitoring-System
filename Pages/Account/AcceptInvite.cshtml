@@ -1,44 +1,280 @@
 @page
 @model Roman_Ara_Andrea.Inventory_and_Monitoring_System.Pages.Account.AcceptInviteModel
+
 @{
-    ViewData["Title"] = "Accept Invite";
-}
-l
-<h2>Accept Invite</h2>
-
-@if (!string.IsNullOrEmpty(Model.ErrorMessage))
-{
-    <div class="alert alert-danger">
-        @Model.ErrorMessage
-    </div>
+    ViewData["Title"] = "Accept Invitation";
 }
 
-<form method="post">
+<div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center bg-light py-5">
+    <div class="row w-100 justify-content-center">
+        <div class="col-12 col-sm-10 col-md-8 col-lg-5 col-xl-4">
 
-    <!-- Keep the invite token -->
-    <input type="hidden" asp-for="Token" />
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
 
-    <div class="mb-3">
-        <label>Password</label>
-        <input asp-for="Password" type="password" class="form-control" />
+                <!-- Header -->
+                <div class="text-center p-4 invitation-header">
+                    <div class="invite-icon mx-auto mb-3">
+                        <i class="bi bi-envelope-check-fill"></i>
+                    </div>
 
-        <span asp-validation-for="Password" class="text-danger"></span>
+                    <h2 class="fw-bold mb-2">You're Invited!</h2>
+
+                    <p class="mb-0 text-muted">
+                        Complete your account setup to get started.
+                    </p>
+                </div>
+
+                <!-- Body -->
+                <div class="card-body p-4 p-md-5">
+
+                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                    {
+                        <div class="alert alert-danger d-flex align-items-start rounded-3 mb-4" role="alert">
+                            <i class="bi bi-exclamation-circle-fill me-2 mt-1"></i>
+                            <div>
+                                @Model.ErrorMessage
+                            </div>
+                        </div>
+                    }
+
+                    <div class="text-center mb-4">
+                        <h5 class="fw-semibold">Create Your Password</h5>
+                        <p class="small text-muted mb-0">
+                            Choose a secure password for your new account.
+                        </p>
+                    </div>
+
+                    <form method="post">
+
+                        <!-- Keep Invite Token -->
+                        <input type="hidden" asp-for="Token" />
+
+                        <!-- Password -->
+                        <div class="mb-4">
+                            <label asp-for="Password" class="form-label fw-semibold">
+                                Password
+                            </label>
+
+                            <div class="input-group">
+                                <span class="input-group-text bg-white">
+                                    <i class="bi bi-lock-fill text-muted"></i>
+                                </span>
+
+                                <input asp-for="Password"
+                                       type="password"
+                                       class="form-control"
+                                       id="passwordInput"
+                                       placeholder="Enter your password"
+                                       autocomplete="new-password" />
+
+                                <button type="button"
+                                        class="btn btn-outline-secondary"
+                                        id="togglePassword"
+                                        aria-label="Show password">
+                                    <i class="bi bi-eye" id="passwordIcon"></i>
+                                </button>
+                            </div>
+
+                            <span asp-validation-for="Password"
+                                  class="text-danger small">
+                            </span>
+                        </div>
+
+                        <!-- Confirm Password -->
+                        <div class="mb-4">
+                            <label asp-for="ConfirmPassword" class="form-label fw-semibold">
+                                Confirm Password
+                            </label>
+
+                            <div class="input-group">
+                                <span class="input-group-text bg-white">
+                                    <i class="bi bi-shield-lock-fill text-muted"></i>
+                                </span>
+
+                                <input asp-for="ConfirmPassword"
+                                       type="password"
+                                       class="form-control"
+                                       id="confirmPasswordInput"
+                                       placeholder="Re-enter your password"
+                                       autocomplete="new-password" />
+
+                                <button type="button"
+                                        class="btn btn-outline-secondary"
+                                        id="toggleConfirmPassword"
+                                        aria-label="Show password">
+                                    <i class="bi bi-eye" id="confirmPasswordIcon"></i>
+                                </button>
+                            </div>
+
+                            <span asp-validation-for="ConfirmPassword"
+                                  class="text-danger small">
+                            </span>
+                        </div>
+
+                        <!-- Submit -->
+                        <div class="d-grid">
+                            <button type="submit"
+                                    class="btn btn-invitation btn-lg rounded-3 fw-semibold">
+                                <i class="bi bi-check-circle-fill me-2"></i>
+                                Accept Invitation
+                            </button>
+                        </div>
+
+                    </form>
+
+                    <div class="text-center mt-4">
+                        <p class="small text-muted mb-0">
+                            Already have an account?
+                            <a asp-page="/Account/Login"
+                               class="fw-semibold login-link">
+                                Sign In
+                            </a>
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- Footer -->
+                <div class="card-footer bg-white border-0 text-center pb-4">
+                    <small class="text-muted">
+                        <i class="bi bi-shield-check me-1"></i>
+                        Your account information is securely protected.
+                    </small>
+                </div>
+
+            </div>
+
+            <div class="text-center mt-4">
+                <small class="text-muted">
+                    © @DateTime.Now.Year Inventory & Monitoring System
+                </small>
+            </div>
+
+        </div>
     </div>
+</div>
 
-    <div class="mb-3">
-        <label>Confirm Password</label>
-        <input asp-for="ConfirmPassword" type="password" class="form-control" />
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
 
-        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-    </div>
+    .invitation-header {
+        background: linear-gradient(135deg, #fff0f6, #ffffff);
+        border-bottom: 1px solid #f1f1f1;
+    }
 
-    <button type="submit" class="btn btn-primary">
-        Create Password
-    </button>
+    .invite-icon {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fce4ec;
+        color: #d63384;
+        font-size: 32px;
+    }
 
-</form>
+    .card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
 
+    .form-control,
+    .input-group-text,
+    .btn {
+        min-height: 48px;
+    }
 
+    .form-control:focus {
+        border-color: #d63384;
+        box-shadow: 0 0 0 0.2rem rgba(214, 51, 132, 0.15);
+    }
+
+    .btn-invitation {
+        background: linear-gradient(135deg, #d63384, #c2185b);
+        border: none;
+        color: white;
+        transition: all 0.2s ease;
+    }
+
+    .btn-invitation:hover {
+        background: linear-gradient(135deg, #c2185b, #ad1457);
+        color: white;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 15px rgba(214, 51, 132, 0.25);
+    }
+
+    .login-link {
+        color: #d63384;
+        text-decoration: none;
+    }
+
+    .login-link:hover {
+        color: #ad1457;
+        text-decoration: underline;
+    }
+
+    .input-group .form-control {
+        border-left: 0;
+    }
+
+    .input-group-text {
+        border-right: 0;
+    }
+
+    .input-group .btn {
+        border-left: 0;
+    }
+@@media (max-width: 576px) {
+    .card-body {
+        padding: 1.5rem !important;
+    }
+
+    .invite-icon {
+        width: 64px;
+        height: 64px;
+        font-size: 28px;
+    }
+}
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // Password toggle
+        document.getElementById("togglePassword").addEventListener("click", function () {
+            const input = document.getElementById("passwordInput");
+            const icon = document.getElementById("passwordIcon");
+
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove("bi-eye");
+                icon.classList.add("bi-eye-slash");
+                this.setAttribute("aria-label", "Hide password");
+            } else {
+                input.type = "password";
+                icon.classList.remove("bi-eye-slash");
+                icon.classList.add("bi-eye");
+                this.setAttribute("aria-label", "Show password");
+            }
+        });
+
+        // Confirm password toggle
+        document.getElementById("toggleConfirmPassword").addEventListener("click", function () {
+            const input = document.getElementById("confirmPasswordInput");
+            const icon = document.getElementById("confirmPasswordIcon");
+
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove("bi-eye");
+                icon.classList.add("bi-eye-slash");
+                this.setAttribute("aria-label", "Hide password");
+            } else {
+                input.type = "password";
+                icon.classList.remove("bi-eye-slash");
+                icon.classList.add("bi-eye");
+                this.setAttribute("aria-label", "Show password");
+            }
+        });
+    </script>
 }

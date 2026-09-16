@@ -1,56 +1,341 @@
-
 @page "/account/profile"
 @model ProfileModel
 
 @{
-    ViewData["Title"] = "";
+    ViewData["Title"] = "My Profile";
 }
 
-<div class="card mt-4 p-4">
+<style>
+    .profile-page {
+        min-height: calc(100vh - 80px);
+        padding: 35px 20px;
+        background: #fdf5f8;
+    }
 
-    <div class="text-center mb-4">
-        <img src="@Model.UserDto.ProfileImage"
-             alt="Profile Image"
-             width="150"
-             height="150"
-             style="object-fit: cover; border-radius: 50%;" />
-    </div>
+    .profile-wrapper {
+        max-width: 950px;
+        margin: 0 auto;
+    }
 
-    <div class="mb-3">
-        <strong>Username:</strong>
-        <span>@Model.UserDto.Username</span>
-    </div>
+    /* Header */
+    .profile-header {
+        margin-bottom: 25px;
+    }
 
-    <div class="mb-3">
-        <strong>First Name:</strong>
-        <span>@Model.UserDto.FirstName</span>
-    </div>
+    .profile-header h2 {
+        margin: 0;
+        font-size: 28px;
+        font-weight: 700;
+        color: #4a1830;
+    }
 
-    <div class="mb-3">
-        <strong>Last Name:</strong>
-        <span>@Model.UserDto.LastName</span>
-    </div>
+    .profile-header p {
+        margin: 6px 0 0;
+        color: #8b7180;
+        font-size: 14px;
+    }
 
-    <div class="mb-3">
-        <strong>Date of Birth:</strong>
-        <span>
-            @Model.UserDto.DateOfBirth?.ToString("yyyy-MM-dd")
-        </span>
-    </div>
+    /* Main Card */
+    .profile-card {
+        background: #ffffff;
+        border-radius: 22px;
+        box-shadow: 0 10px 35px rgba(107, 25, 70, 0.10);
+        overflow: hidden;
+        border: 1px solid #f3dce6;
+    }
 
-    <div class="mt-3">
+    /* Pink top section */
+    .profile-cover {
+        height: 150px;
+        background: linear-gradient(135deg, #8f174f, #d84b88);
+        position: relative;
+    }
 
-        <a asp-page="/Account/UpdateProfile"
-           class="btn btn-primary d-block mb-2">
-            Update Profile
-        </a>
+    .profile-cover::after {
+        content: "";
+        position: absolute;
+        width: 220px;
+        height: 220px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.08);
+        right: -60px;
+        top: -100px;
+    }
 
-        <a asp-page="/Account/UpdateAvatar"
-           class="btn btn-success d-block">
-            Update Avatar
-        </a>
+    /* Profile image */
+    .profile-image-wrapper {
+        position: relative;
+        margin-top: -75px;
+        margin-left: 45px;
+        width: 150px;
+        height: 150px;
+    }
+
+    .profile-image {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 6px solid #ffffff;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        background: #f8eaf0;
+    }
+
+    /* Content */
+    .profile-content {
+        padding: 0 45px 40px;
+    }
+
+    .profile-name {
+        margin-top: 15px;
+        font-size: 24px;
+        font-weight: 700;
+        color: #43152d;
+    }
+
+    .profile-role {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 5px;
+        padding: 6px 12px;
+        border-radius: 20px;
+        background: #fce8f1;
+        color: #a51d5b;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    /* Information grid */
+    .profile-info {
+        margin-top: 30px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
+    }
+
+    .info-box {
+        padding: 18px 20px;
+        border: 1px solid #f1dfe7;
+        border-radius: 14px;
+        background: #fffafb;
+    }
+
+    .info-label {
+        display: block;
+        font-size: 12px;
+        font-weight: 600;
+        color: #9a7d8c;
+        margin-bottom: 7px;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+    }
+
+    .info-value {
+        display: block;
+        font-size: 15px;
+        font-weight: 600;
+        color: #42172e;
+        word-break: break-word;
+    }
+
+    /* Buttons */
+    .profile-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 30px;
+        padding-top: 25px;
+        border-top: 1px solid #f2e3e9;
+    }
+
+    .profile-btn {
+        border: none;
+        border-radius: 11px;
+        padding: 12px 20px;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all .2s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .btn-update {
+        background: #a51d5b;
+        color: white;
+    }
+
+    .btn-update:hover {
+        background: #861548;
+        color: white;
+        transform: translateY(-1px);
+        box-shadow: 0 5px 15px rgba(165,29,91,.20);
+    }
+
+    .btn-avatar {
+        background: #fce8f1;
+        color: #a51d5b;
+        border: 1px solid #f1cbdc;
+    }
+
+    .btn-avatar:hover {
+        background: #f7dce8;
+        color: #8c164c;
+        transform: translateY(-1px);
+    }
+
+    /* Mobile */
+    @@media (max-width: 700px) {
+        .profile-page {
+            padding: 20px 12px;
+        }
+
+        .profile-header h2 {
+            font-size: 24px;
+        }
+
+        .profile-cover {
+            height: 120px;
+        }
+
+        .profile-image-wrapper {
+            margin-left: 25px;
+            margin-top: -65px;
+            width: 130px;
+            height: 130px;
+        }
+
+        .profile-image {
+            width: 130px;
+            height: 130px;
+        }
+
+        .profile-content {
+            padding: 0 25px 30px;
+        }
+
+        .profile-name {
+            font-size: 21px;
+        }
+
+        .profile-info {
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .profile-actions {
+            flex-direction: column;
+        }
+
+        .profile-btn {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="profile-page">
+
+    <div class="profile-wrapper">
+
+        <!-- Page Header -->
+        <div class="profile-header">
+            <h2>My Profile</h2>
+            <p>View and manage your account information.</p>
+        </div>
+
+        <!-- Profile Card -->
+        <div class="profile-card">
+
+            <!-- Cover -->
+            <div class="profile-cover"></div>
+
+            <!-- Profile Content -->
+            <div class="profile-content">
+
+                <!-- Avatar -->
+                <div class="profile-image-wrapper">
+                    <img src="@Model.UserDto.ProfileImage"
+                         alt="Profile Image"
+                         class="profile-image" />
+                </div>
+
+                <!-- Name -->
+                <div class="profile-name">
+                    @Model.UserDto.FirstName @Model.UserDto.LastName
+                </div>
+
+                <div class="profile-role">
+                    <i class="bi bi-person-fill"></i>
+                    Inventory System Account
+                </div>
+
+                <!-- Information -->
+                <div class="profile-info">
+
+                    <div class="info-box">
+                        <span class="info-label">
+                            <i class="bi bi-person"></i>
+                            Username
+                        </span>
+                        <span class="info-value">
+                            @Model.UserDto.Username
+                        </span>
+                    </div>
+
+                    <div class="info-box">
+                        <span class="info-label">
+                            <i class="bi bi-person-badge"></i>
+                            First Name
+                        </span>
+                        <span class="info-value">
+                            @Model.UserDto.FirstName
+                        </span>
+                    </div>
+
+                    <div class="info-box">
+                        <span class="info-label">
+                            <i class="bi bi-person-badge"></i>
+                            Last Name
+                        </span>
+                        <span class="info-value">
+                            @Model.UserDto.LastName
+                        </span>
+                    </div>
+
+                    <div class="info-box">
+                        <span class="info-label">
+                            <i class="bi bi-calendar3"></i>
+                            Date of Birth
+                        </span>
+                        <span class="info-value">
+                            @Model.UserDto.DateOfBirth?.ToString("MMMM dd, yyyy")
+                        </span>
+                    </div>
+
+                </div>
+
+                <!-- Actions -->
+                <div class="profile-actions">
+
+                    <a asp-page="/Account/UpdateProfile"
+                       class="profile-btn btn-update">
+                        <i class="bi bi-pencil-square"></i>
+                        Update Profile
+                    </a>
+
+                    <a asp-page="/Account/UpdateAvatar"
+                       class="profile-btn btn-avatar">
+                        <i class="bi bi-camera"></i>
+                        Update Avatar
+                    </a>
+
+                </div>
+
+            </div>
+        </div>
 
     </div>
 
 </div>
-

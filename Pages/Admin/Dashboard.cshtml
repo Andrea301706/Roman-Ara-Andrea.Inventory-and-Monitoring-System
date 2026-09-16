@@ -1,6 +1,1169 @@
 @page
+@using Microsoft.AspNetCore.Authorization
 @model Roman_Ara_Andrea.Inventory_and_Monitoring_System.Pages.Admin.DashboardModel
 
-<h1>Admin Dashboard</h1>
+@{
+    ViewData["Title"] = "Dashboard";
+    var today = DateTime.Now.ToString("MMMM dd, yyyy");
+}
 
-<p>Welcome to the Admin Dashboard.</p>
+<style>
+    :root {
+        --primary: #a51d5b;
+        --primary-dark: #7f1647;
+        --primary-light: #fce8f1;
+        --primary-soft: #fff5f8;
+        --text: #42172e;
+        --muted: #8b7180;
+        --border: #f1dfe7;
+        --white: #ffffff;
+        --success: #23845b;
+        --success-bg: #eaf8f1;
+        --warning: #b87516;
+        --warning-bg: #fff5df;
+        --shadow: 0 10px 35px rgba(107, 25, 70, 0.09);
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        background: #fdf7fa;
+    }
+
+    .dashboard-page {
+        min-height: calc(100vh - 70px);
+        padding: 30px 0 50px;
+        color: var(--text);
+    }
+
+    .dashboard-container {
+        max-width: 1450px;
+        margin: 0 auto;
+        padding: 0 28px;
+    }
+
+    /* =========================
+       HEADER
+       ========================= */
+
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 25px;
+        margin-bottom: 28px;
+    }
+
+    .header-left {
+        min-width: 0;
+    }
+
+    .eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--primary);
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+    }
+
+    .eyebrow i {
+        font-size: 15px;
+    }
+
+    .dashboard-title {
+        margin: 0;
+        font-size: 34px;
+        font-weight: 800;
+        letter-spacing: -0.8px;
+        color: var(--text);
+    }
+
+    .welcome-text {
+        margin: 8px 0 0;
+        color: var(--muted);
+        font-size: 14px;
+    }
+
+    .welcome-text strong {
+        color: var(--text);
+        font-weight: 700;
+    }
+
+    .date-box {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 11px 16px;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 5px 18px rgba(107, 25, 70, 0.05);
+        white-space: nowrap;
+    }
+
+    .date-box i {
+        color: var(--primary);
+        font-size: 17px;
+    }
+
+    /* =========================
+       STAT CARDS
+       ========================= */
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+        margin-bottom: 22px;
+    }
+
+    .stat-card {
+        position: relative;
+        overflow: hidden;
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 22px;
+        min-height: 145px;
+        box-shadow: var(--shadow);
+        transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(107, 25, 70, 0.13);
+    }
+
+    .stat-card::after {
+        content: "";
+        position: absolute;
+        width: 95px;
+        height: 95px;
+        border-radius: 50%;
+        right: -35px;
+        top: -35px;
+        background: var(--primary-light);
+        opacity: .8;
+    }
+
+    .stat-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        position: relative;
+        z-index: 2;
+    }
+
+    .stat-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--primary-light);
+        color: var(--primary);
+        font-size: 21px;
+    }
+
+    .stat-label {
+        margin-top: 17px;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .stat-value {
+        margin-top: 3px;
+        color: var(--text);
+        font-size: 27px;
+        line-height: 1.15;
+        font-weight: 800;
+        letter-spacing: -.5px;
+    }
+
+    .stat-description {
+        margin-top: 5px;
+        font-size: 11px;
+        color: #aa94a0;
+    }
+
+    .stat-card.warning .stat-icon {
+        background: var(--warning-bg);
+        color: var(--warning);
+    }
+
+    .stat-card.warning::after {
+        background: var(--warning-bg);
+    }
+
+    /* =========================
+       MAIN GRID
+       ========================= */
+
+    .main-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.6fr) minmax(320px, .9fr);
+        gap: 22px;
+        margin-bottom: 22px;
+    }
+
+    .dashboard-card {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 22px;
+        box-shadow: var(--shadow);
+    }
+
+    .card-header-custom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 22px 24px 16px;
+    }
+
+    .card-heading {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .heading-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: var(--primary-light);
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+    }
+
+    .card-title {
+        margin: 0;
+        font-size: 17px;
+        font-weight: 800;
+        color: var(--text);
+    }
+
+    .card-subtitle {
+        margin: 3px 0 0;
+        font-size: 12px;
+        color: var(--muted);
+    }
+
+    /* =========================
+       INVENTORY OVERVIEW
+       ========================= */
+
+    .overview-body {
+        padding: 4px 24px 25px;
+    }
+
+    .overview-summary {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-bottom: 25px;
+    }
+
+    .overview-item {
+        padding: 16px;
+        border-radius: 15px;
+        background: var(--primary-soft);
+        border: 1px solid var(--border);
+    }
+
+    .overview-item .label {
+        font-size: 11px;
+        color: var(--muted);
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    .overview-item .number {
+        font-size: 22px;
+        font-weight: 800;
+        color: var(--text);
+    }
+
+    .overview-item.success .number {
+        color: var(--success);
+    }
+
+    .overview-item.warning .number {
+        color: var(--warning);
+    }
+
+    .availability-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 9px;
+    }
+
+    .availability-title {
+        font-size: 13px;
+        font-weight: 800;
+        color: var(--text);
+    }
+
+    .availability-percent {
+        color: var(--primary);
+        font-size: 18px;
+        font-weight: 800;
+    }
+
+    .progress-track {
+        height: 12px;
+        background: #f5e7ed;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .progress-bar-custom {
+        width: 92.9%;
+        height: 100%;
+        border-radius: 20px;
+        background: linear-gradient(90deg, #8f174f, #d84b88);
+    }
+
+    .availability-note {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 9px;
+        font-size: 11px;
+        color: var(--muted);
+    }
+
+    /* =========================
+       QUICK ACTIONS
+       ========================= */
+
+    .actions-body {
+        padding: 4px 20px 22px;
+    }
+
+    .action-button {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        width: 100%;
+        padding: 14px;
+        margin-bottom: 10px;
+        text-decoration: none;
+        border-radius: 15px;
+        border: 1px solid var(--border);
+        background: #fffafb;
+        transition: all .2s ease;
+    }
+
+    .action-button:last-child {
+        margin-bottom: 0;
+    }
+
+    .action-button:hover {
+        background: var(--primary-light);
+        border-color: #e9b8ce;
+        transform: translateX(3px);
+    }
+
+    .action-icon {
+        width: 42px;
+        height: 42px;
+        flex-shrink: 0;
+        border-radius: 12px;
+        background: var(--primary-light);
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+    }
+
+    .action-content {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .action-title {
+        display: block;
+        color: var(--text);
+        font-size: 13px;
+        font-weight: 800;
+    }
+
+    .action-description {
+        display: block;
+        margin-top: 2px;
+        color: var(--muted);
+        font-size: 11px;
+    }
+
+    .action-arrow {
+        color: #bda1ae;
+        font-size: 14px;
+    }
+
+    .action-button.primary-action {
+        background: linear-gradient(135deg, #8f174f, #c53b76);
+        border-color: transparent;
+    }
+
+    .action-button.primary-action .action-icon {
+        background: rgba(255,255,255,.16);
+        color: #fff;
+    }
+
+    .action-button.primary-action .action-title,
+    .action-button.primary-action .action-description,
+    .action-button.primary-action .action-arrow {
+        color: #fff;
+    }
+
+    .action-button.primary-action .action-description {
+        opacity: .8;
+    }
+
+    /* =========================
+       RECENT PRODUCTS
+       ========================= */
+
+    .recent-card {
+        overflow: hidden;
+    }
+
+    .view-all {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--primary);
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 800;
+    }
+
+    .view-all:hover {
+        color: var(--primary-dark);
+    }
+
+    .table-wrapper {
+        overflow-x: auto;
+    }
+
+    .products-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 700px;
+    }
+
+    .products-table thead th {
+        padding: 12px 24px;
+        background: #fff8fb;
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        color: #927584;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: .8px;
+        font-weight: 800;
+        text-align: left;
+    }
+
+    .products-table tbody td {
+        padding: 16px 24px;
+        border-bottom: 1px solid #f7eaf0;
+        color: var(--text);
+        font-size: 13px;
+        vertical-align: middle;
+    }
+
+    .products-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .products-table tbody tr {
+        transition: background .15s ease;
+    }
+
+    .products-table tbody tr:hover {
+        background: #fffafd;
+    }
+
+    .product-name {
+        font-weight: 800;
+    }
+
+    .product-code {
+        color: var(--muted);
+        font-size: 11px;
+        margin-top: 2px;
+    }
+
+    .price {
+        font-weight: 800;
+    }
+
+    .stock-number {
+        font-weight: 800;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        border-radius: 30px;
+        font-size: 10px;
+        font-weight: 800;
+    }
+
+    .status-badge::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+    .status-in {
+        color: var(--success);
+        background: var(--success-bg);
+    }
+
+    .status-low {
+        color: var(--warning);
+        background: var(--warning-bg);
+    }
+
+    /* =========================
+       FOOTER NOTE
+       ========================= */
+
+    .dashboard-footer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 7px;
+        color: #aa94a0;
+        font-size: 11px;
+        margin-top: 24px;
+    }
+
+    .dashboard-footer i {
+        color: var(--primary);
+    }
+
+    /* =========================
+       RESPONSIVE
+       ========================= */
+
+    @@media (max-width: 1100px) {
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .main-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @@media (max-width: 700px) {
+        .dashboard-page {
+            padding-top: 20px;
+        }
+
+        .dashboard-container {
+            padding: 0 15px;
+        }
+
+        .dashboard-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .dashboard-title {
+            font-size: 28px;
+        }
+
+        .date-box {
+            width: 100%;
+        }
+
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .overview-summary {
+            grid-template-columns: 1fr;
+        }
+
+        .card-header-custom {
+            padding-left: 18px;
+            padding-right: 18px;
+        }
+
+        .overview-body {
+            padding-left: 18px;
+            padding-right: 18px;
+        }
+
+        .actions-body {
+            padding-left: 14px;
+            padding-right: 14px;
+        }
+    }
+</style>
+
+<div class="dashboard-page">
+    <div class="dashboard-container">
+
+        <!-- ================= HEADER ================= -->
+        <div class="dashboard-header">
+
+            <div class="header-left">
+
+                <div class="eyebrow">
+                    <i class="bi bi-box-seam"></i>
+                    Inventory Management
+                </div>
+
+                <h1 class="dashboard-title">
+                    Dashboard
+                </h1>
+
+                <p class="welcome-text">
+                    Welcome back,
+                    <strong>@User.Identity?.Name</strong>.
+                    Here's your inventory overview.
+                </p>
+
+            </div>
+
+            <div class="date-box">
+                <i class="bi bi-calendar3"></i>
+                <span>@today</span>
+            </div>
+
+        </div>
+
+
+        <!-- ================= STAT CARDS ================= -->
+        <div class="stats-grid">
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+                    <div class="stat-icon">
+                        <i class="bi bi-box-seam"></i>
+                    </div>
+                </div>
+
+                <div class="stat-label">
+                    Total Products
+                </div>
+
+                <div class="stat-value">
+                    254
+                </div>
+
+                <div class="stat-description">
+                    Products currently registered
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+                    <div class="stat-icon">
+                        <i class="bi bi-stack"></i>
+                    </div>
+                </div>
+
+                <div class="stat-label">
+                    Total Stock
+                </div>
+
+                <div class="stat-value">
+                    8,742
+                </div>
+
+                <div class="stat-description">
+                    Total available units
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+                    <div class="stat-icon">
+                        <i class="bi bi-cash-stack"></i>
+                    </div>
+                </div>
+
+                <div class="stat-label">
+                    Inventory Value
+                </div>
+
+                <div class="stat-value">
+                    ₱1.24M
+                </div>
+
+                <div class="stat-description">
+                    Estimated inventory value
+                </div>
+
+            </div>
+
+
+            <div class="stat-card warning">
+
+                <div class="stat-top">
+                    <div class="stat-icon">
+                        <i class="bi bi-exclamation-triangle"></i>
+                    </div>
+                </div>
+
+                <div class="stat-label">
+                    Low Stock
+                </div>
+
+                <div class="stat-value">
+                    18
+                </div>
+
+                <div class="stat-description">
+                    Products need attention
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= MAIN CONTENT ================= -->
+        <div class="main-grid">
+
+            <!-- INVENTORY OVERVIEW -->
+            <div class="dashboard-card">
+
+                <div class="card-header-custom">
+
+                    <div class="card-heading">
+
+                        <div class="heading-icon">
+                            <i class="bi bi-bar-chart-line"></i>
+                        </div>
+
+                        <div>
+                            <h2 class="card-title">
+                                Inventory Overview
+                            </h2>
+
+                            <p class="card-subtitle">
+                                Current stock availability
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="overview-body">
+
+                    <div class="overview-summary">
+
+                        <div class="overview-item">
+
+                            <div class="label">
+                                Total Products
+                            </div>
+
+                            <div class="number">
+                                254
+                            </div>
+
+                        </div>
+
+
+                        <div class="overview-item success">
+
+                            <div class="label">
+                                In Stock
+                            </div>
+
+                            <div class="number">
+                                236
+                            </div>
+
+                        </div>
+
+
+                        <div class="overview-item warning">
+
+                            <div class="label">
+                                Low Stock
+                            </div>
+
+                            <div class="number">
+                                18
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="availability-row">
+
+                        <div class="availability-title">
+                            Stock Availability
+                        </div>
+
+                        <div class="availability-percent">
+                            92.9%
+                        </div>
+
+                    </div>
+
+
+                    <div class="progress-track">
+                        <div class="progress-bar-custom"></div>
+                    </div>
+
+
+                    <div class="availability-note">
+                        <span>236 of 254 products available</span>
+                        <span>18 need attention</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- QUICK ACTIONS -->
+            <div class="dashboard-card">
+
+                <div class="card-header-custom">
+
+                    <div class="card-heading">
+
+                        <div class="heading-icon">
+                            <i class="bi bi-lightning-charge"></i>
+                        </div>
+
+                        <div>
+                            <h2 class="card-title">
+                                Quick Actions
+                            </h2>
+
+                            <p class="card-subtitle">
+                                Common inventory tasks
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="actions-body">
+
+                    <!-- Manage Products -->
+                    <a asp-page="/Admin/Products/Index"
+                       class="action-button primary-action">
+
+                        <div class="action-icon">
+                            <i class="bi bi-boxes"></i>
+                        </div>
+
+                        <div class="action-content">
+
+                            <span class="action-title">
+                                Manage Products
+                            </span>
+
+                            <span class="action-description">
+                                View and manage inventory
+                            </span>
+
+                        </div>
+
+                        <i class="bi bi-chevron-right action-arrow"></i>
+
+                    </a>
+
+
+                    <!-- Add Product -->
+                    <a asp-page="/Admin/Products/Create"
+                       class="action-button">
+
+                        <div class="action-icon">
+                            <i class="bi bi-plus-lg"></i>
+                        </div>
+
+                        <div class="action-content">
+
+                            <span class="action-title">
+                                Add Product
+                            </span>
+
+                            <span class="action-description">
+                                Register a new product
+                            </span>
+
+                        </div>
+
+                        <i class="bi bi-chevron-right action-arrow"></i>
+
+                    </a>
+
+
+                    <!-- View All Products -->
+                    <a asp-page="/Admin/Products/Index"
+                       class="action-button">
+
+                        <div class="action-icon">
+                            <i class="bi bi-list-ul"></i>
+                        </div>
+
+                        <div class="action-content">
+
+                            <span class="action-title">
+                                View All Products
+                            </span>
+
+                            <span class="action-description">
+                                Browse the complete inventory
+                            </span>
+
+                        </div>
+
+                        <i class="bi bi-chevron-right action-arrow"></i>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= RECENT PRODUCTS ================= -->
+        <div class="dashboard-card recent-card">
+
+            <div class="card-header-custom">
+
+                <div class="card-heading">
+
+                    <div class="heading-icon">
+                        <i class="bi bi-clock-history"></i>
+                    </div>
+
+                    <div>
+                        <h2 class="card-title">
+                            Recent Products
+                        </h2>
+
+                        <p class="card-subtitle">
+                            Recently added inventory items
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <a asp-page="/Admin/Products/Index"
+                   class="view-all">
+
+                    View All
+
+                    <i class="bi bi-arrow-right"></i>
+
+                </a>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table class="products-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Product
+                            </th>
+
+                            <th>
+                                Price
+                            </th>
+
+                            <th>
+                                Stock
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+
+                                <div class="product-name">
+                                    Sample Product
+                                </div>
+
+                                <div class="product-code">
+                                    PRD-001
+                                </div>
+
+                            </td>
+
+                            <td>
+                                <span class="price">
+                                    ₱1,250
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="stock-number">
+                                    125
+                                </span>
+                            </td>
+
+                            <td>
+
+                                <span class="status-badge status-in">
+                                    In Stock
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+
+                                <div class="product-name">
+                                    Office Supplies
+                                </div>
+
+                                <div class="product-code">
+                                    PRD-002
+                                </div>
+
+                            </td>
+
+                            <td>
+                                <span class="price">
+                                    ₱850
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="stock-number">
+                                    74
+                                </span>
+                            </td>
+
+                            <td>
+
+                                <span class="status-badge status-in">
+                                    In Stock
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+
+                                <div class="product-name">
+                                    Printer Ink
+                                </div>
+
+                                <div class="product-code">
+                                    PRD-003
+                                </div>
+
+                            </td>
+
+                            <td>
+                                <span class="price">
+                                    ₱1,500
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="stock-number">
+                                    8
+                                </span>
+                            </td>
+
+                            <td>
+
+                                <span class="status-badge status-low">
+                                    Low Stock
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= FOOTER ================= -->
+        <div class="dashboard-footer">
+
+            <i class="bi bi-shield-check"></i>
+
+            Inventory and Monitoring System
+
+            <span>•</span>
+
+            Admin Dashboard
+
+        </div>
+
+    </div>
+</div>

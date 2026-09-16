@@ -1,0 +1,224 @@
+@page "{id:int}"
+@model Roman_Ara_Andrea.Inventory_and_Monitoring_System.Pages.Admin.Products.EditModel
+
+@{
+    ViewData["Title"] = "Edit Product";
+}
+
+<div class="products-page">
+
+    <!-- HEADER -->
+    <div class="products-header">
+
+        <div>
+            <h1>Edit Product</h1>
+            <p>Update the information of this inventory product.</p>
+        </div>
+
+        <a asp-page="./Index" class="btn btn-light">
+            <i class="bi bi-arrow-left"></i>
+            Back to Products
+        </a>
+
+    </div>
+
+
+    <!-- FORM CARD -->
+    <div class="product-form-card">
+
+        <div class="product-form-header">
+
+            <div class="form-icon">
+                <i class="bi bi-pencil-square"></i>
+            </div>
+
+            <div>
+                <h4>Edit Product Information</h4>
+                <p>Modify the product details below.</p>
+            </div>
+
+        </div>
+
+
+        <form method="post">
+
+            <!-- PRODUCT ID -->
+            <input type="hidden" asp-for="Product.Id" />
+
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger mb-3">
+            </div>
+
+
+            <div class="row g-4">
+
+                <!-- PRODUCT CODE -->
+                <div class="col-md-6">
+
+                    <label asp-for="Product.ProductCode"
+                           class="form-label">
+                        Product Code
+                    </label>
+
+                    <div class="input-group">
+
+                        <span class="input-group-text">
+                            <i class="bi bi-upc-scan"></i>
+                        </span>
+
+                        <input asp-for="Product.ProductCode"
+                               class="form-control"
+                               placeholder="Enter product code" />
+
+                    </div>
+
+                    <span asp-validation-for="Product.ProductCode"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- PRODUCT NAME -->
+                <div class="col-md-6">
+
+                    <label asp-for="Product.Name"
+                           class="form-label">
+                        Product Name
+                    </label>
+
+                    <div class="input-group">
+
+                        <span class="input-group-text">
+                            <i class="bi bi-box"></i>
+                        </span>
+
+                        <input asp-for="Product.Name"
+                               class="form-control"
+                               placeholder="Enter product name" />
+
+                    </div>
+
+                    <span asp-validation-for="Product.Name"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- UNIT PRICE -->
+                <div class="col-md-4">
+
+                    <label asp-for="Product.UnitPrice"
+                           class="form-label">
+                        Unit Price
+                    </label>
+
+                    <div class="input-group">
+
+                        <span class="input-group-text">
+                            ₱
+                        </span>
+
+                        <input asp-for="Product.UnitPrice"
+                               class="form-control"
+                               type="number"
+                               step="0.01"
+                               min="0" />
+
+                    </div>
+
+                    <span asp-validation-for="Product.UnitPrice"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- CURRENT STOCK -->
+                <div class="col-md-4">
+
+                    <label asp-for="Product.CurrentStock"
+                           class="form-label">
+                        Current Stock
+                    </label>
+
+                    <div class="input-group">
+
+                        <span class="input-group-text">
+                            <i class="bi bi-boxes"></i>
+                        </span>
+
+                        <input asp-for="Product.CurrentStock"
+                               class="form-control"
+                               type="number"
+                               min="0" />
+
+                    </div>
+
+                    <span asp-validation-for="Product.CurrentStock"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- REORDER LEVEL -->
+                <div class="col-md-4">
+
+                    <label asp-for="Product.ReorderLevel"
+                           class="form-label">
+                        Reorder Level
+                    </label>
+
+                    <div class="input-group">
+
+                        <span class="input-group-text">
+                            <i class="bi bi-exclamation-triangle"></i>
+                        </span>
+
+                        <input asp-for="Product.ReorderLevel"
+                               class="form-control"
+                               type="number"
+                               min="0" />
+
+                    </div>
+
+                    <span asp-validation-for="Product.ReorderLevel"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- BUTTONS -->
+            <div class="product-form-footer">
+
+                <a asp-page="./Index"
+                   class="btn btn-light">
+                    Cancel
+                </a>
+
+                <button type="submit"
+                        class="btn btn-pink">
+
+                    <i class="bi bi-check-lg"></i>
+                    Save Changes
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

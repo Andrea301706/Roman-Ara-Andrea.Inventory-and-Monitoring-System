@@ -1,228 +1,302 @@
 @page
-@model IndexModel
-@using System.Security.Claims
+@model Roman_Ara_Andrea.Inventory_and_Monitoring_System.Pages.Admin.Products.IndexModel
 
 @{
-    ViewData["Title"] = "Dashboard";
+    ViewData["Title"] = "Products";
 }
 
-<!DOCTYPE html>
-<html>
-<head>
+<div class="products-page">
 
-<title>Inventory System Dashboard</title>
+    <!-- HEADER -->
+    <div class="products-header">
+        <div>
+            <div class="dashboard-eyebrow">
+                <i class="bi bi-box-seam"></i>
+                Inventory Management
+            </div>
 
-<style>
+            <h1>Products</h1>
 
-body {
-    margin:0;
-    font-family:'Segoe UI', sans-serif;
-    background:#f7f7f7;
-}
+            <p>Manage and monitor your inventory products.</p>
+        </div>
 
-
-/* Header */
-
-.header {
-
-    background:linear-gradient(135deg,#ff6b81,#ff9a9e);
-    padding:35px;
-    color:white;
-
-}
+        <a asp-page="/Admin/Products/Create" class="btn btn-pink">
+            <i class="bi bi-plus-lg"></i>
+            Add Product
+        </a>
+    </div>
 
 
-.header h1 {
+    <!-- SUMMARY CARDS -->
+    <div class="products-summary">
 
-    margin:0;
-    font-size:40px;
+        <div class="product-summary-card">
+            <div class="summary-icon pink">
+                <i class="bi bi-box-seam"></i>
+            </div>
 
-}
-
-
-/* Dashboard */
-
-.container {
-
-    padding:40px;
-
-}
-
-
-.welcome {
-
-    background:white;
-    padding:30px;
-    border-radius:20px;
-    box-shadow:0 10px 25px rgba(0,0,0,.1);
-
-}
+            <div>
+                <span>Total Products</span>
+                <h2>@Model.Products.Count</h2>
+                <small>Products in inventory</small>
+            </div>
+        </div>
 
 
-.welcome h2 {
+        <div class="product-summary-card">
+            <div class="summary-icon green">
+                <i class="bi bi-boxes"></i>
+            </div>
 
-    color:#ff6b81;
-
-}
-
-
-
-/* Cards */
-
-.cards {
-
-    display:flex;
-    gap:25px;
-    margin-top:30px;
-    flex-wrap:wrap;
-
-}
+            <div>
+                <span>Total Stock</span>
+                <h2>@Model.Products.Sum(p => p.CurrentStock)</h2>
+                <small>Items currently available</small>
+            </div>
+        </div>
 
 
-.card {
+        <div class="product-summary-card">
+            <div class="summary-icon orange">
+                <i class="bi bi-exclamation-triangle"></i>
+            </div>
 
-    background:white;
-    width:250px;
-    padding:25px;
-    border-radius:20px;
-    text-align:center;
-    box-shadow:0 8px 20px rgba(0,0,0,.1);
+            <div>
+                <span>Low Stock</span>
+                <h2>
+                    @Model.Products.Count(
+                        p => p.CurrentStock <= p.ReorderLevel
+                    )
+                </h2>
+                <small>Products need attention</small>
+            </div>
+        </div>
 
-}
-
-
-.card h3 {
-
-    color:#ff6b81;
-    font-size:30px;
-
-}
-
+    </div>
 
 
-/* Buttons */
+    <!-- PRODUCT INVENTORY -->
+    <div class="products-card">
 
-.menu {
+        <div class="products-card-header">
 
-    margin-top:40px;
+            <div>
+                <div class="dashboard-eyebrow">
+                    Inventory List
+                </div>
 
-}
+                <h4>
+                    <i class="bi bi-box-seam"></i>
+                    Product Inventory
+                </h4>
 
-
-.menu a {
-
-    text-decoration:none;
-    background:#ff6b81;
-    color:white;
-    padding:12px 25px;
-    border-radius:30px;
-    margin-right:10px;
-
-}
+                <p>View and manage all products in your inventory.</p>
+            </div>
 
 
-.menu a:hover {
+            <div class="product-search">
+                <i class="bi bi-search"></i>
 
-    background:#ff4757;
+                <input type="text"
+                       id="productSearch"
+                       placeholder="Search products..." />
+            </div>
 
-}
-
-
-</style>
-
-</head>
-
-
-<body>
+        </div>
 
 
-<div class="header">
+        <div class="table-responsive">
 
-<h1>
-INVENTORY SYSTEM
-</h1>
+            <table class="table products-table" id="productsTable">
 
-<p>
-Monitoring and Management Dashboard
-</p>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Product Code</th>
+                        <th>Product</th>
+                        <th>Unit Price</th>
+                        <th>Stock</th>
+                        <th>Reorder Level</th>
+                        <th>Status</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
 
+
+                <tbody>
+
+                    @if (Model.Products.Any())
+                    {
+                        foreach (var product in Model.Products)
+                        {
+                            var lowStock =
+                                product.CurrentStock <= product.ReorderLevel;
+
+                            <tr>
+
+                                <td>
+                                    <span class="product-id">
+                                        @product.Id
+                                    </span>
+                                </td>
+
+
+                                <td>
+                                    <span class="product-code-badge">
+                                        @product.ProductCode
+                                    </span>
+                                </td>
+
+
+                                <td>
+                                    <div class="product-info">
+
+                                        <div class="product-avatar">
+                                            <i class="bi bi-box"></i>
+                                        </div>
+
+                                        <div>
+                                            <strong>@product.Name</strong>
+                                            <small>Inventory product</small>
+                                        </div>
+
+                                    </div>
+                                </td>
+
+
+                                <td>
+                                    <strong class="product-price">
+                                        ₱@product.UnitPrice.ToString("N2")
+                                    </strong>
+                                </td>
+
+
+                                <td>
+                                    <strong class="@(lowStock ? "stock-low" : "stock-good")">
+                                        @product.CurrentStock
+                                    </strong>
+                                </td>
+
+
+                                <td>
+                                    <span class="reorder-level">
+                                        @product.ReorderLevel
+                                    </span>
+                                </td>
+
+
+                                <td>
+                                    @if (lowStock)
+                                    {
+                                        <span class="product-status low">
+                                            <i class="bi bi-exclamation-circle"></i>
+                                            Low Stock
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="product-status good">
+                                            <i class="bi bi-check-circle"></i>
+                                            In Stock
+                                        </span>
+                                    }
+                                </td>
+
+
+                                <td>
+                                    <div class="product-actions">
+
+                                        <a asp-page="./Details"
+                                           asp-route-id="@product.Id"
+                                           class="action-button view"
+                                           title="View Product">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+
+                                        <a asp-page="./Edit"
+                                           asp-route-id="@product.Id"
+                                           class="action-button edit"
+                                           title="Edit Product">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+
+                                        <a asp-page="./Delete"
+                                           asp-route-id="@product.Id"
+                                           class="action-button delete"
+                                           title="Delete Product">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+
+                                    </div>
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8">
+
+                                <div class="empty-products">
+
+                                    <div class="empty-icon">
+                                        <i class="bi bi-box-seam"></i>
+                                    </div>
+
+                                    <h5>No Products Found</h5>
+
+                                    <p>
+                                        There are currently no products
+                                        in your inventory.
+                                    </p>
+
+                                    <a asp-page="/Admin/Products/Create"
+                                       class="btn btn-pink">
+                                        <i class="bi bi-plus-lg"></i>
+                                        Add Product
+                                    </a>
+
+                                </div>
+
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
 
 </div>
 
 
+@section Scripts {
 
-<div class="container">
+    <script>
+        const searchInput = document.getElementById("productSearch");
 
+        if (searchInput) {
+            searchInput.addEventListener("keyup", function () {
 
-<div class="welcome">
+                const searchValue = this.value.toLowerCase();
 
-<h2>
-Welcome, @User.Identity?.Name! 👋
-</h2>
+                const rows = document.querySelectorAll(
+                    "#productsTable tbody tr"
+                );
 
+                rows.forEach(function (row) {
 
-<p>
-Login successful. Welcome to your Inventory Monitoring System.
-</p>
+                    const text = row.textContent.toLowerCase();
 
+                    row.style.display =
+                        text.includes(searchValue) ? "" : "none";
 
-</div>
-
-
-
-<div class="cards">
-
-
-<div class="card">
-
-<h3>
-📦
-</h3>
-
-<p>
-Products
-</p>
-
-</div>
-
-
-<div class="card">
-
-<h3>
-👤
-</h3>
-
-<p>
-Admin Account
-</p>
-
-</div>
-
-
-
-</div>
-
-
-
-<div class="menu">
-
-
-<a asp-page="/Products/Index">
-Manage Products
-</a>
-
-
-
-<a asp-page="/Account/Logout">
-Logout
-</a>
-
-
-</div>
-
-
-</div>
-
-
-</body>
-</html>
+                });
+            });
+        }
+    </script>
+}

@@ -1,74 +1,425 @@
 @page "/Account/Invite-User"
+
 @model Roman_Ara_Andrea.Inventory_and_Monitoring_System.Pages.Account.InviteModel
 
 @{
     ViewData["Title"] = "Invite User";
 }
 
-<h2>Invite User</h2>
+<div class="invite-page">
+    <div class="invite-card">
 
-@if (TempData["SuccessMessage"] != null)
-{
-    <div style="color:green; font-weight:bold; padding:10px; border:1px solid green; margin-bottom:20px;">
-        @TempData["SuccessMessage"]
+        <!-- Header -->
+        <div class="invite-header">
+            <div class="invite-icon">
+                <i class="bi bi-person-plus-fill"></i>
+            </div>
+
+            <h2>Invite a New User</h2>
+            <p>
+                Create an invitation for a new user to join the system.
+            </p>
+        </div>
+
+        <div class="card-body">
+
+            <!-- Success Message -->
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success custom-alert">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    <span>@TempData["SuccessMessage"]</span>
+                </div>
+            }
+
+            <!-- Invite Link -->
+            @if (TempData["InviteUrl"] != null)
+            {
+                <div class="invite-link-box">
+                    <div class="link-title">
+                        <i class="bi bi-link-45deg"></i>
+                        Invitation Link
+                    </div>
+
+                    <p class="link-description">
+                        Share this link with the invited user.
+                    </p>
+
+                    <div class="input-group">
+                        <input type="text"
+                               class="form-control"
+                               id="inviteUrl"
+                               value="@TempData["InviteUrl"]"
+                               readonly />
+
+                        <button type="button"
+                                class="btn btn-copy"
+                                onclick="copyInviteLink()">
+                            <i class="bi bi-copy me-1"></i>
+                            Copy
+                        </button>
+                    </div>
+                </div>
+            }
+
+            <!-- Form -->
+            <form method="post">
+
+                <!-- Username -->
+                <div class="form-group">
+                    <label asp-for="UserInviteDto.Username" class="form-label">
+                        <i class="bi bi-person me-1"></i>
+                        Username
+                    </label>
+
+                    <input asp-for="UserInviteDto.Username"
+                           class="form-control"
+                           placeholder="Enter username"
+                           autocomplete="off" />
+
+                    <span asp-validation-for="UserInviteDto.Username"
+                          class="text-danger"></span>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label asp-for="UserInviteDto.Email" class="form-label">
+                        <i class="bi bi-envelope me-1"></i>
+                        Email Address
+                    </label>
+
+                    <input asp-for="UserInviteDto.Email"
+                           type="email"
+                           class="form-control"
+                           placeholder="Enter email address"
+                           autocomplete="email" />
+
+                    <span asp-validation-for="UserInviteDto.Email"
+                          class="text-danger"></span>
+                </div>
+
+                <!-- First Name -->
+                <div class="form-group">
+                    <label asp-for="UserInviteDto.FirstName" class="form-label">
+                        <i class="bi bi-person-badge me-1"></i>
+                        First Name
+                    </label>
+
+                    <input asp-for="UserInviteDto.FirstName"
+                           class="form-control"
+                           placeholder="Enter first name" />
+
+                    <span asp-validation-for="UserInviteDto.FirstName"
+                          class="text-danger"></span>
+                </div>
+
+                <!-- Last Name -->
+                <div class="form-group">
+                    <label asp-for="UserInviteDto.LastName" class="form-label">
+                        <i class="bi bi-person-badge me-1"></i>
+                        Last Name
+                    </label>
+
+                    <input asp-for="UserInviteDto.LastName"
+                           class="form-control"
+                           placeholder="Enter last name" />
+
+                    <span asp-validation-for="UserInviteDto.LastName"
+                          class="text-danger"></span>
+                </div>
+
+                <!-- Date of Birth -->
+                <div class="form-group">
+                    <label asp-for="UserInviteDto.DateOfBirth" class="form-label">
+                        <i class="bi bi-calendar3 me-1"></i>
+                        Date of Birth
+                    </label>
+
+                    <input asp-for="UserInviteDto.DateOfBirth"
+                           type="date"
+                           class="form-control" />
+
+                    <span asp-validation-for="UserInviteDto.DateOfBirth"
+                          class="text-danger"></span>
+                </div>
+
+                <!-- Submit -->
+                <button type="submit" class="btn btn-invite w-100">
+                    <i class="bi bi-send-fill me-2"></i>
+                    Send User Invitation
+                </button>
+
+            </form>
+
+            <!-- Security Information -->
+            <div class="security-info">
+                <i class="bi bi-shield-check"></i>
+
+                <div>
+                    <strong>Secure Invitation</strong>
+                    <p>
+                        The invited user will receive a secure link
+                        to create their password and activate their account.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="invite-footer">
+            <i class="bi bi-shield-lock-fill me-1"></i>
+            Inventory & Monitoring System
+        </div>
+
     </div>
-}
-
-@if (TempData["InviteUrl"] != null)
-{
-    <div style="color:blue; margin-bottom:20px;">
-        <strong>Invite Link:</strong><br />
-        <a href="@TempData["InviteUrl"]">@TempData["InviteUrl"]</a>
-    </div>
-}
-
-<form method="post">
-
-    <div>
-        <label asp-for="UserInviteDto.Username"></label><br />
-        <input asp-for="UserInviteDto.Username" />
-        <span asp-validation-for="UserInviteDto.Username" style="color:red"></span>
-    </div>
-
-    <br />
-
-    <div>
-        <label asp-for="UserInviteDto.Email"></label><br />
-        <input asp-for="UserInviteDto.Email" type="email" />
-        <span asp-validation-for="UserInviteDto.Email" style="color:red"></span>
-    </div>
-
-    <br />
-
-    <div>
-        <label asp-for="UserInviteDto.FirstName"></label><br />
-        <input asp-for="UserInviteDto.FirstName" />
-        <span asp-validation-for="UserInviteDto.FirstName" style="color:red"></span>
-    </div>
-
-    <br />
-
-    <div>
-        <label asp-for="UserInviteDto.LastName"></label><br />
-        <input asp-for="UserInviteDto.LastName" />
-        <span asp-validation-for="UserInviteDto.LastName" style="color:red"></span>
-    </div>
-
-    <br />
-
-    <div>
-        <label asp-for="UserInviteDto.DateOfBirth"></label><br />
-        <input asp-for="UserInviteDto.DateOfBirth" type="date" />
-        <span asp-validation-for="UserInviteDto.DateOfBirth" style="color:red"></span>
-    </div>
-
-    <br />
-
-    <button type="submit">Invite User</button>
-
-</form>
+</div>
 
 @section Scripts
 {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        function copyInviteLink() {
+            const input = document.getElementById("inviteUrl");
+
+            navigator.clipboard.writeText(input.value).then(function () {
+                const button = document.querySelector(".btn-copy");
+
+                const original = button.innerHTML;
+
+                button.innerHTML =
+                    '<i class="bi bi-check-lg me-1"></i> Copied!';
+
+                setTimeout(function () {
+                    button.innerHTML = original;
+                }, 2000);
+            });
+        }
+    </script>
 }
+
+<style>
+    .invite-page {
+        min-height: calc(100vh - 80px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 20px;
+        background: linear-gradient(135deg, #fff5f9, #fdfcff);
+    }
+
+    .invite-card {
+        width: 100%;
+        max-width: 650px;
+        background: #ffffff;
+        border-radius: 22px;
+        overflow: hidden;
+        box-shadow: 0 15px 45px rgba(0, 0, 0, 0.10);
+        border: 1px solid #f1e1e8;
+    }
+
+    .invite-header {
+        text-align: center;
+        padding: 40px 30px 35px;
+        background: linear-gradient(135deg, #e83e8c, #c2185b);
+        color: white;
+    }
+
+    .invite-header h2 {
+        margin: 15px 0 8px;
+        font-weight: 700;
+        font-size: 28px;
+    }
+
+    .invite-header p {
+        margin: 0;
+        opacity: 0.92;
+        font-size: 15px;
+    }
+
+    .invite-icon {
+        width: 75px;
+        height: 75px;
+        margin: auto;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.20);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        border: 2px solid rgba(255, 255, 255, 0.35);
+    }
+
+    .card-body {
+        padding: 35px;
+    }
+
+    .form-group {
+        margin-bottom: 22px;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #343a40;
+        margin-bottom: 8px;
+    }
+
+    .form-label i {
+        color: #d63384;
+    }
+
+    .form-control {
+        min-height: 48px;
+        border-radius: 10px;
+        border: 1px solid #dee2e6;
+        padding: 10px 14px;
+        transition: all 0.2s ease;
+    }
+
+    .form-control:focus {
+        border-color: #e83e8c;
+        box-shadow: 0 0 0 0.2rem rgba(232, 62, 140, 0.15);
+    }
+
+    .text-danger {
+        font-size: 13px;
+        margin-top: 5px;
+        display: block;
+    }
+
+    .custom-alert {
+        border-radius: 12px;
+        border: none;
+        margin-bottom: 25px;
+    }
+
+    .invite-link-box {
+        background: #fff5f9;
+        border: 1px solid #f5c6d9;
+        border-radius: 14px;
+        padding: 18px;
+        margin-bottom: 28px;
+    }
+
+    .link-title {
+        color: #c2185b;
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
+
+    .link-title i {
+        font-size: 20px;
+    }
+
+    .link-description {
+        color: #6c757d;
+        font-size: 13px;
+        margin-bottom: 12px;
+    }
+
+    .btn-copy {
+        background: #e83e8c;
+        color: white;
+        border: none;
+        font-weight: 600;
+        padding: 0 18px;
+    }
+
+    .btn-copy:hover {
+        background: #c2185b;
+        color: white;
+    }
+
+    .btn-invite {
+        min-height: 50px;
+        border: none;
+        border-radius: 11px;
+        background: linear-gradient(135deg, #e83e8c, #c2185b);
+        color: white;
+        font-size: 16px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        margin-top: 5px;
+    }
+
+    .btn-invite:hover {
+        color: white;
+        transform: translateY(-1px);
+        box-shadow: 0 8px 20px rgba(194, 24, 91, 0.25);
+    }
+
+    .security-info {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 16px;
+        margin-top: 28px;
+    }
+
+    .security-info > i {
+        color: #d63384;
+        font-size: 22px;
+    }
+
+    .security-info strong {
+        font-size: 14px;
+        color: #343a40;
+    }
+
+    .security-info p {
+        margin: 3px 0 0;
+        color: #6c757d;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    .invite-footer {
+        text-align: center;
+        padding: 16px;
+        background: #fafafa;
+        border-top: 1px solid #f1f1f1;
+        color: #888;
+        font-size: 12px;
+    }
+
+    @@media (max-width: 576px) {
+        .invite-page {
+            padding: 20px 10px;
+        }
+
+        .invite-header {
+            padding: 30px 20px;
+        }
+
+        .invite-header h2 {
+            font-size: 24px;
+        }
+
+        .card-body {
+            padding: 25px 20px;
+        }
+
+        .invite-icon {
+            width: 65px;
+            height: 65px;
+            font-size: 28px;
+        }
+
+        .input-group {
+            flex-direction: column;
+        }
+
+        .input-group .form-control {
+            border-radius: 10px !important;
+            margin-bottom: 8px;
+        }
+
+        .btn-copy {
+            min-height: 44px;
+            border-radius: 10px !important;
+        }
+    }
+</style>

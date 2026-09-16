@@ -1,141 +1,1012 @@
-@page "/manage/users"
+@page
 @model Roman_Ara_Andrea.Inventory_and_Monitoring_System.Pages.Manage.Users.IndexModel
 
 @{
     ViewData["Title"] = "Manage Users";
 }
 
-<div class="container mt-5">
-
-    <h1 class="mb-5">Manage Users</h1>
-
-    <table class="user-table">
-        <thead>
-            <tr>
-                <th>Username</th>
-                <th>Current Role</th>
-                <th>Change Role</th>
-            </tr>
-        </thead>
-
-        <tbody>
-
-            @foreach (var user in Model.Users)
-            {
-                <tr>
-
-                    <td>
-                        @user.UserName
-                    </td>
-
-                    <td>
-                        <span class="role-badge">
-                            @user.Role
-                        </span>
-                    </td>
-
-                    <td>
-
-                        <form method="post">
-
-                            <input type="hidden"
-                                   name="userId"
-                                   value="@user.UserId" />
-
-                            <select name="role"
-                                    class="role-select">
-
-                                @if (user.Role == "Admin")
-                                {
-                                    <option value="Admin" selected>
-                                        Admin
-                                    </option>
-
-                                    <option value="User">
-                                        User
-                                    </option>
-                                }
-                                else
-                                {
-                                    <option value="Admin">
-                                        Admin
-                                    </option>
-
-                                    <option value="User" selected>
-                                        User
-                                    </option>
-                                }
-
-                            </select>
-
-                            <button type="submit"
-                                    class="save-btn">
-                                Save
-                            </button>
-
-                        </form>
-
-                    </td>
-
-                </tr>
-            }
-
-        </tbody>
-    </table>
-
-</div>
+<!-- Bootstrap Icons -->
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 
 <style>
-
-    .user-table {
-        width: 100%;
-        border-collapse: collapse;
+    :root {
+        --pink-dark: #8f174f;
+        --pink: #c72d70;
+        --pink-main: #d9367a;
+        --pink-light: #fde8f1;
+        --pink-soft: #fff5f9;
+        --pink-border: #f5c7d9;
+        --text-dark: #35152a;
+        --text-muted: #856678;
     }
 
-    .user-table th {
-        text-align: left;
-        padding: 18px 20px;
-        font-size: 18px;
-        border-bottom: 1px solid #ccc;
+    /* PAGE */
+    .manage-users-page {
+        padding: 28px 30px 40px;
+        background: #fffafd;
+        min-height: calc(100vh - 60px);
+        color: var(--text-dark);
     }
 
-    .user-table td {
-        padding: 22px 20px;
-        font-size: 17px;
-        border-bottom: 1px solid #ddd;
+    /* PAGE HEADER */
+    .users-header {
+        background: linear-gradient(135deg, #fff0f7, #fde0ed);
+        border: 1px solid var(--pink-border);
+        border-radius: 20px;
+        padding: 22px 25px;
+        margin-bottom: 20px;
+        position: relative;
+        overflow: hidden;
     }
 
-    .role-badge {
-        display: inline-block;
-        background: #c94f56;
+    .users-header::after {
+        content: "";
+        position: absolute;
+        width: 170px;
+        height: 170px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, .35);
+        right: -55px;
+        top: -80px;
+    }
+
+    .header-icon {
+        width: 58px;
+        height: 58px;
+        border-radius: 18px;
+        background: #ffd1e3;
+        color: var(--pink);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 27px;
+        flex-shrink: 0;
+    }
+
+    .users-header h1 {
+        color: var(--pink-dark);
+        font-size: 30px;
+        font-weight: 800;
+        margin: 0;
+    }
+
+    .users-header p {
+        color: var(--text-muted);
+        margin: 3px 0 0;
+        font-size: 14px;
+    }
+
+    /* BUTTON */
+    .btn-pink {
+        background: linear-gradient(135deg, #e83d82, #c92368);
         color: white;
-        font-weight: bold;
-        padding: 9px 25px;
-        border-radius: 7px;
-        min-width: 100px;
-        text-align: center;
-    }
-
-    .role-select {
-        padding: 9px 15px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-        font-size: 16px;
-        margin-right: 8px;
-    }
-
-    .save-btn {
-        padding: 9px 18px;
         border: none;
-        border-radius: 6px;
-        background: #c94f56;
+        border-radius: 12px;
+        padding: 11px 18px;
+        font-weight: 700;
+        box-shadow: 0 7px 18px rgba(201, 35, 104, .18);
+        transition: .2s ease;
+        position: relative;
+        z-index: 2;
+    }
+
+    .btn-pink:hover {
         color: white;
-        font-weight: bold;
-        cursor: pointer;
+        transform: translateY(-1px);
+        box-shadow: 0 9px 22px rgba(201, 35, 104, .25);
     }
 
-    .save-btn:hover {
-        opacity: 0.9;
+    .btn-clear {
+        border: 1px solid #d9a9bc;
+        background: white;
+        color: #684357;
+        border-radius: 11px;
+        font-weight: 600;
+        padding: 10px 17px;
     }
 
+    .btn-clear:hover {
+        background: var(--pink-soft);
+        border-color: var(--pink);
+        color: var(--pink-dark);
+    }
+
+    /* GENERAL CARD */
+    .users-card {
+        background: white;
+        border: 1px solid #f0dce5;
+        border-radius: 17px;
+        box-shadow: 0 5px 18px rgba(92, 25, 55, .055);
+        overflow: hidden;
+    }
+
+    /* SEARCH */
+    .search-section {
+        margin-bottom: 20px;
+    }
+
+    .section-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 18px 20px 15px;
+        border-bottom: 1px solid #f3dfe7;
+        background: linear-gradient(to right, #fff8fb, #ffffff);
+    }
+
+    .section-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: var(--pink-light);
+        color: var(--pink);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+    }
+
+    .section-title h5 {
+        margin: 0;
+        color: var(--text-dark);
+        font-weight: 800;
+        font-size: 17px;
+    }
+
+    .section-title small {
+        color: var(--text-muted);
+        font-size: 12px;
+    }
+
+    .search-body {
+        padding: 18px 20px 20px;
+    }
+
+    .form-label {
+        color: #633b50;
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 7px;
+    }
+
+    .form-control,
+    .form-select {
+        height: 45px;
+        border: 1px solid #ead2de;
+        border-radius: 11px;
+        color: #4b293c;
+        font-size: 13px;
+        box-shadow: none !important;
+        background-color: white;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #e15a91;
+        box-shadow: 0 0 0 3px rgba(225, 90, 145, .10) !important;
+    }
+
+    .search-button {
+        height: 45px;
+        border-radius: 11px;
+        border: none;
+        background: var(--pink-main);
+        color: white;
+        font-weight: 700;
+        width: 100%;
+    }
+
+    .search-button:hover {
+        background: var(--pink-dark);
+        color: white;
+    }
+
+    /* STAT CARDS */
+    .stats-row {
+        margin-bottom: 20px;
+    }
+
+    .stat-card {
+        background: white;
+        border: 1px solid #f0dce5;
+        border-radius: 16px;
+        padding: 17px 18px;
+        height: 100%;
+        box-shadow: 0 5px 16px rgba(92, 25, 55, .045);
+    }
+
+    .stat-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .stat-label {
+        color: var(--text-muted);
+        font-size: 12px;
+        margin-bottom: 3px;
+        font-weight: 600;
+    }
+
+    .stat-number {
+        color: var(--text-dark);
+        font-size: 25px;
+        font-weight: 800;
+        margin: 0;
+    }
+
+    .stat-icon {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background: var(--pink-light);
+        color: var(--pink);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 19px;
+    }
+
+    /* USERS TABLE CARD */
+    .registered-header {
+        padding: 18px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #f2dce6;
+        background: linear-gradient(to right, #fff8fb, white);
+    }
+
+    .registered-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .registered-title h5 {
+        margin: 0;
+        color: var(--text-dark);
+        font-weight: 800;
+        font-size: 17px;
+    }
+
+    .registered-title small {
+        color: var(--text-muted);
+        font-size: 12px;
+    }
+
+    .user-count {
+        background: var(--pink-main);
+        color: white;
+        border-radius: 20px;
+        padding: 7px 13px;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    /* TABLE */
+    .users-table {
+        margin: 0;
+        width: 100%;
+    }
+
+    .users-table thead th {
+        background: #fff0f6;
+        color: var(--pink-dark);
+        border-bottom: 1px solid #efcddd;
+        padding: 13px 15px;
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: .3px;
+        white-space: nowrap;
+    }
+
+    .users-table tbody td {
+        padding: 13px 15px;
+        border-bottom: 1px solid #f5e7ed;
+        color: #43283a;
+        font-size: 13px;
+        vertical-align: middle;
+    }
+
+    .users-table tbody tr {
+        transition: .15s ease;
+    }
+
+    .users-table tbody tr:hover {
+        background: #fff7fa;
+    }
+
+    .users-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .id-cell {
+        color: #977286 !important;
+        font-weight: 700;
+    }
+
+    .username-cell {
+        color: #d02d70 !important;
+        font-weight: 700;
+    }
+
+    /* ROLE BADGES */
+    .role-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 800;
+    }
+
+    .role-admin {
+        background: #ffe0eb;
+        color: #b51d5b;
+    }
+
+    .role-user {
+        background: #edf2ff;
+        color: #3974d8;
+    }
+
+    /* EMPTY */
+    .empty-state {
+        text-align: center;
+        padding: 45px 20px;
+        color: var(--text-muted);
+    }
+
+    .empty-icon {
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 12px;
+        border-radius: 50%;
+        background: var(--pink-light);
+        color: var(--pink);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 25px;
+    }
+
+    /* FOOTER */
+    .users-footer {
+        padding: 15px 20px;
+        border-top: 1px solid #f2dce6;
+        background: #fffafd;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .showing-text {
+        color: var(--text-muted);
+        font-size: 12px;
+    }
+
+    .showing-text strong {
+        color: var(--text-dark);
+    }
+
+    /* PAGINATION */
+    .pagination {
+        margin: 0;
+        gap: 5px;
+    }
+
+    .pagination .page-link {
+        border: 1px solid #efcfdd;
+        border-radius: 9px !important;
+        color: var(--pink-dark);
+        background: white;
+        font-size: 12px;
+        font-weight: 700;
+        min-width: 34px;
+        height: 34px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .pagination .page-link:hover {
+        background: var(--pink-light);
+        color: var(--pink);
+        border-color: #e99cba;
+    }
+
+    .pagination .page-item.active .page-link {
+        background: var(--pink-main);
+        border-color: var(--pink-main);
+        color: white;
+    }
+
+    .pagination .page-item.disabled .page-link {
+        color: #c8aeba;
+        background: #fff;
+    }
+
+    /* RESPONSIVE */
+    @@media (max-width: 768px) {
+        .manage-users-page {
+            padding: 18px 14px 30px;
+        }
+
+        .users-header {
+            padding: 18px;
+        }
+
+        .users-header h1 {
+            font-size: 24px;
+        }
+
+        .registered-header {
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .users-footer {
+            flex-direction: column;
+            gap: 14px;
+            align-items: flex-start;
+        }
+
+        .table-responsive {
+            border-radius: 0;
+        }
+    }
 </style>
+
+<div class="manage-users-page">
+
+    <!-- PAGE HEADER -->
+    <div class="users-header">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+
+            <div class="d-flex align-items-center gap-3">
+                <div class="header-icon">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+
+                <div>
+                    <h1>Manage Users</h1>
+                    <p>View, search, sort, and manage registered users.</p>
+                </div>
+            </div>
+
+            <a asp-page="/Manage/Users/Create"
+               class="btn btn-pink">
+                <i class="bi bi-plus-lg me-1"></i>
+                Add New User
+            </a>
+
+        </div>
+    </div>
+
+
+    <!-- SEARCH & FILTER -->
+    <div class="users-card search-section">
+
+        <div class="section-title">
+            <div class="section-icon">
+                <i class="bi bi-funnel-fill"></i>
+            </div>
+
+            <div>
+                <h5>Search &amp; Filter</h5>
+                <small>Find registered users quickly.</small>
+            </div>
+        </div>
+
+        <div class="search-body">
+
+            <form method="get">
+
+                <div class="row g-3 align-items-end">
+
+                    <!-- USERNAME -->
+                    <div class="col-12 col-lg-5">
+
+                        <label for="keyword" class="form-label">
+                            Search Username
+                        </label>
+
+                        <div class="input-group">
+                            <span class="input-group-text"
+                                  style="background:white;border:1px solid #ead2de;border-right:0;border-radius:11px 0 0 11px;color:#d9367a;">
+                                <i class="bi bi-search"></i>
+                            </span>
+
+                            <input type="text"
+                                   id="keyword"
+                                   name="keyword"
+                                   value="@Model.Keyword"
+                                   class="form-control"
+                                   style="border-left:0;border-radius:0 11px 11px 0;"
+                                   placeholder="Search by username..." />
+                        </div>
+
+                    </div>
+
+
+                    <!-- SORT -->
+                    <div class="col-12 col-md-6 col-lg-3">
+
+                        <label for="sortOrder" class="form-label">
+                            Sort By
+                        </label>
+
+                        <select id="sortOrder"
+                                name="sortOrder"
+                                class="form-select">
+
+                            @if (Model.SortOrder == "desc")
+                            {
+                                <option value="asc">
+                                    Username — A to Z
+                                </option>
+
+                                <option value="desc" selected>
+                                    Username — Z to A
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="asc" selected>
+                                    Username — A to Z
+                                </option>
+
+                                <option value="desc">
+                                    Username — Z to A
+                                </option>
+                            }
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- PAGE SIZE -->
+                    <div class="col-12 col-md-6 col-lg-2">
+
+                        <label for="pageSize" class="form-label">
+                            Users Per Page
+                        </label>
+
+                        <select id="pageSize"
+                                name="pageSize"
+                                class="form-select">
+
+                            <option value="5" selected="@(Model.PageSize == 5)">
+                                5
+                            </option>
+
+                            <option value="10" selected="@(Model.PageSize == 10)">
+                                10
+                            </option>
+
+                            <option value="20" selected="@(Model.PageSize == 20)">
+                                20
+                            </option>
+
+                            <option value="50" selected="@(Model.PageSize == 50)">
+                                50
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- BUTTONS -->
+                    <div class="col-12 col-lg-2">
+
+                        <div class="d-flex gap-2">
+
+                            <button type="submit"
+                                    class="search-button flex-grow-1">
+                                <i class="bi bi-search me-1"></i>
+                                Search
+                            </button>
+
+                            <a asp-page="/Manage/Users/Index"
+                               class="btn btn-clear">
+                                Clear
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <input type="hidden"
+                       name="sortBy"
+                       value="username" />
+
+                <input type="hidden"
+                       name="pageIndex"
+                       value="1" />
+
+            </form>
+
+        </div>
+    </div>
+
+
+    <!-- SUMMARY CARDS -->
+    <div class="row g-3 stats-row">
+
+        <!-- TOTAL USERS -->
+        <div class="col-12 col-sm-6 col-xl-3">
+
+            <div class="stat-card">
+
+                <div class="stat-content">
+
+                    <div>
+                        <div class="stat-label">
+                            Total Users
+                        </div>
+
+                        <h3 class="stat-number">
+                            @Model.TotalRecords
+                        </h3>
+                    </div>
+
+                    <div class="stat-icon">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- CURRENT PAGE -->
+        <div class="col-12 col-sm-6 col-xl-3">
+
+            <div class="stat-card">
+
+                <div class="stat-content">
+
+                    <div>
+                        <div class="stat-label">
+                            Current Page
+                        </div>
+
+                        <h3 class="stat-number">
+                            @Model.PageIndex
+                        </h3>
+                    </div>
+
+                    <div class="stat-icon">
+                        <i class="bi bi-file-earmark-text-fill"></i>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- TOTAL PAGES -->
+        <div class="col-12 col-sm-6 col-xl-3">
+
+            <div class="stat-card">
+
+                <div class="stat-content">
+
+                    <div>
+                        <div class="stat-label">
+                            Total Pages
+                        </div>
+
+                        <h3 class="stat-number">
+                            @Model.TotalPages
+                        </h3>
+                    </div>
+
+                    <div class="stat-icon">
+                        <i class="bi bi-layers-fill"></i>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SHOWING -->
+        <div class="col-12 col-sm-6 col-xl-3">
+
+            <div class="stat-card">
+
+                <div class="stat-content">
+
+                    <div>
+                        <div class="stat-label">
+                            Showing
+                        </div>
+
+                        <h3 class="stat-number">
+                            @Model.Users.Count
+                        </h3>
+                    </div>
+
+                    <div class="stat-icon">
+                        <i class="bi bi-eye-fill"></i>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- REGISTERED USERS -->
+    <div class="users-card">
+
+        <!-- HEADER -->
+        <div class="registered-header">
+
+            <div class="registered-title">
+
+                <div class="section-icon">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+
+                <div>
+                    <h5>Registered Users</h5>
+
+                    <small>
+                        Users currently registered in the system.
+                    </small>
+                </div>
+
+            </div>
+
+            <span class="user-count">
+                @Model.TotalRecords user(s)
+            </span>
+
+        </div>
+
+
+        <!-- TABLE -->
+        <div class="table-responsive">
+
+            @if (Model.Users.Count == 0)
+            {
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        <i class="bi bi-person-x-fill"></i>
+                    </div>
+
+                    <h6 class="fw-bold mb-1">
+                        No users found
+                    </h6>
+
+                    @if (!string.IsNullOrEmpty(Model.Keyword))
+                    {
+                        <p class="small mb-0">
+                            No users matched
+                            "<strong>@Model.Keyword</strong>".
+                        </p>
+                    }
+                    else
+                    {
+                        <p class="small mb-0">
+                            There are currently no registered users.
+                        </p>
+                    }
+
+                </div>
+            }
+            else
+            {
+                <table class="table users-table align-middle">
+
+                    <thead>
+                        <tr>
+
+                            <th style="padding-left:20px;">
+                                ID
+                            </th>
+
+                            <th>
+                                Username
+                            </th>
+
+                            <th>
+                                First Name
+                            </th>
+
+                            <th>
+                                Last Name
+                            </th>
+
+                            <th>
+                                Date of Birth
+                            </th>
+
+                            <th>
+                                Role
+                            </th>
+
+                        </tr>
+                    </thead>
+
+
+                    <tbody>
+
+                        @foreach (var user in Model.Users)
+                        {
+                            <tr>
+
+                                <td class="id-cell"
+                                    style="padding-left:20px;">
+                                    @user.UserId
+                                </td>
+
+                                <td class="username-cell">
+                                    @user.UserName
+                                </td>
+
+                                <td>
+                                    @user.FirstName
+                                </td>
+
+                                <td>
+                                    @user.LastName
+                                </td>
+
+                                <td>
+                                    @user.DateOfBirth.ToString("yyyy-MM-dd")
+                                </td>
+
+                                <td>
+
+                                    @if (user.Role == "Admin")
+                                    {
+                                        <span class="role-badge role-admin">
+                                            <i class="bi bi-shield-fill-check"></i>
+                                            Admin
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="role-badge role-user">
+                                            <i class="bi bi-person-fill"></i>
+                                            User
+                                        </span>
+                                    }
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+            }
+
+        </div>
+
+
+        <!-- PAGINATION -->
+        @if (Model.TotalPages > 0)
+        {
+            <div class="users-footer">
+
+                <div class="showing-text">
+
+                    Showing
+                    <strong>@Model.Users.Count</strong>
+                    of
+                    <strong>@Model.TotalRecords</strong>
+                    users
+
+                </div>
+
+
+                <nav aria-label="User pagination">
+
+                    <ul class="pagination">
+
+                        <!-- PREVIOUS -->
+                        @if (Model.PageIndex > 1)
+                        {
+                            <li class="page-item">
+
+                                <a class="page-link"
+                                   asp-page="/Manage/Users/Index"
+                                   asp-route-pageIndex="@(Model.PageIndex - 1)"
+                                   asp-route-pageSize="@Model.PageSize"
+                                   asp-route-sortBy="@Model.SortBy"
+                                   asp-route-sortOrder="@Model.SortOrder"
+                                   asp-route-keyword="@Model.Keyword">
+
+                                    <i class="bi bi-chevron-left"></i>
+
+                                </a>
+
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="page-item disabled">
+
+                                <span class="page-link">
+                                    <i class="bi bi-chevron-left"></i>
+                                </span>
+
+                            </li>
+                        }
+
+
+                        <!-- CURRENT PAGE -->
+                        <li class="page-item active"
+                            aria-current="page">
+
+                            <span class="page-link">
+                                @Model.PageIndex
+                            </span>
+
+                        </li>
+
+
+                        <!-- NEXT -->
+                        @if (Model.PageIndex < Model.TotalPages)
+                        {
+                            <li class="page-item">
+
+                                <a class="page-link"
+                                   asp-page="/Manage/Users/Index"
+                                   asp-route-pageIndex="@(Model.PageIndex + 1)"
+                                   asp-route-pageSize="@Model.PageSize"
+                                   asp-route-sortBy="@Model.SortBy"
+                                   asp-route-sortOrder="@Model.SortOrder"
+                                   asp-route-keyword="@Model.Keyword">
+
+                                    <i class="bi bi-chevron-right"></i>
+
+                                </a>
+
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="page-item disabled">
+
+                                <span class="page-link">
+                                    <i class="bi bi-chevron-right"></i>
+                                </span>
+
+                            </li>
+                        }
+
+                    </ul>
+
+                </nav>
+
+            </div>
+        }
+
+    </div>
+
+</div>

@@ -1,32 +1,297 @@
 @page "/account/update-my-profile"
 @model UpdateProfile
 
+@{
+    ViewData["Title"] = "Update Profile";
+}
 
-<form method="post" class="mt-5">
-  <div class="mb-3">
-    <div asp-validation-summary="All" class="text-danger"></div>
-  </div>    
-  <div class="mb-3">
-    <img class="card-img-top mb-3" style="max-width: 200px; height: auto;" src="@Model.UserUpdateDto.ProfileImage" alt="@Model.UserUpdateDto.FirstName @Model.UserUpdateDto.LastName">
-  </div>
-  <div class="mb-3">
-    <label for="exampleInputEmail1" class="form-label">Email address</label>
-    <p class="card-text">@Model.UserUpdateDto.Username </p>
-  </div>
-  <div class="mb-3">
-    <label for="exampleInputFirstName1" class="form-label">First Name</label>
-    <input type="text" class="form-control" id="exampleInputFirstName1" asp-for="@Model.UserUpdateDto.FirstName">
-    <span asp-validation-for="@Model.UserUpdateDto.FirstName" class="text-danger"></span>
-  </div>
-  <div class="mb-3">
-    <label for="exampleInputLastName1" class="form-label">Last Name</label>
-    <input type="text" class="form-control" id="exampleInputLastName1" asp-for="@Model.UserUpdateDto.LastName">
-    <span asp-validation-for="@Model.UserUpdateDto.LastName" class="text-danger"></span>
-  </div>
-  <div class="mb-3">
-    <label for="exampleInputDateOfBirth1" class="form-label">Date of Birth</label>
-    <input type="date" class="form-control" id="exampleInputDateOfBirth1" asp-for="@Model.UserUpdateDto.DateOfBirth">
-    <span asp-validation-for="@Model.UserUpdateDto.DateOfBirth" class="text-danger"></span>
-  </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+<style>
+    body {
+        background: #fdf5f8;
+    }
+
+    .profile-edit-wrapper {
+        max-width: 850px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    .profile-edit-card {
+        background: #ffffff;
+        border: 1px solid #f3dce6;
+        border-radius: 22px;
+        overflow: hidden;
+        box-shadow: 0 10px 35px rgba(107, 25, 70, 0.10);
+    }
+
+    /* Header */
+    .profile-header {
+        background: linear-gradient(135deg, #8f174f, #d84b88);
+        padding: 35px 40px;
+        color: white;
+    }
+
+    .profile-header h2 {
+        margin: 0;
+        font-weight: 700;
+        font-size: 28px;
+    }
+
+    .profile-header p {
+        margin: 8px 0 0;
+        opacity: 0.9;
+        font-size: 14px;
+    }
+
+    /* Content */
+    .profile-content {
+        padding: 35px 40px 40px;
+    }
+
+    .avatar-section {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .profile-avatar {
+        width: 145px;
+        height: 145px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 6px solid #ffffff;
+        box-shadow: 0 5px 20px rgba(107, 25, 70, 0.18);
+        background: #fce8f1;
+    }
+
+    .username-box {
+        background: #fdf5f8;
+        border: 1px solid #f3dce6;
+        border-radius: 12px;
+        padding: 14px 16px;
+        margin-bottom: 25px;
+    }
+
+    .username-label {
+        display: block;
+        font-size: 12px;
+        font-weight: 700;
+        color: #9a7d8c;
+        text-transform: uppercase;
+        letter-spacing: .5px;
+        margin-bottom: 4px;
+    }
+
+    .username-value {
+        color: #4a1830;
+        font-weight: 600;
+    }
+
+    .form-label {
+        color: #4a1830;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .form-control {
+        border: 1px solid #ead3de;
+        border-radius: 10px;
+        padding: 12px 14px;
+        min-height: 46px;
+    }
+
+    .form-control:focus {
+        border-color: #c63b76;
+        box-shadow: 0 0 0 0.2rem rgba(198, 59, 118, 0.12);
+    }
+
+    .field-group {
+        margin-bottom: 20px;
+    }
+
+    .validation-summary {
+        background: #fff0f4;
+        border: 1px solid #f2c8d7;
+        border-radius: 10px;
+        padding: 12px 15px;
+        margin-bottom: 20px;
+    }
+
+    .validation-summary:empty {
+        display: none;
+    }
+
+    .button-row {
+        display: flex;
+        gap: 12px;
+        margin-top: 30px;
+    }
+
+    .btn-save {
+        background: #a51d5b;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 12px 28px;
+        font-weight: 600;
+        transition: 0.2s ease;
+    }
+
+    .btn-save:hover {
+        background: #891749;
+        color: white;
+        transform: translateY(-1px);
+    }
+
+    .btn-cancel {
+        background: #fce8f1;
+        color: #a51d5b;
+        border: none;
+        border-radius: 10px;
+        padding: 12px 25px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-cancel:hover {
+        background: #f8d9e6;
+        color: #8f174f;
+    }
+
+    .section-title {
+        color: #4a1830;
+        font-weight: 700;
+        font-size: 17px;
+        margin-bottom: 18px;
+    }
+
+    @@media (max-width: 576px) {
+        .profile-edit-wrapper {
+            margin: 20px auto;
+            padding: 0 12px;
+        }
+
+        .profile-header {
+            padding: 28px 25px;
+        }
+
+        .profile-header h2 {
+            font-size: 23px;
+        }
+
+        .profile-content {
+            padding: 28px 22px;
+        }
+
+        .button-row {
+            flex-direction: column;
+        }
+
+        .btn-save,
+        .btn-cancel {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="profile-edit-wrapper">
+
+    <div class="profile-edit-card">
+
+        <!-- Header -->
+        <div class="profile-header">
+            <h2>Update My Profile</h2>
+            <p>Update your personal information below.</p>
+        </div>
+
+        <!-- Content -->
+        <div class="profile-content">
+
+            <!-- Validation -->
+            <div asp-validation-summary="All"
+                 class="text-danger validation-summary"></div>
+
+            <!-- Profile Picture -->
+            <div class="avatar-section">
+                <img class="profile-avatar"
+                     src="@Model.UserUpdateDto.ProfileImage"
+                     alt="@Model.UserUpdateDto.FirstName @Model.UserUpdateDto.LastName">
+            </div>
+
+            <div class="section-title">
+                Profile Information
+            </div>
+
+            <!-- Username -->
+            <div class="username-box">
+                <span class="username-label">Username</span>
+                <span class="username-value">
+                    @Model.UserUpdateDto.Username
+                </span>
+            </div>
+
+            <!-- First Name -->
+            <div class="field-group">
+                <label class="form-label" for="exampleInputFirstName1">
+                    First Name
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       id="exampleInputFirstName1"
+                       asp-for="@Model.UserUpdateDto.FirstName">
+
+                <span asp-validation-for="@Model.UserUpdateDto.FirstName"
+                      class="text-danger"></span>
+            </div>
+
+            <!-- Last Name -->
+            <div class="field-group">
+                <label class="form-label" for="exampleInputLastName1">
+                    Last Name
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       id="exampleInputLastName1"
+                       asp-for="@Model.UserUpdateDto.LastName">
+
+                <span asp-validation-for="@Model.UserUpdateDto.LastName"
+                      class="text-danger"></span>
+            </div>
+
+            <!-- Date of Birth -->
+            <div class="field-group">
+                <label class="form-label" for="exampleInputDateOfBirth1">
+                    Date of Birth
+                </label>
+
+                <input type="date"
+                       class="form-control"
+                       id="exampleInputDateOfBirth1"
+                       asp-for="@Model.UserUpdateDto.DateOfBirth">
+
+                <span asp-validation-for="@Model.UserUpdateDto.DateOfBirth"
+                      class="text-danger"></span>
+            </div>
+
+            <!-- Buttons -->
+            <div class="button-row">
+
+                <button type="submit" class="btn-save">
+                    Save Changes
+                </button>
+
+                <a asp-page="/Account/Profile"
+                   class="btn-cancel">
+                    Cancel
+                </a>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
