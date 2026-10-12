@@ -16,10 +16,6 @@ public class IndexModel : PageModel
         _dbContext = dbContext;
     }
 
-    // =====================================================
-    // TEMPORARY AUTHENTICATION DEBUG
-    // =====================================================
-
     public bool IsAuthenticated =>
         User.Identity?.IsAuthenticated ?? false;
 
@@ -35,11 +31,6 @@ public class IndexModel : PageModel
 
     public string CurrentUserName =>
         User.Identity?.Name ?? "NO USERNAME";
-
-
-    // =====================================================
-    // USERS
-    // =====================================================
 
     public List<UserDisplay> Users { get; set; } = new();
 
@@ -58,6 +49,10 @@ public class IndexModel : PageModel
     public string SortOrder { get; set; } = "asc";
 
 
+    // =========================================================
+    // LOAD USERS
+    // =========================================================
+
     public async Task OnGetAsync(
         int pageIndex = 1,
         int pageSize = 10,
@@ -65,21 +60,24 @@ public class IndexModel : PageModel
         string? sortOrder = "asc",
         string? keyword = "")
     {
-        // STEP 1: Set safe default values
         PageIndex = pageIndex < 1 ? 1 : pageIndex;
+
         PageSize = pageSize <= 0 ? 10 : pageSize;
 
         Keyword = keyword?.Trim().ToLower() ?? string.Empty;
 
         SortBy = sortBy?.Trim().ToLower() ?? "username";
+
         SortOrder = sortOrder?.Trim().ToLower() ?? "asc";
 
 
-        // STEP 2: Start with Users table
         IQueryable<User> query = _dbContext.Users;
 
 
-        // STEP 3: Search by username
+        // =====================================================
+        // SEARCH BY USERNAME
+        // =====================================================
+
         if (!string.IsNullOrEmpty(Keyword))
         {
             query = query.Where(user =>
@@ -88,23 +86,31 @@ public class IndexModel : PageModel
         }
 
 
-        // STEP 4: Count filtered records
+        // =====================================================
+        // TOTAL RECORDS
+        // =====================================================
+
         TotalRecords = await query.CountAsync();
 
 
-        // STEP 5: Calculate total pages
+        // =====================================================
+        // TOTAL PAGES
+        // =====================================================
+
         TotalPages = (int)Math.Ceiling(
             TotalRecords / (double)PageSize);
 
 
-        // STEP 6: Prevent invalid page numbers
         if (TotalPages > 0 && PageIndex > TotalPages)
         {
             PageIndex = TotalPages;
         }
 
 
-        // STEP 7: Sort by username
+        // =====================================================
+        // SORT USERNAME
+        // =====================================================
+
         if (SortBy == "username" && SortOrder == "desc")
         {
             query = query.OrderByDescending(user => user.UserName);
@@ -112,29 +118,42 @@ public class IndexModel : PageModel
         else
         {
             query = query.OrderBy(user => user.UserName);
+
             SortBy = "username";
             SortOrder = "asc";
         }
 
 
-        // STEP 8: Calculate Skip
+        // =====================================================
+        // PAGINATION
+        // =====================================================
+
         var skip = (PageIndex - 1) * PageSize;
 
-
-        // STEP 9: Apply pagination
         query = query
             .Skip(skip)
             .Take(PageSize);
 
 
-        // STEP 10: Retrieve users
+        // =====================================================
+        // GET USERS
+        // =====================================================
+
         var users = await query.ToListAsync();
 
 
-        // STEP 11: Retrieve roles
+        // =====================================================
+        // GET USER IDS
+        // =====================================================
+
         var userIds = users
             .Select(user => user.Id)
             .ToList();
+
+
+        // =====================================================
+        // GET USER ROLES
+        // =====================================================
 
         var roleRecords = await _dbContext.UserLoginInfos
             .Where(x =>
@@ -143,7 +162,10 @@ public class IndexModel : PageModel
             .ToListAsync();
 
 
-        // STEP 12: Create display list
+        // =====================================================
+        // PREPARE DISPLAY DATA
+        // =====================================================
+
         Users = users.Select(user =>
         {
             var role = roleRecords
@@ -155,28 +177,36 @@ public class IndexModel : PageModel
             return new UserDisplay
             {
                 UserId = user.Id,
+
                 UserName = user.UserName ?? string.Empty,
+
                 FirstName = user.FirstName ?? string.Empty,
+
                 LastName = user.LastName ?? string.Empty,
+
                 DateOfBirth = user.DateOfBirth,
+
                 Role = role ?? "User"
             };
+
         }).ToList();
     }
 
+
+    // =========================================================
+    // CHANGE USER ROLE
+    // =========================================================
 
     public async Task<IActionResult> OnPostAsync(
         int userId,
         string role)
     {
-        // Only allow Admin or User
         if (role != "Admin" && role != "User")
         {
             return RedirectToPage();
         }
 
 
-        // Database uses Key = "role"
         var roleRecord = await _dbContext.UserLoginInfos
             .FirstOrDefaultAsync(x =>
                 x.UserId == userId &&
@@ -188,7 +218,9 @@ public class IndexModel : PageModel
             roleRecord = new UserLogininfo
             {
                 UserId = userId,
+
                 Key = "role",
+
                 Value = role
             };
 
@@ -202,9 +234,66 @@ public class IndexModel : PageModel
 
         await _dbContext.SaveChangesAsync();
 
+
         return RedirectToPage();
     }
 
+
+    // =========================================================
+    // DELETE USER
+    // =========================================================
+
+    public async Task<IActionResult> OnPostDeleteAsync(int userId)
+    {
+        // Find the user
+        var user = await _dbContext.Users
+            .FirstOrDefaultAsync(x => x.Id == userId);
+
+
+        // If user does not exist
+        if (user == null)
+        {
+            return RedirectToPage();
+        }
+
+
+        // =====================================================
+        // REMOVE USER LOGIN INFORMATION
+        // =====================================================
+
+        var loginInfos = await _dbContext.UserLoginInfos
+            .Where(x => x.UserId == userId)
+            .ToListAsync();
+
+
+        if (loginInfos.Any())
+        {
+            _dbContext.UserLoginInfos.RemoveRange(loginInfos);
+        }
+
+
+        // =====================================================
+        // REMOVE USER
+        // =====================================================
+
+        _dbContext.Users.Remove(user);
+
+
+        // =====================================================
+        // SAVE CHANGES
+        // =====================================================
+
+        await _dbContext.SaveChangesAsync();
+
+
+        // Return to Manage Users page
+        return RedirectToPage();
+    }
+
+
+    // =========================================================
+    // USER DISPLAY MODEL
+    // =========================================================
 
     public class UserDisplay
     {

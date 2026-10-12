@@ -1,4 +1,5 @@
 @page
+
 @model Roman_Ara_Andrea.Inventory_and_Monitoring_System.Pages.Manage.Users.IndexModel
 
 @{
@@ -10,6 +11,7 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 
 <style>
+
     :root {
         --pink-dark: #8f174f;
         --pink: #c72d70;
@@ -430,8 +432,69 @@
         background: #fff;
     }
 
+    /* =====================================================
+       USER ACTION BUTTON
+       ===================================================== */
+
+    .user-action-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        border: 1px solid #efcfdd;
+        background: #fff5f9;
+        color: #c72d70;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: .2s ease;
+    }
+
+    .user-action-btn:hover {
+        background: #d9367a;
+        color: white;
+        border-color: #d9367a;
+        transform: translateY(-1px);
+    }
+
+    /* =====================================================
+       DELETE MODAL
+       ===================================================== */
+
+    .user-modal .modal-content {
+        border: none;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 15px 45px rgba(92, 25, 55, .18);
+    }
+
+    .user-modal .modal-header {
+        background: linear-gradient(135deg, #fff0f7, #fde0ed);
+        border-bottom: 1px solid #f3d1df;
+        padding: 20px 22px;
+    }
+
+    .user-modal .modal-title {
+        color: #8f174f;
+        font-weight: 800;
+    }
+
+    .user-modal .modal-body {
+        padding: 22px;
+        color: #35152a;
+    }
+
+    .user-modal .modal-body strong {
+        color: #c72d70;
+    }
+
+    .user-modal .modal-footer {
+        border-top: 1px solid #f3dfe7;
+        padding: 15px 22px;
+    }
+
     /* RESPONSIVE */
     @@media (max-width: 768px) {
+
         .manage-users-page {
             padding: 18px 14px 30px;
         }
@@ -459,47 +522,68 @@
             border-radius: 0;
         }
     }
+
 </style>
 
 <div class="manage-users-page">
 
     <!-- PAGE HEADER -->
+
     <div class="users-header">
+
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
 
             <div class="d-flex align-items-center gap-3">
+
                 <div class="header-icon">
                     <i class="bi bi-people-fill"></i>
                 </div>
 
                 <div>
+
                     <h1>Manage Users</h1>
-                    <p>View, search, sort, and manage registered users.</p>
+
+                    <p>
+                        View, search, sort, and manage registered users.
+                    </p>
+
                 </div>
+
             </div>
 
             <a asp-page="/Manage/Users/Create"
                class="btn btn-pink">
+
                 <i class="bi bi-plus-lg me-1"></i>
                 Add New User
+
             </a>
 
         </div>
+
     </div>
 
 
     <!-- SEARCH & FILTER -->
+
     <div class="users-card search-section">
 
         <div class="section-title">
+
             <div class="section-icon">
                 <i class="bi bi-funnel-fill"></i>
             </div>
 
             <div>
+
                 <h5>Search &amp; Filter</h5>
-                <small>Find registered users quickly.</small>
+
+                <small>
+                    Find registered users quickly.
+                </small>
+
             </div>
+
         </div>
 
         <div class="search-body">
@@ -509,6 +593,7 @@
                 <div class="row g-3 align-items-end">
 
                     <!-- USERNAME -->
+
                     <div class="col-12 col-lg-5">
 
                         <label for="keyword" class="form-label">
@@ -516,9 +601,12 @@
                         </label>
 
                         <div class="input-group">
+
                             <span class="input-group-text"
                                   style="background:white;border:1px solid #ead2de;border-right:0;border-radius:11px 0 0 11px;color:#d9367a;">
+
                                 <i class="bi bi-search"></i>
+
                             </span>
 
                             <input type="text"
@@ -528,12 +616,14 @@
                                    class="form-control"
                                    style="border-left:0;border-radius:0 11px 11px 0;"
                                    placeholder="Search by username..." />
+
                         </div>
 
                     </div>
 
 
                     <!-- SORT -->
+
                     <div class="col-12 col-md-6 col-lg-3">
 
                         <label for="sortOrder" class="form-label">
@@ -571,6 +661,7 @@
 
 
                     <!-- PAGE SIZE -->
+
                     <div class="col-12 col-md-6 col-lg-2">
 
                         <label for="pageSize" class="form-label">
@@ -603,19 +694,24 @@
 
 
                     <!-- BUTTONS -->
+
                     <div class="col-12 col-lg-2">
 
                         <div class="d-flex gap-2">
 
                             <button type="submit"
                                     class="search-button flex-grow-1">
+
                                 <i class="bi bi-search me-1"></i>
                                 Search
+
                             </button>
 
                             <a asp-page="/Manage/Users/Index"
                                class="btn btn-clear">
+
                                 Clear
+
                             </a>
 
                         </div>
@@ -636,13 +732,16 @@
             </form>
 
         </div>
+
     </div>
 
 
     <!-- SUMMARY CARDS -->
+
     <div class="row g-3 stats-row">
 
         <!-- TOTAL USERS -->
+
         <div class="col-12 col-sm-6 col-xl-3">
 
             <div class="stat-card">
@@ -650,6 +749,7 @@
                 <div class="stat-content">
 
                     <div>
+
                         <div class="stat-label">
                             Total Users
                         </div>
@@ -657,6 +757,7 @@
                         <h3 class="stat-number">
                             @Model.TotalRecords
                         </h3>
+
                     </div>
 
                     <div class="stat-icon">
@@ -671,6 +772,7 @@
 
 
         <!-- CURRENT PAGE -->
+
         <div class="col-12 col-sm-6 col-xl-3">
 
             <div class="stat-card">
@@ -678,6 +780,7 @@
                 <div class="stat-content">
 
                     <div>
+
                         <div class="stat-label">
                             Current Page
                         </div>
@@ -685,6 +788,7 @@
                         <h3 class="stat-number">
                             @Model.PageIndex
                         </h3>
+
                     </div>
 
                     <div class="stat-icon">
@@ -699,6 +803,7 @@
 
 
         <!-- TOTAL PAGES -->
+
         <div class="col-12 col-sm-6 col-xl-3">
 
             <div class="stat-card">
@@ -706,6 +811,7 @@
                 <div class="stat-content">
 
                     <div>
+
                         <div class="stat-label">
                             Total Pages
                         </div>
@@ -713,6 +819,7 @@
                         <h3 class="stat-number">
                             @Model.TotalPages
                         </h3>
+
                     </div>
 
                     <div class="stat-icon">
@@ -727,6 +834,7 @@
 
 
         <!-- SHOWING -->
+
         <div class="col-12 col-sm-6 col-xl-3">
 
             <div class="stat-card">
@@ -734,6 +842,7 @@
                 <div class="stat-content">
 
                     <div>
+
                         <div class="stat-label">
                             Showing
                         </div>
@@ -741,6 +850,7 @@
                         <h3 class="stat-number">
                             @Model.Users.Count
                         </h3>
+
                     </div>
 
                     <div class="stat-icon">
@@ -757,9 +867,11 @@
 
 
     <!-- REGISTERED USERS -->
+
     <div class="users-card">
 
         <!-- HEADER -->
+
         <div class="registered-header">
 
             <div class="registered-title">
@@ -769,11 +881,13 @@
                 </div>
 
                 <div>
+
                     <h5>Registered Users</h5>
 
                     <small>
                         Users currently registered in the system.
                     </small>
+
                 </div>
 
             </div>
@@ -786,6 +900,7 @@
 
 
         <!-- TABLE -->
+
         <div class="table-responsive">
 
             @if (Model.Users.Count == 0)
@@ -803,8 +918,10 @@
                     @if (!string.IsNullOrEmpty(Model.Keyword))
                     {
                         <p class="small mb-0">
+
                             No users matched
                             "<strong>@Model.Keyword</strong>".
+
                         </p>
                     }
                     else
@@ -818,9 +935,11 @@
             }
             else
             {
+
                 <table class="table users-table align-middle">
 
                     <thead>
+
                         <tr>
 
                             <th style="padding-left:20px;">
@@ -847,7 +966,12 @@
                                 Role
                             </th>
 
+                            <th class="text-center">
+                                Actions
+                            </th>
+
                         </tr>
+
                     </thead>
 
 
@@ -855,6 +979,7 @@
 
                         @foreach (var user in Model.Users)
                         {
+
                             <tr>
 
                                 <td class="id-cell"
@@ -882,35 +1007,66 @@
 
                                     @if (user.Role == "Admin")
                                     {
+
                                         <span class="role-badge role-admin">
+
                                             <i class="bi bi-shield-fill-check"></i>
                                             Admin
+
                                         </span>
+
                                     }
                                     else
                                     {
+
                                         <span class="role-badge role-user">
+
                                             <i class="bi bi-person-fill"></i>
                                             User
+
                                         </span>
+
                                     }
 
                                 </td>
 
+
+                                <!-- DELETE BUTTON -->
+
+                                <td class="text-center">
+
+                                    <button type="button"
+                                            class="user-action-btn"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#confirmDeleteModal"
+                                            data-user-id="@user.UserId"
+                                            data-user-name="@user.FirstName @user.LastName"
+                                            title="Delete User">
+
+                                        <i class="bi bi-trash-fill"></i>
+
+                                    </button>
+
+                                </td>
+
                             </tr>
+
                         }
 
                     </tbody>
 
                 </table>
+
             }
 
         </div>
 
 
         <!-- PAGINATION -->
+
         @if (Model.TotalPages > 0)
         {
+
             <div class="users-footer">
 
                 <div class="showing-text">
@@ -929,8 +1085,10 @@
                     <ul class="pagination">
 
                         <!-- PREVIOUS -->
+
                         @if (Model.PageIndex > 1)
                         {
+
                             <li class="page-item">
 
                                 <a class="page-link"
@@ -946,20 +1104,26 @@
                                 </a>
 
                             </li>
+
                         }
                         else
                         {
+
                             <li class="page-item disabled">
 
                                 <span class="page-link">
+
                                     <i class="bi bi-chevron-left"></i>
+
                                 </span>
 
                             </li>
+
                         }
 
 
                         <!-- CURRENT PAGE -->
+
                         <li class="page-item active"
                             aria-current="page">
 
@@ -971,8 +1135,10 @@
 
 
                         <!-- NEXT -->
+
                         @if (Model.PageIndex < Model.TotalPages)
                         {
+
                             <li class="page-item">
 
                                 <a class="page-link"
@@ -988,16 +1154,21 @@
                                 </a>
 
                             </li>
+
                         }
                         else
                         {
+
                             <li class="page-item disabled">
 
                                 <span class="page-link">
+
                                     <i class="bi bi-chevron-right"></i>
+
                                 </span>
 
                             </li>
+
                         }
 
                     </ul>
@@ -1005,8 +1176,137 @@
                 </nav>
 
             </div>
+
         }
 
     </div>
 
 </div>
+
+
+<!-- =====================================================
+     CONFIRM DELETE MODAL
+     ===================================================== -->
+
+<div class="modal fade user-modal"
+     id="confirmDeleteModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <!-- HEADER -->
+
+            <div class="modal-header">
+
+                <h5 class="modal-title">
+
+                    <i class="bi bi-trash-fill me-2"></i>
+                    Confirm Delete
+
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                </button>
+
+            </div>
+
+
+            <!-- BODY -->
+
+            <div class="modal-body text-center">
+
+                <p class="mb-0">
+
+                    Are you sure you want to delete:
+
+                    <strong id="deleteUserName"></strong>?
+
+                </p>
+
+            </div>
+
+
+            <!-- FOOTER -->
+
+            <div class="modal-footer">
+
+                <button type="button"
+                        class="btn btn-clear"
+                        data-bs-dismiss="modal">
+
+                    Close
+
+                </button>
+
+
+                <form method="post"
+                      asp-page-handler="Delete">
+
+                    <input type="hidden"
+                           name="userId"
+                           id="deleteUserId" />
+
+                    <button type="submit"
+                            class="btn btn-pink">
+
+                        Save Changes
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     DELETE MODAL JAVASCRIPT
+     ===================================================== -->
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const modal =
+            document.getElementById("confirmDeleteModal");
+
+        if (!modal) {
+            return;
+        }
+
+        modal.addEventListener("show.bs.modal", function (event) {
+
+            const button = event.relatedTarget;
+
+            if (!button) {
+                return;
+            }
+
+            const userId =
+                button.getAttribute("data-user-id") || "";
+
+            const userName =
+                button.getAttribute("data-user-name") || "";
+
+            document.getElementById("deleteUserId").value =
+                userId;
+
+            document.getElementById("deleteUserName").textContent =
+                userName;
+
+        });
+
+    });
+
+</script>
